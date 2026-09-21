@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>柚子老師的每日五字小學堂 | 國小高年級英語</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Phosphor Icons for playful UI -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Canvas Confetti for winning celebrations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pomelo: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            },
+            kidsSky: '#38bdf8',
+          },
+          fontFamily: {
+            sans: ['"Nunito"', '"Quicksand"', '"PingFang TC"', '"Noto Sans TC"', '"Microsoft JhengHei"', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Google Fonts: Rounded & Child-friendly -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Nunito', 'Fredoka', sans-serif;
+    }
+    .card-bounce {
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .card-bounce:hover {
+      transform: translateY(-3px);
+    }
+    .pop-btn {
+      transition: all 0.15s ease-in-out;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.08);
+    }
+    .pop-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(0,0,0,0.12);
+    }
+    .pop-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body class="bg-[#FFFDF7] text-slate-700 min-h-screen pb-12 antialiased selection:bg-amber-200">
+
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-amber-100 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
+      
+      <!-- Logo Title & Taiwan Date Display -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('daily')">
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-black text-slate-800 tracking-tight">每日 5 字小學堂</h1>
+            <span class="bg-amber-100 text-amber-900 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-200">
+              國小五六年級英語
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 font-medium flex items-center gap-1.5 mt-0.5">
+            <i class="ph-bold ph-clock text-amber-500"></i>
+            <span id="header-tw-date" class="font-bold text-slate-700">台灣時間載入中...</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1.5 bg-amber-100/70 p-1.5 rounded-2xl border border-amber-200/80 text-xs sm:text-sm font-bold">
+        <button id="tab-btn-daily" onclick="switchTab('daily')" class="tab-btn px-3.5 py-2 rounded-xl text-amber-950 bg-white shadow-sm flex items-center gap-1.5 transition">
+          <i class="ph-bold ph-calendar-check text-lg text-amber-500"></i>
+          <span>今日五字</span>
+        </button>
+        <button id="tab-btn-quiz" onclick="switchTab('quiz')" class="tab-btn px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition">
+          <i class="ph-bold ph-game-controller text-lg text-indigo-500"></i>
+          <span>過關測驗</span>
+        </button>
+        <button id="tab-btn-bank" onclick="switchTab('bank')" class="tab-btn px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition">
+          <i class="ph-bold ph-books text-lg text-emerald-500"></i>
+          <span>單字總寶庫</span>
+        </button>
+        <button id="tab-btn-github" onclick="switchTab('github')" class="tab-btn px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition">
+          <i class="ph-bold ph-github-logo text-lg text-slate-700"></i>
+          <span>GitHub發布教學</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-24 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white text-sm px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5">
+    <i class="ph-fill ph-bell-ringing text-amber-400 text-xl"></i>
+    <span id="toast-text" class="font-bold">通知訊息</span>
+  </div>
+
+  <main class="max-w-4xl mx-auto px-4 pt-6">
+
+    <!-- TAB 1: DAILY WORDS SECTION -->
+    <section id="section-daily" class="space-y-5">
+
+      <!-- Interactive Date Navigator (Recall yesterday, block tomorrow) -->
+      <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border-2 border-amber-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button onclick="changeDateOffset(-1)" class="pop-btn bg-amber-50 hover:bg-amber-100 text-amber-900 font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-amber-200">
+            <i class="ph-bold ph-caret-left text-base"></i> 前一天 (溫習)
+          </button>
+          
+          <div class="text-center sm:text-left flex-1 sm:flex-initial">
+            <div class="flex items-center gap-2">
+              <span id="viewing-date-label" class="text-base sm:text-lg font-black text-slate-800">讀取中...</span>
+              <span id="date-status-badge" class="text-xs font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">今日單字</span>
+            </div>
+            <p class="text-[11px] text-slate-400 font-bold">依台灣時間每日 00:00 自動換日</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <button id="btn-back-today" onclick="resetToToday()" class="hidden pop-btn bg-amber-400 hover:bg-amber-300 text-slate-900 font-black text-xs px-3 py-2 rounded-xl shadow-xs flex items-center gap-1">
+            <i class="ph-bold ph-arrow-u-up-left"></i> 回今天
+          </button>
+          <input 
+            type="date" 
+            id="date-picker-input" 
+            onchange="onCustomDatePick(this.value)"
+            class="bg-amber-50/70 border border-amber-200 text-slate-700 text-xs font-bold px-2.5 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-300"
+          />
+          <button id="btn-next-day" onclick="changeDateOffset(1)" disabled class="pop-btn bg-slate-100 text-slate-400 font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-slate-200 cursor-not-allowed">
+            後一天 <i class="ph-bold ph-caret-right text-base"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Encouragement Banner -->
+      <div class="bg-gradient-to-r from-amber-300 via-yellow-300 to-emerald-300 rounded-3xl p-5 sm:p-6 shadow-md border-2 border-amber-200 relative overflow-hidden">
+        <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div class="space-y-1">
+            <h2 id="hero-date-title" class="text-xl md:text-2xl font-black text-slate-800">
+              今天挑戰這 5 個高年級必背單字！
+            </h2>
+            <p class="text-slate-700 text-xs sm:text-sm font-semibold max-w-xl">
+              生活化實用例句，點擊發音按鈕多聽多念，每天 5 個字，輕鬆累積字彙量！
+            </p>
+          </div>
+
+          <button onclick="startDailyQuiz()" class="pop-btn bg-emerald-500 hover:bg-emerald-400 text-white font-black text-xs sm:text-sm px-5 py-2.5 rounded-2xl flex items-center gap-1.5 shadow-md shrink-0">
+            <i class="ph-fill ph-lightning text-yellow-200 text-lg"></i>
+            開始練習這 5 字
+          </button>
+        </div>
+        <div class="absolute -right-6 -bottom-10 w-44 h-44 rounded-full bg-white/20 pointer-events-none"></div>
+      </div>
+
+      <!-- Word Cards List -->
+      <div id="daily-words-container" class="space-y-4">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- TAB 2: QUIZ SECTION -->
+    <section id="section-quiz" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border-2 border-amber-100">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-amber-50 pb-5">
+          <div>
+            <h2 class="text-2xl font-black text-slate-800 flex items-center gap-2">
+              <span class="w-9 h-9 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl shadow-xs">
+                <i class="ph-fill ph-trophy"></i>
+              </span>
+              高年級單字過關測驗
+            </h2>
+            <p class="text-slate-500 text-xs font-semibold mt-1">答對獲得金幣音效與彩帶，連續全對累積星星！</p>
+          </div>
+
+          <!-- Gamified Stats -->
+          <div class="flex items-center gap-2 sm:gap-3">
+            <div class="bg-amber-50 border-2 border-amber-200 px-4 py-2 rounded-2xl text-center shadow-xs">
+              <span class="text-[11px] text-amber-700 font-extrabold block">答對星星</span>
+              <div class="flex items-center justify-center gap-1">
+                <i class="ph-fill ph-star text-amber-400 text-sm"></i>
+                <span id="quiz-correct-count" class="text-lg font-black text-amber-800">0</span>
+              </div>
+            </div>
+            <div class="bg-rose-50 border-2 border-rose-200 px-4 py-2 rounded-2xl text-center shadow-xs">
+              <span class="text-[11px] text-rose-700 font-extrabold block">連勝紀錄</span>
+              <div class="flex items-center justify-center gap-1">
+                <i class="ph-fill ph-flame text-rose-500 text-sm"></i>
+                <span id="quiz-streak-count" class="text-lg font-black text-rose-800">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mode Buttons & Scope Filter -->
+        <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex rounded-2xl bg-slate-100 p-1 font-bold text-xs sm:text-sm">
+            <button id="quiz-type-mcq" onclick="setQuizType('mcq')" class="px-4 py-2 rounded-xl bg-white text-indigo-700 shadow-sm transition flex items-center gap-1.5">
+              <i class="ph-bold ph-list-numbers text-base"></i> 四選一字義測驗
+            </button>
+            <button id="quiz-type-cloze" onclick="setQuizType('cloze')" class="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+              <i class="ph-bold ph-pencil-simple-line text-base"></i> 生活例句克漏字
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2 text-xs font-bold text-slate-600">
+            <span>題目範圍：</span>
+            <select id="quiz-scope" onchange="loadNewQuizQuestion()" class="bg-amber-50/80 border border-amber-200 text-slate-800 rounded-xl px-3 py-1.5 font-bold focus:outline-none focus:ring-2 focus:ring-amber-300">
+              <option value="daily">目前選取日期的 5 個單字</option>
+              <option value="all">從全部題庫抽題</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Action Card Area -->
+      <div id="quiz-card-box" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border-2 border-amber-100 min-h-[340px] flex flex-col justify-between">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- TAB 3: BANK SECTION -->
+    <section id="section-bank" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 shadow-sm border-2 border-amber-100">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-slate-800 flex items-center gap-2">
+              <span class="w-9 h-9 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shadow-xs">
+                <i class="ph-fill ph-book-open"></i>
+              </span>
+              國小高年級單字寶庫
+            </h2>
+            <p class="text-slate-500 text-xs font-medium mt-1">
+              收錄國小高年級課綱核心與銜接字庫。目前已有 <span id="bank-total-count" class="font-extrabold text-emerald-600 text-sm">0</span> 個精選單字。
+            </p>
+          </div>
+
+          <!-- JSON Export/Import buttons -->
+          <div class="flex items-center gap-2">
+            <button onclick="downloadWordBankJson()" class="pop-btn text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold flex items-center gap-1 border border-slate-200">
+              <i class="ph-bold ph-download-simple"></i> 匯出字庫
+            </button>
+            <label class="pop-btn text-xs bg-emerald-500 hover:bg-emerald-400 text-white px-3.5 py-2 rounded-xl font-bold flex items-center gap-1 cursor-pointer shadow-sm">
+              <i class="ph-bold ph-upload-simple"></i> 匯入擴充字庫
+              <input type="file" id="json-importer" accept=".json" class="hidden" onchange="handleImportJson(event)" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mt-4 relative">
+          <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+          <input 
+            type="text" 
+            id="bank-search-input" 
+            oninput="handleBankSearch()"
+            placeholder="搜尋單字、中文解釋或詞性（例: apple、朋友、adj.）..." 
+            class="w-full pl-11 pr-4 py-3 rounded-2xl bg-amber-50/40 border-2 border-amber-100 text-sm font-semibold focus:outline-none focus:border-amber-400 focus:bg-white transition"
+          />
+        </div>
+      </div>
+
+      <!-- Word Grid List -->
+      <div id="bank-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- TAB 4: GITHUB PAGES TUTORIAL -->
+    <section id="section-github" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border-2 border-amber-100 space-y-6">
+        <div>
+          <span class="bg-indigo-100 text-indigo-900 font-extrabold text-xs px-3 py-1 rounded-full border border-indigo-200">
+            免費上線指南 💡
+          </span>
+          <h2 class="text-2xl font-black text-slate-800 mt-2">如何用 GitHub 免費發布這個網站？</h2>
+          <p class="text-slate-500 text-sm font-medium mt-1">
+            不用花錢買伺服器，直接在手機、平板與電腦隨時開啟讓孩子練習！
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/50 border border-amber-100">
+            <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-900 font-black flex items-center justify-center shrink-0 shadow-xs">1</div>
+            <div class="space-y-1.5">
+              <h3 class="font-black text-slate-800">在 GitHub 建立 Repository</h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                登入 <a href="https://github.com" target="_blank" class="text-indigo-600 underline font-bold">GitHub</a>，點選右上角「+」➔「New repository」，取名為 <code>daily-words</code>，設為 <strong>Public</strong> 並建立。
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/50 border border-amber-100">
+            <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-900 font-black flex items-center justify-center shrink-0 shadow-xs">2</div>
+            <div class="space-y-1.5">
+              <h3 class="font-black text-slate-800">上傳 index.html 與 teacher.png 照片</h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                點選「Add file」➔「Upload files」：<br/>
+                ① 將這份網頁程式碼另存為 <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-black">index.html</code> 上傳。<br/>
+                ② 將您的小熊貓照片命名為 <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-black">teacher.png</code> 一同上傳至同目錄。
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/50 border border-amber-100">
+            <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-900 font-black flex items-center justify-center shrink-0 shadow-xs">3</div>
+            <div class="space-y-1.5">
+              <h3 class="font-black text-slate-800">開啟 GitHub Pages</h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                點選儲存庫上方的「Settings」➔ 左側「Pages」➔ Branch 選擇「main」或「master」➔ 點擊 Save。<br/>
+                約 1 分鐘後即可得到專屬網址！
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- EXACT FOOTER BADGE AS REQUESTED IN USER REFERENCE IMAGE -->
+  <footer class="mt-14 flex flex-col items-center justify-center">
+    <div class="inline-flex items-center gap-3 bg-[#1e293b] px-6 py-2.5 rounded-full shadow-lg border border-slate-700/60 transition hover:border-slate-500">
+      <!-- Round White Avatar Frame for teacher.png -->
+      <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center p-0.5 overflow-hidden shrink-0 shadow-inner">
+        <img 
+          src="teacher.png" 
+          alt="柚子老師" 
+          class="w-full h-full object-contain"
+          onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'52\' r=\'36\' fill=\'%23FFFFFF\' stroke=\'%231e293b\' stroke-width=\'4\'/><circle cx=\'26\' cy=\'30\' r=\'14\' fill=\'%231e293b\'/><circle cx=\'74\' cy=\'30\' r=\'14\' fill=\'%231e293b\'/><circle cx=\'38\' cy=\'52\' r=\'11\' fill=\'%231e293b\'/><circle cx=\'62\' cy=\'52\' r=\'11\' fill=\'%231e293b\'/><path d=\'M50 16 C 50 8, 62 10, 64 18 C 64 24, 52 24, 50 16 Z\' fill=\'%2384cc16\' stroke=\'%231e293b\' stroke-width=\'2\'/></svg>';"
+        />
+      </div>
+      <!-- Label Text -->
+      <span class="text-white font-black text-base tracking-wide select-none">
+        柚子老師製作
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Happy Victory / Coin Sound for correct answer
+    function playCorrectSound() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(523.25, now); // C5
+        osc1.frequency.exponentialRampToValueAtTime(659.25, now + 0.12); // E5
+        gain1.gain.setValueAtTime(0.2, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.35);
+
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(1046.50, now + 0.12); // C6
+        gain2.gain.setValueAtTime(0.25, now + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.12);
+        osc2.stop(now + 0.55);
+      } catch (err) {
+        console.log("Audio not allowed yet:", err);
+      }
+    }
+
+    // Gentle encouraging sound for wrong attempt
+    function playWrongSound() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(280, now);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.25);
+
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } catch (err) {
+        console.log("Audio not allowed yet:", err);
+      }
+    }
+  </script>
+
+  <script>
+    const GRADE_VOCABULARY_DATABASE = [
+      {
+        word: "brave",
+        kk: "[brev]",
+        pos: "adj.",
+        meaning: "勇敢的",
+        example: "The ______ boy helped the small kitten down from the tree.",
+        exampleTrans: "這名勇敢的男孩幫忙將小貓咪從樹上救下來。"
+      },
+      {
+        word: "breakfast",
+        kk: "[ˈbrɛkfəst]",
+        pos: "n.",
+        meaning: "早餐",
+        example: "I eat eggs and warm milk for ______ every morning.",
+        exampleTrans: "我每天早上吃雞蛋並喝溫牛奶當作早餐。"
+      },
+      {
+        word: "camera",
+        kk: "[ˈkæmərə]",
+        pos: "n.",
+        meaning: "相機",
+        example: "Dad used his new ______ to take photos of our family trip.",
+        exampleTrans: "爸爸用他的新相機替我們的全家旅行拍了許多照片。"
+      },
+      {
+        word: "delicious",
+        kk: "[dɪˈlɪʃəs]",
+        pos: "adj.",
+        meaning: "美味的；好吃的",
+        example: "The apple pie Mom made is very ______.",
+        exampleTrans: "媽媽烤的蘋果派真的非常美味好吃。"
+      },
+      {
+        word: "excited",
+        kk: "[ɪkˈsaɪtɪd]",
+        pos: "adj.",
+        meaning: "興奮的；雀躍的",
+        example: "The students are ______ because tomorrow is our field trip.",
+        exampleTrans: "學生們都很興奮，因為明天就是我們的校外教學了。"
+      },
+      {
+        word: "friendly",
+        kk: "[ˈfrɛndlɪ]",
+        pos: "adj.",
+        meaning: "友善的；親切的",
+        example: "Our new teacher is very kind and ______ to all of us.",
+        exampleTrans: "我們的新老師為人非常和善，對大家都十分親切。"
+      },
+      {
+        word: "glasses",
+        kk: "[ˈɡlæsɪz]",
+        pos: "n.",
+        meaning: "眼鏡",
+        example: "Teacher Youzi wears round ______ and loves reading books.",
+        exampleTrans: "柚子老師戴著圓圓的眼鏡，非常喜歡閱讀書籍。"
+      },
+      {
+        word: "healthy",
+        kk: "[ˈhɛlθɪ]",
+        pos: "adj.",
+        meaning: "健康的",
+        example: "Eating lots of green vegetables keeps your body ______.",
+        exampleTrans: "多吃綠色蔬菜可以保持身體健康強壯。"
+      },
+      {
+        word: "island",
+        kk: "[ˈaɪlənd]",
+        pos: "n.",
+        meaning: "島嶼",
+        example: "Taiwan is a beautiful green ______ surrounded by the ocean.",
+        exampleTrans: "台灣是一座被美麗海洋環繞的綠色島嶼。"
+      },
+      {
+        word: "jacket",
+        kk: "[ˈdʒækɪt]",
+        pos: "n.",
+        meaning: "夾克；外套",
+        example: "It is chilly outside today, so please put on your warm ______.",
+        exampleTrans: "今天外面天氣有點涼，請穿上你的保暖外套。"
+      },
+      {
+        word: "kitchen",
+        kk: "[ˈkɪtʃɪn]",
+        pos: "n.",
+        meaning: "廚房",
+        example: "Mom and Dad are cooking hot soup in the ______.",
+        exampleTrans: "爸爸媽媽正在廚房裡煮熱騰騰的濃湯。"
+      },
+      {
+        word: "library",
+        kk: "[ˈlaɪˌbrɛrɪ]",
+        pos: "n.",
+        meaning: "圖書館",
+        example: "We should keep quiet when reading comic books in the ______.",
+        exampleTrans: "我們在圖書館裡看漫畫故事書時應該保持安靜。"
+      },
+      {
+        word: "neighbor",
+        kk: "[ˈnebɚ]",
+        pos: "n.",
+        meaning: "鄰居",
+        example: "Our friendly ______ always waves hello when we meet.",
+        exampleTrans: "我們親切的鄰居見面時總是會微笑揮手打招呼。"
+      },
+      {
+        word: "orange",
+        kk: "[ˈɔrɪndʒ]",
+        pos: "n./adj.",
+        meaning: "橘子；柳橙",
+        example: "I peeled a sweet ______ to share with my best friend.",
+        exampleTrans: "我剝了一顆香甜的橘子和最好的朋友一起分享。"
+      },
+      {
+        word: "playground",
+        kk: "[ˈpleˌɡraʊnd]",
+        pos: "n.",
+        meaning: "遊樂場；操場",
+        example: "The children ran to the ______ to play on the swings.",
+        exampleTrans: "小朋友們跑向操場遊樂區去盪鞦韆。"
+      },
+      {
+        word: "quiet",
+        kk: "[ˈkwaɪət]",
+        pos: "adj.",
+        meaning: "安靜的",
+        example: "Please be ______ because the baby is sleeping right now.",
+        exampleTrans: "請大家保持安靜，因為小嬰兒現在正在睡覺喔。"
+      },
+      {
+        word: "rainbow",
+        kk: "[ˈrenˌbo]",
+        pos: "n.",
+        meaning: "彩虹",
+        example: "After the rain stopped, we saw a colorful ______ in the blue sky.",
+        exampleTrans: "雨停之後，我們看見藍天上出現了一道七彩的彩虹。"
+      },
+      {
+        word: "season",
+        kk: "[ˈsizn]",
+        pos: "n.",
+        meaning: "季節",
+        example: "Spring is my favorite ______ because colorful flowers bloom.",
+        exampleTrans: "春天是我最喜歡的季節，因為繽紛花朵都盛開了。"
+      },
+      {
+        word: "tomorrow",
+        kk: "[təˈmɑro]",
+        pos: "adv./n.",
+        meaning: "明天",
+        example: "Don't forget to pack your schoolbag for class ______.",
+        exampleTrans: "別忘了把明天上課要用的書包整理收好喔。"
+      },
+      {
+        word: "umbrella",
+        kk: "[ʌmˈbrɛlə]",
+        pos: "n.",
+        meaning: "雨傘",
+        example: "Take an ______ with you because it might rain this afternoon.",
+        exampleTrans: "隨身帶把雨傘，因為今天下午可能會下雨喔。"
+      },
+      {
+        word: "vacation",
+        kk: "[veˈkeʃən]",
+        pos: "n.",
+        meaning: "假期；休假",
+        example: "During summer ______, my family loves going to the sunny beach.",
+        exampleTrans: "在暑假期間，我們全家人都很喜歡去陽光沙灘玩。"
+      },
+      {
+        word: "weather",
+        kk: "[ˈwɛðɚ]",
+        pos: "n.",
+        meaning: "天氣",
+        example: "The sunny ______ is great for riding bikes in the city park.",
+        exampleTrans: "晴朗的好天氣非常適合在市區公園裡騎腳踏車。"
+      },
+      {
+        word: "yellow",
+        kk: "[ˈjɛlo]",
+        pos: "adj./n.",
+        meaning: "黃色的",
+        example: "The cute duck swimming in the small pond is bright ______.",
+        exampleTrans: "在小池塘裡游泳的那隻可愛小鴨是亮黃色的。"
+      },
+      {
+        word: "zoo",
+        kk: "[zu]",
+        pos: "n.",
+        meaning: "動物園",
+        example: "We saw big pandas and tall giraffes at the Taipei ______.",
+        exampleTrans: "我們在台北動物園看到了大貓熊與高高的長頸鹿。"
+      },
+      {
+        word: "smart",
+        kk: "[smɑrt]",
+        pos: "adj.",
+        meaning: "聰明的",
+        example: "The ______ dog can open the back door by itself.",
+        exampleTrans: "那隻聰明的狗狗居然能夠自己打開後門。"
+      },
+      {
+        word: "pencil",
+        kk: "[ˈpɛnsl]",
+        pos: "n.",
+        meaning: "鉛筆",
+        example: "Can you lend me a sharp ______ to finish my homework?",
+        exampleTrans: "你能借我一枝削好的鉛筆來完成作業嗎？"
+      },
+      {
+        word: "water",
+        kk: "[ˈwɔtɚ]",
+        pos: "n.",
+        meaning: "水",
+        example: "Remember to drink more ______ after running in gym class.",
+        exampleTrans: "在體育課跑步運動之後，記得要多補充水分喔。"
+      },
+      {
+        word: "teacher",
+        kk: "[ˈtitʃɚ]",
+        pos: "n.",
+        meaning: "老師",
+        example: "Teacher Youzi always teaches us English with fun games.",
+        exampleTrans: "柚子老師總是用好玩有趣的遊戲來教我們學英文。"
+      },
+      {
+        word: "rabbit",
+        kk: "[ˈræbɪt]",
+        pos: "n.",
+        meaning: "兔子",
+        example: "The white ______ has long ears and loves crunchy carrots.",
+        exampleTrans: "這隻白兔子有著長長的耳朵，而且最愛吃脆脆的胡蘿蔔。"
+      },
+      {
+        word: "family",
+        kk: "[ˈfæməlɪ]",
+        pos: "n.",
+        meaning: "家人；家庭",
+        example: "I love spending dinner time talking with my sweet ______.",
+        exampleTrans: "我很喜歡在晚餐時間和親愛的家人們一起聊天。"
+      }
+    ];
+
+    let wordBank = [];
+    let dailyWords = [];
+    let currentQuizTarget = null;
+    let quizType = 'mcq';
+    let correctStreak = 0;
+    let totalCorrect = 0;
+    let clozeHintLevel = 0;
+
+    let taiwanTodayString = "";
+    let viewingDateString = "";
+
+    function getTaiwanDateObject() {
+      const now = new Date();
+      const twString = now.toLocaleString("en-US", { timeZone: "Asia/Taipei" });
+      return new Date(twString);
+    }
+
+    function formatToYYYYMMDD(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function parseYYYYMMDD(dateStr) {
+      const parts = dateStr.split('-').map(Number);
+      return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+
+    function initTaiwanTime() {
+      const twNow = getTaiwanDateObject();
+      taiwanTodayString = formatToYYYYMMDD(twNow);
+      viewingDateString = taiwanTodayString;
+
+      const picker = document.getElementById('date-picker-input');
+      if (picker) {
+        picker.max = taiwanTodayString;
+        picker.value = viewingDateString;
+      }
+
+      // Safe update for header date
+      const headerDateEl = document.getElementById('header-tw-date');
+      if (headerDateEl) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short', timeZone: 'Asia/Taipei' };
+        headerDateEl.innerText = new Date().toLocaleDateString('zh-TW', options);
+      }
+    }
+
+    function updateDateViewUI() {
+      const isToday = (viewingDateString === taiwanTodayString);
+      const viewDateObj = parseYYYYMMDD(viewingDateString);
+      const dateTextZh = `${viewDateObj.getFullYear()} 年 ${viewDateObj.getMonth() + 1} 月 ${viewDateObj.getDate()} 日`;
+      
+      const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+      const dayName = weekdays[viewDateObj.getDay()];
+
+      const labelEl = document.getElementById('viewing-date-label');
+      if (labelEl) labelEl.innerText = `${dateTextZh} (${dayName})`;
+      
+      const statusBadge = document.getElementById('date-status-badge');
+      const backTodayBtn = document.getElementById('btn-back-today');
+      const nextBtn = document.getElementById('btn-next-day');
+      const heroTitle = document.getElementById('hero-date-title');
+
+      if (isToday) {
+        if (statusBadge) {
+          statusBadge.innerText = "今日單字";
+          statusBadge.className = "text-xs font-black px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200";
+        }
+        if (backTodayBtn) backTodayBtn.classList.add('hidden');
+        
+        // Disable forward navigation into the future
+        if (nextBtn) {
+          nextBtn.disabled = true;
+          nextBtn.className = "pop-btn bg-slate-100 text-slate-400 font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-slate-200 cursor-not-allowed";
+        }
+        if (heroTitle) heroTitle.innerText = "今天挑戰這 5 個高年級必背單字！";
+      } else {
+        if (statusBadge) {
+          statusBadge.innerText = "歷史單字回顧";
+          statusBadge.className = "text-xs font-black px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 border border-amber-300";
+        }
+        if (backTodayBtn) backTodayBtn.classList.remove('hidden');
+
+        if (nextBtn) {
+          nextBtn.disabled = false;
+          nextBtn.className = "pop-btn bg-amber-100 hover:bg-amber-200 text-amber-900 font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-amber-300";
+        }
+        if (heroTitle) heroTitle.innerText = `溫故知新：${dateTextZh} 的 5 個單字`;
+      }
+
+      const picker = document.getElementById('date-picker-input');
+      if (picker) picker.value = viewingDateString;
+    }
+
+    function changeDateOffset(offset) {
+      const current = parseYYYYMMDD(viewingDateString);
+      current.setDate(current.getDate() + offset);
+      const newDateStr = formatToYYYYMMDD(current);
+
+      if (newDateStr > taiwanTodayString) {
+        showToast("不能看明天的單字喔！明天準時來解鎖～");
+        return;
+      }
+
+      viewingDateString = newDateStr;
+      updateDateViewUI();
+      dailyWords = computeDailyWordsForDate(viewingDateString);
+      renderDailyCards();
+      
+      if (offset < 0) {
+        showToast(`已切換至 ${viewingDateString} 溫習單字！`);
+      } else {
+        showToast(`已切換至 ${viewingDateString}！`);
+      }
+    }
+
+    function resetToToday() {
+      viewingDateString = taiwanTodayString;
+      updateDateViewUI();
+      dailyWords = computeDailyWordsForDate(viewingDateString);
+      renderDailyCards();
+      showToast("已返回今天的單字！");
+    }
+
+    function onCustomDatePick(val) {
+      if (!val) return;
+      if (val > taiwanTodayString) {
+        showToast("未來的單字還沒解鎖喔！請選擇今天或以前的日期。");
+        const picker = document.getElementById('date-picker-input');
+        if (picker) picker.value = viewingDateString;
+        return;
+      }
+      viewingDateString = val;
+      updateDateViewUI();
+      dailyWords = computeDailyWordsForDate(viewingDateString);
+      renderDailyCards();
+    }
+
+    function initDatabase() {
+      const saved = localStorage.getItem('youzi_word_bank_v2');
+      if (saved) {
+        try {
+          wordBank = JSON.parse(saved);
+        } catch(e) {
+          wordBank = [...GRADE_VOCABULARY_DATABASE];
+        }
+      } else {
+        wordBank = [...GRADE_VOCABULARY_DATABASE];
+        saveDatabase();
+      }
+      const countEl = document.getElementById('bank-total-count');
+      if (countEl) countEl.innerText = wordBank.length;
+    }
+
+    function saveDatabase() {
+      localStorage.setItem('youzi_word_bank_v2', JSON.stringify(wordBank));
+      const countEl = document.getElementById('bank-total-count');
+      if (countEl) countEl.innerText = wordBank.length;
+    }
+
+    function hashString(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash);
+    }
+
+    function pseudoRandom(seed) {
+      const x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    }
+
+    // Deterministic 5 words seeded by Taiwan date string
+    function computeDailyWordsForDate(dateStr) {
+      if (wordBank.length <= 5) return [...wordBank];
+
+      let seed = hashString("taiwan_grade56_" + dateStr);
+      const copy = [...wordBank];
+      const result = [];
+
+      for (let i = 0; i < 5; i++) {
+        const r = pseudoRandom(seed + i * 47);
+        const idx = Math.floor(r * copy.length);
+        result.push(copy.splice(idx, 1)[0]);
+      }
+      return result;
+    }
+
+    // Natural child-friendly speech synthesis
+    function speak(text) {
+      if (!('speechSynthesis' in window)) {
+        showToast("瀏覽器未支援發音");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    }
+
+    function renderDailyCards() {
+      const container = document.getElementById('daily-words-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      dailyWords.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-3xl p-5 sm:p-6 shadow-sm border-2 border-amber-100 card-bounce flex flex-col md:flex-row md:items-center justify-between gap-4";
+
+        const completeSentence = item.example.replace('______', item.word);
+
+        card.innerHTML = `
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-2xl bg-amber-200/70 text-amber-900 font-black text-lg flex items-center justify-center shrink-0 border border-amber-300">
+              0${index + 1}
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-3xl font-black text-slate-800 tracking-wide">${item.word}</span>
+                <span class="text-xs bg-slate-100 text-slate-600 font-mono font-bold px-2.5 py-0.5 rounded-lg border border-slate-200">${item.kk}</span>
+                <span class="text-xs bg-amber-100 text-amber-900 font-black px-2.5 py-0.5 rounded-lg border border-amber-200">${item.pos}</span>
+              </div>
+              <p class="text-lg font-black text-amber-800">${item.meaning}</p>
+              
+              <div class="mt-2 bg-amber-50/60 p-3 rounded-2xl border border-amber-100/80 text-xs sm:text-sm">
+                <p class="font-bold text-slate-800">
+                  <span class="text-amber-600 font-black">日常例句：</span>
+                  ${item.example.replace('______', `<span class="text-indigo-600 underline font-black mx-1">${item.word}</span>`)}
+                </p>
+                <p class="text-slate-500 font-semibold mt-1">例句解釋：${item.exampleTrans}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex sm:flex-col md:flex-row items-center gap-2 self-end md:self-center shrink-0">
+            <button onclick="speak('${item.word}')" class="pop-btn bg-amber-100 hover:bg-amber-200 text-amber-900 font-black text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5">
+              <i class="ph-fill ph-speaker-high text-base"></i> 單字念法
+            </button>
+            <button onclick="speak('${escapeSentence(completeSentence)}')" class="pop-btn bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-black text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5">
+              <i class="ph-bold ph-waveform text-base"></i> 例句朗讀
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function escapeSentence(str) {
+      return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    function startDailyQuiz() {
+      switchTab('quiz');
+      const scopeEl = document.getElementById('quiz-scope');
+      if (scopeEl) scopeEl.value = 'daily';
+      loadNewQuizQuestion();
+    }
+
+    function setQuizType(type) {
+      quizType = type;
+      const mcqBtn = document.getElementById('quiz-type-mcq');
+      const clozeBtn = document.getElementById('quiz-type-cloze');
+
+      if (type === 'mcq') {
+        if (mcqBtn) mcqBtn.className = "px-4 py-2 rounded-xl bg-white text-indigo-700 shadow-sm transition flex items-center gap-1.5";
+        if (clozeBtn) clozeBtn.className = "px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5";
+      } else {
+        if (clozeBtn) clozeBtn.className = "px-4 py-2 rounded-xl bg-white text-indigo-700 shadow-sm transition flex items-center gap-1.5";
+        if (mcqBtn) mcqBtn.className = "px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5";
+      }
+      loadNewQuizQuestion();
+    }
+
+    function getQuizPool() {
+      const scopeEl = document.getElementById('quiz-scope');
+      const scope = scopeEl ? scopeEl.value : 'daily';
+      if (scope === 'daily' && dailyWords.length > 0) {
+        return dailyWords;
+      }
+      return wordBank;
+    }
+
+    function loadNewQuizQuestion() {
+      clozeHintLevel = 0;
+      const pool = getQuizPool();
+      if (!pool || pool.length === 0) return;
+
+      currentQuizTarget = pool[Math.floor(Math.random() * pool.length)];
+
+      if (quizType === 'mcq') {
+        renderMCQ(currentQuizTarget);
+      } else {
+        renderCloze(currentQuizTarget);
+      }
+    }
+
+    function renderMCQ(target) {
+      const container = document.getElementById('quiz-card-box');
+      if (!container) return;
+
+      const pool = wordBank.filter(w => w.word !== target.word);
+      const distractors = pool.sort(() => 0.5 - Math.random()).slice(0, 3);
+      const choices = [...distractors, target].sort(() => 0.5 - Math.random());
+
+      container.innerHTML = `
+        <div>
+          <div class="flex items-center justify-between text-xs font-black text-amber-700 mb-3 bg-amber-50 px-3.5 py-1.5 rounded-xl inline-flex gap-1.5 border border-amber-200/70">
+            <i class="ph-fill ph-lightbulb"></i> 柚子老師考考你：請問這個英文單字是什麼意思呢？
+          </div>
+
+          <div class="text-center py-5">
+            <h3 class="text-4xl sm:text-5xl font-black text-slate-800 tracking-wider">${target.word}</h3>
+            <div class="flex items-center justify-center gap-2 mt-2">
+              <span class="text-sm font-mono font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-lg">${target.kk}</span>
+              <span class="text-xs font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-lg">${target.pos}</span>
+              <button onclick="speak('${target.word}')" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-2 py-0.5 rounded-lg flex items-center gap-1 ml-1 transition">
+                <i class="ph-fill ph-speaker-high"></i> 聽發音
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4" id="mcq-options-container">
+            ${choices.map((item, idx) => `
+              <button 
+                onclick="checkMCQAnswer('${escapeSentence(item.word)}', this)" 
+                class="mcq-btn pop-btn text-left p-4 rounded-2xl border-2 border-slate-100 bg-white hover:border-amber-400 hover:bg-amber-50/50 text-slate-800 font-black text-base flex items-center justify-between transition"
+              >
+                <span>${String.fromCharCode(65 + idx)}. ${item.meaning}</span>
+                <span class="icon-indicator"></span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <div id="quiz-result-bar" class="hidden mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        </div>
+      `;
+    }
+
+    function checkMCQAnswer(selectedWord, buttonEl) {
+      const allBtns = document.querySelectorAll('.mcq-btn');
+      allBtns.forEach(btn => btn.disabled = true);
+
+      const resultBar = document.getElementById('quiz-result-bar');
+      if (resultBar) resultBar.classList.remove('hidden');
+
+      if (selectedWord === currentQuizTarget.word) {
+        playCorrectSound();
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.65 }
+        });
+
+        buttonEl.classList.remove('border-slate-100', 'bg-white');
+        buttonEl.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+        buttonEl.querySelector('.icon-indicator').innerHTML = `<i class="ph-fill ph-check-circle text-emerald-500 text-2xl"></i>`;
+
+        totalCorrect++;
+        correctStreak++;
+        updateStatsView();
+
+        if (resultBar) {
+          resultBar.innerHTML = `
+            <div class="flex items-center gap-2 text-emerald-600 font-black text-sm sm:text-base">
+              <i class="ph-fill ph-hands-clapping text-2xl text-emerald-500"></i>
+              答對了！恭喜獲得一顆星星！
+            </div>
+            <button onclick="loadNewQuizQuestion()" class="pop-btn bg-emerald-500 hover:bg-emerald-400 text-white font-black text-sm px-6 py-2.5 rounded-2xl shadow-sm flex items-center gap-1.5">
+              下一題 <i class="ph-bold ph-arrow-right"></i>
+            </button>
+          `;
+        }
+      } else {
+        playWrongSound();
+        buttonEl.classList.remove('border-slate-100', 'bg-white');
+        buttonEl.classList.add('border-rose-400', 'bg-rose-50', 'text-rose-900');
+        buttonEl.querySelector('.icon-indicator').innerHTML = `<i class="ph-fill ph-x-circle text-rose-500 text-2xl"></i>`;
+
+        correctStreak = 0;
+        updateStatsView();
+
+        if (resultBar) {
+          resultBar.innerHTML = `
+            <div class="text-rose-600 text-xs sm:text-sm font-bold">
+              沒關係！正確答案是：<span class="font-black text-slate-800 text-base">${currentQuizTarget.meaning} (${currentQuizTarget.word})</span>
+            </div>
+            <button onclick="loadNewQuizQuestion()" class="pop-btn bg-slate-800 hover:bg-slate-700 text-white font-black text-sm px-5 py-2.5 rounded-2xl shadow-sm flex items-center gap-1.5">
+              再試下一題 <i class="ph-bold ph-arrow-right"></i>
+            </button>
+          `;
+        }
+      }
+    }
+
+    function renderCloze(target) {
+      const container = document.getElementById('quiz-card-box');
+      if (!container) return;
+      const completeSentence = target.example.replace('______', target.word);
+
+      container.innerHTML = `
+        <div>
+          <div class="flex items-center justify-between text-xs font-black text-indigo-800 mb-3 bg-indigo-50 px-3.5 py-1.5 rounded-xl inline-flex gap-1.5 border border-indigo-200/60">
+            <i class="ph-fill ph-pencil"></i> 生活例句克漏字：請在空格填入正確的英文單字！
+          </div>
+
+          <div class="bg-amber-50/50 p-6 rounded-3xl border-2 border-amber-100 text-slate-800 text-lg sm:text-xl font-bold leading-relaxed space-y-2">
+            <div>
+              ${target.example.replace('______', `
+                <span class="inline-flex items-center px-3 py-1 mx-1 bg-white border-2 border-amber-300 rounded-xl text-indigo-700 font-mono font-black" id="cloze-hint-span">
+                  ${target.word.split('').map(() => '_').join(' ')}
+                </span>
+              `)}
+            </div>
+            <p class="text-sm font-semibold text-slate-500 italic">
+              中文提示：${target.exampleTrans}
+            </p>
+          </div>
+
+          <div class="mt-5 space-y-3">
+            <div class="flex flex-col sm:flex-row items-center gap-2">
+              <input 
+                type="text" 
+                id="cloze-input"
+                placeholder="輸入拼字（例: ${target.word[0]}...）"
+                autocomplete="off"
+                class="w-full px-5 py-3.5 rounded-2xl border-2 border-amber-200 text-lg font-black text-slate-800 focus:outline-none focus:border-indigo-500 focus:bg-white transition uppercase"
+                onkeypress="if(event.key === 'Enter') checkClozeAnswer()"
+              />
+              <button 
+                onclick="checkClozeAnswer()" 
+                class="w-full sm:w-auto pop-btn bg-indigo-600 hover:bg-indigo-500 text-white font-black px-6 py-3.5 rounded-2xl shrink-0 flex items-center justify-center gap-1.5 text-base"
+              >
+                確認答案
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between text-xs">
+              <button onclick="revealLetterHint()" class="text-amber-700 hover:text-amber-900 font-black flex items-center gap-1 underline cursor-pointer">
+                <i class="ph-fill ph-lightbulb text-amber-500 text-sm"></i> 給我一個字母提示！
+              </button>
+              <button onclick="speak('${escapeSentence(completeSentence)}')" class="text-slate-500 hover:text-indigo-600 font-bold flex items-center gap-1">
+                <i class="ph-fill ph-speaker-high"></i> 朗讀完整例句
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="quiz-result-bar" class="hidden mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        </div>
+      `;
+
+      setTimeout(() => {
+        const inp = document.getElementById('cloze-input');
+        if (inp) inp.focus();
+      }, 100);
+    }
+
+    function revealLetterHint() {
+      if (!currentQuizTarget) return;
+      clozeHintLevel++;
+      const word = currentQuizTarget.word;
+      let hint = "";
+      for (let i = 0; i < word.length; i++) {
+        if (i < clozeHintLevel) {
+          hint += word[i] + " ";
+        } else {
+          hint += "_ ";
+        }
+      }
+      const span = document.getElementById('cloze-hint-span');
+      if (span) span.innerText = hint.trim();
+    }
+
+    function checkClozeAnswer() {
+      const input = document.getElementById('cloze-input');
+      if (!input) return;
+      const userVal = input.value.trim().toLowerCase();
+      if (!userVal) {
+        showToast("請先輸入單字喔！");
+        return;
+      }
+
+      input.disabled = true;
+      const resultBar = document.getElementById('quiz-result-bar');
+      if (resultBar) resultBar.classList.remove('hidden');
+
+      if (userVal === currentQuizTarget.word.toLowerCase()) {
+        playCorrectSound();
+        confetti({
+          particleCount: 90,
+          spread: 80,
+          origin: { y: 0.65 }
+        });
+
+        input.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+        totalCorrect++;
+        correctStreak++;
+        updateStatsView();
+
+        if (resultBar) {
+          resultBar.innerHTML = `
+            <div class="flex items-center gap-2 text-emerald-600 font-black text-sm sm:text-base">
+              <i class="ph-fill ph-star text-2xl text-amber-400"></i>
+              太厲害了！完全拼對了！
+            </div>
+            <button onclick="loadNewQuizQuestion()" class="pop-btn bg-indigo-600 hover:bg-indigo-500 text-white font-black text-sm px-6 py-2.5 rounded-2xl shadow-sm flex items-center gap-1.5">
+              下一題 <i class="ph-bold ph-arrow-right"></i>
+            </button>
+          `;
+        }
+      } else {
+        playWrongSound();
+        input.classList.add('border-rose-400', 'bg-rose-50', 'text-rose-800');
+        correctStreak = 0;
+        updateStatsView();
+
+        if (resultBar) {
+          resultBar.innerHTML = `
+            <div class="text-rose-600 text-xs sm:text-sm font-bold">
+              正確拼字是：<span class="font-black text-slate-800 text-base">${currentQuizTarget.word}</span> (${currentQuizTarget.meaning})
+            </div>
+            <button onclick="loadNewQuizQuestion()" class="pop-btn bg-slate-800 hover:bg-slate-700 text-white font-black text-sm px-5 py-2.5 rounded-2xl shadow-sm flex items-center gap-1.5">
+              繼續挑戰 <i class="ph-bold ph-arrow-right"></i>
+            </button>
+          `;
+        }
+      }
+    }
+
+    function updateStatsView() {
+      const correctEl = document.getElementById('quiz-correct-count');
+      const streakEl = document.getElementById('quiz-streak-count');
+      if (correctEl) correctEl.innerText = totalCorrect;
+      if (streakEl) streakEl.innerText = correctStreak;
+    }
+
+    function renderBankCards(list = wordBank) {
+      const container = document.getElementById('bank-list-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-2 text-center py-12 bg-white rounded-3xl border-2 border-dashed border-amber-200 text-slate-400 font-bold">
+            查無相符單字，換個關鍵字找找看吧！
+          </div>
+        `;
+        return;
+      }
+
+      list.forEach(item => {
+        const div = document.createElement('div');
+        div.className = "bg-white p-4 sm:p-5 rounded-3xl border-2 border-amber-100/70 shadow-xs flex items-start justify-between gap-3 card-bounce";
+        div.innerHTML = `
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xl font-black text-slate-800">${item.word}</span>
+              <span class="text-xs bg-slate-100 text-slate-600 font-mono font-bold px-2 py-0.5 rounded-md">${item.kk}</span>
+              <span class="text-xs bg-amber-100 text-amber-800 font-black px-2 py-0.5 rounded-md">${item.pos}</span>
+            </div>
+            <p class="text-base font-black text-amber-900 mt-1">${item.meaning}</p>
+            <p class="text-xs text-slate-500 font-medium mt-1 line-clamp-1">${item.example.replace('______', item.word)}</p>
+          </div>
+          <button onclick="speak('${item.word}')" class="pop-btn p-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 shrink-0 border border-amber-200">
+            <i class="ph-bold ph-speaker-high text-lg"></i>
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function handleBankSearch() {
+      const input = document.getElementById('bank-search-input');
+      if (!input) return;
+      const query = input.value.trim().toLowerCase();
+      if (!query) {
+        renderBankCards(wordBank);
+        return;
+      }
+      const filtered = wordBank.filter(i => 
+        i.word.toLowerCase().includes(query) ||
+        i.meaning.includes(query) ||
+        i.pos.toLowerCase().includes(query)
+      );
+      renderBankCards(filtered);
+    }
+
+    function downloadWordBankJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(wordBank, null, 2));
+      const a = document.createElement('a');
+      a.setAttribute("href", dataStr);
+      a.setAttribute("download", `youzi_english_1500_${taiwanTodayString}.json`);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      showToast("已成功下載單字庫 JSON！");
+    }
+
+    function handleImportJson(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const data = JSON.parse(evt.target.result);
+          if (Array.isArray(data) && data.length > 0 && data[0].word) {
+            wordBank = data;
+            saveDatabase();
+            renderBankCards(wordBank);
+            dailyWords = computeDailyWordsForDate(viewingDateString);
+            renderDailyCards();
+            showToast(`成功匯入 ${data.length} 個單字！`);
+          } else {
+            showToast("格式需為含有 word、meaning 的陣列！");
+          }
+        } catch(err) {
+          showToast("檔案讀取失敗，請確認格式。");
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    function switchTab(tabId) {
+      ['daily', 'quiz', 'bank', 'github'].forEach(id => {
+        const sec = document.getElementById(`section-${id}`);
+        const btn = document.getElementById(`tab-btn-${id}`);
+        if (!sec || !btn) return;
+
+        if (id === tabId) {
+          sec.classList.remove('hidden');
+          btn.className = "tab-btn px-3.5 py-2 rounded-xl text-amber-950 bg-white shadow-sm flex items-center gap-1.5 transition";
+        } else {
+          sec.classList.add('hidden');
+          btn.className = "tab-btn px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition";
+        }
+      });
+
+      if (tabId === 'quiz') {
+        loadNewQuizQuestion();
+      } else if (tabId === 'bank') {
+        renderBankCards(wordBank);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      if (!toast || !text) return;
+
+      text.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    // Safely run initialization on document ready
+    window.addEventListener('DOMContentLoaded', () => {
+      initDatabase();
+      initTaiwanTime();
+      updateDateViewUI();
+      dailyWords = computeDailyWordsForDate(viewingDateString);
+      renderDailyCards();
+    });
+  </script>
+</body>
+</html>
