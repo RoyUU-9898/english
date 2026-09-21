@@ -14,6 +14,31 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   
   <style>
+    /* 平板與手機：維持原本預設適中比例 */
+    html {
+      font-size: 16px;
+    }
+
+    /* 筆記型電腦、桌上型電腦螢幕（1024px 以上）：字體與元素自動等比例放大 20% */
+    @media (min-width: 1024px) {
+      html {
+        font-size: 19.5px;
+      }
+      main.max-w-4xl, header .max-w-4xl {
+        max-width: 1100px !important;
+      }
+    }
+
+    /* 大螢幕桌機、大顯示器或教室投影機（1440px 以上）：自動等比例放大 35% */
+    @media (min-width: 1440px) {
+      html {
+        font-size: 21.5px;
+      }
+      main.max-w-4xl, header .max-w-4xl {
+        max-width: 1220px !important;
+      }
+    }
+
     * {
       font-family: 'Zen Maru Gothic', 'Fredoka', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       box-sizing: border-box;
@@ -45,15 +70,6 @@
       box-shadow: 0 1px 0px #059669;
     }
 
-    .blue-btn-shadow {
-      box-shadow: 0 4px 0px #2563eb;
-      transition: all 0.1s ease-in-out;
-    }
-    .blue-btn-shadow:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0px #2563eb;
-    }
-
     ::-webkit-scrollbar {
       width: 10px;
       height: 10px;
@@ -73,7 +89,7 @@
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col justify-between selection:bg-amber-200">
 
-  <!-- 頂部導覽列 (字體加大、觸控舒適) -->
+  <!-- 頂部導覽列 -->
   <header class="bg-white/95 backdrop-blur border-b-2 border-amber-200 sticky top-0 z-40 px-4 py-3 sm:py-4 shadow-sm">
     <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-3">
@@ -81,7 +97,7 @@
         <span class="bg-amber-100 text-amber-800 text-sm sm:text-base font-bold px-3 py-1 rounded-full border border-amber-300">國小高年級</span>
       </div>
 
-      <!-- 導覽分頁按鈕 (已拿掉發布教學) -->
+      <!-- 導覽分頁按鈕 -->
       <nav class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 justify-center">
         <button onclick="switchTab('daily')" id="tab-daily" class="px-4 py-2 rounded-xl font-bold text-base sm:text-lg transition-all bg-amber-500 text-white shadow-sm">
           今日單字
@@ -99,10 +115,10 @@
     </div>
   </header>
 
-  <!-- 主內容容器 (支援滑動、自適應比例) -->
+  <!-- 主內容容器 -->
   <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 flex-1">
 
-    <!-- 台灣時間與日期選擇器 (可看昨天、鎖定明天) -->
+    <!-- 台灣時間與日期選擇器 -->
     <div class="bg-white border-2 border-amber-200 rounded-3xl p-4 sm:p-5 mb-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
         <span class="text-2xl">📅</span>
@@ -172,7 +188,7 @@
           </button>
         </div>
 
-        <!-- 四個選項按鈕 (加大高度，平板好點按) -->
+        <!-- 四個選項按鈕 -->
         <div id="choice-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
           <!-- 由 JavaScript 動態生成選項按鈕 -->
         </div>
@@ -246,7 +262,7 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <div>
             <h3 class="text-2xl font-extrabold text-slate-800">國小常用 1500 核心字庫</h3>
-            <p class="text-base text-slate-500 mt-1">點擊主題即可快速篩選分類，共收錄各主題實用基礎單字與例句。</p>
+            <p class="text-base text-slate-500 mt-1">點擊主題即可快速篩選分類，收錄生活實用基礎單字與例句。</p>
           </div>
           <div class="text-amber-700 font-extrabold text-lg bg-amber-50 border border-amber-200 px-4 py-2 rounded-2xl">
             收錄：<span id="lib-total-count" class="text-amber-900 font-black">1500</span> 字
@@ -258,15 +274,14 @@
           <button onclick="filterCategory('ALL')" class="cat-pill active-cat px-4 py-2 rounded-xl text-base font-bold bg-amber-500 text-white shadow-sm transition">
             全部單字
           </button>
-          <!-- 由 JS 填充各主題分類標籤 -->
         </div>
 
-        <!-- 關鍵字搜尋框 -->
+        <!-- 搜尋框 -->
         <div class="my-4">
           <input type="text" id="lib-search-input" oninput="renderLibraryWords()" placeholder="🔍 搜尋英文單字或中文意思..." class="w-full border-2 border-amber-200 rounded-2xl px-4 py-3 text-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
         </div>
 
-        <!-- 單字瀏覽列表 (垂直滑順滾動) -->
+        <!-- 單字列表 -->
         <div id="library-words-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[550px] overflow-y-auto p-1">
           <!-- 由 JavaScript 動態生成單字卡 -->
         </div>
@@ -275,7 +290,7 @@
 
   </main>
 
-  <!-- 頁面底部：精準還原「柚子老師製作」深藍膠囊標章 -->
+  <!-- 頁面底部：依截圖設計的深藍黑曜石膠囊「柚子老師製作」標章 -->
   <footer class="py-8 flex justify-center items-center">
     <div class="bg-[#1e293b] border border-slate-700/80 rounded-full px-6 py-2.5 flex items-center gap-3 shadow-lg select-none">
       <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -428,11 +443,9 @@
       ]
     };
 
-    // 系統性自動展開產生符合教育部課綱高年級銜接的 1500 個單字池
     let WORD_BANK = [];
     let idCounter = 1;
 
-    // 將真實基礎庫載入
     for (const [catName, list] of Object.entries(rawCategories)) {
       list.forEach(([en, zh, kk, pos, ex, ex_zh]) => {
         WORD_BANK.push({
@@ -443,7 +456,6 @@
       });
     }
 
-    // 依教育部 1200 常用字規範補充完整延伸字彙庫，湊足 1500 字
     const supplementaryRoots = [
       ["able", "能幹的", "[ˈebəl]", "adj.", "She is able to swim fast.", "她能夠游得很快。", "特質與能力 🌟"],
       ["about", "大約/關於", "[əˈbaʊt]", "prep.", "Tell me about your family.", "跟我說說關於你的家人吧。", "日常表達 💬"],
@@ -555,11 +567,9 @@
       });
     });
 
-    // 依高年級課綱需求填充至完整 1500 字，確保單字豐富且無空白
     const baseLength = WORD_BANK.length;
     for (let i = baseLength; i < 1500; i++) {
       const template = WORD_BANK[i % baseLength];
-      const seq = Math.floor(i / baseLength) + 1;
       WORD_BANK.push({
         id: idCounter++,
         en: template.en,
@@ -577,7 +587,6 @@
        ========================================================== */
     function getTaiwanDateObject() {
       const now = new Date();
-      // 轉換至台灣時區
       const twString = now.toLocaleString("en-US", { timeZone: "Asia/Taipei" });
       return new Date(twString);
     }
@@ -593,7 +602,6 @@
     const TAIWAN_TODAY_STR = formatDateYMD(TAIWAN_TODAY_OBJ);
     let selectedDateStr = TAIWAN_TODAY_STR;
 
-    // 確定性雜湊演算法：依日期字串取 5 個固定單字
     function getWordsForDate(dateStr) {
       let hash = 0;
       for (let i = 0; i < dateStr.length; i++) {
@@ -606,7 +614,7 @@
     }
 
     /* ==========================================================
-       3. 音效引擎 (Web Audio API - 零外部檔案依賴，100% 響亮)
+       3. 音效引擎 (Web Audio API)
        ========================================================== */
     let audioCtx = null;
     function getAudioContext() {
@@ -619,7 +627,6 @@
       return audioCtx;
     }
 
-    // 答對音效：任天堂過關清脆大三度 (C5 -> E5 -> G5)
     function playSuccessSound() {
       try {
         const ctx = getAudioContext();
@@ -638,11 +645,10 @@
           osc.stop(now + idx * 0.08 + 0.25);
         });
       } catch (e) {
-        console.log("音效播報就緒");
+        console.log("音效就緒");
       }
     }
 
-    // 答錯音效：溫柔彈性泡泡聲 (不挫折、激勵再試一次)
     function playWrongSound() {
       try {
         const ctx = getAudioContext();
@@ -659,17 +665,16 @@
         osc.start(now);
         osc.stop(now + 0.22);
       } catch (e) {
-        console.log("音效播報就緒");
+        console.log("音效就緒");
       }
     }
 
-    // 發音：使用 Web Speech API 朗讀單字與例句
     function speakText(text) {
       if (!('speechSynthesis' in window)) return;
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
-      utterance.rate = 0.88; // 稍微放慢，適合國小高年級聆聽
+      utterance.rate = 0.88;
       window.speechSynthesis.speak(utterance);
     }
 
@@ -709,7 +714,6 @@
 
       const parts = selectedDateStr.split('-');
       const y = parts[0], m = parts[1], d = parts[2];
-      
       const isToday = (selectedDateStr === TAIWAN_TODAY_STR);
 
       if (dateDisplay) {
@@ -718,11 +722,10 @@
 
       if (datePicker) {
         datePicker.value = selectedDateStr;
-        datePicker.max = TAIWAN_TODAY_STR; // 核心：鎖定明天，防偷看
+        datePicker.max = TAIWAN_TODAY_STR;
       }
 
       if (nextBtn) {
-        // 今天時鎖定「後一天」
         nextBtn.disabled = isToday;
       }
 
@@ -742,7 +745,6 @@
       current.setDate(current.getDate() + delta);
       const targetStr = formatDateYMD(current);
 
-      // 防偷看明天檢查
       if (targetStr > TAIWAN_TODAY_STR) return;
 
       selectedDateStr = targetStr;
@@ -766,7 +768,7 @@
     }
 
     /* ==========================================================
-       5. 渲染 5 個單字卡片
+       5. 渲染單字卡片
        ========================================================== */
     function renderDailyCards() {
       const container = document.getElementById('daily-cards-container');
@@ -799,7 +801,6 @@
             </div>
           </div>
 
-          <!-- 生活化例句與翻譯 -->
           <div class="mt-4 bg-amber-50/60 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
               <p class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug">${w.ex}</p>
@@ -815,7 +816,7 @@
     }
 
     /* ==========================================================
-       6. 字義測驗 (選擇題) 邏輯
+       6. 字義測驗 (選擇題)
        ========================================================== */
     let choiceWords = [];
     let choiceIndex = 0;
@@ -835,7 +836,6 @@
       document.getElementById('choice-feedback').innerText = '';
       document.getElementById('choice-next-btn').classList.add('hidden');
 
-      // 產生 4 個選項 (1 個正解 + 3 個隨機干擾選項)
       let options = [current.zh];
       while (options.length < 4) {
         const randWord = WORD_BANK[Math.floor(Math.random() * WORD_BANK.length)];
@@ -902,7 +902,7 @@
     }
 
     /* ==========================================================
-       7. 例句克漏字填空測驗 邏輯
+       7. 例句克漏字填空測驗
        ========================================================== */
     let clozeWords = [];
     let clozeIndex = 0;
@@ -926,7 +926,6 @@
       inputEl.disabled = false;
       inputEl.focus();
 
-      // 例句克漏字替換
       const regex = new RegExp(`\\b${current.en}\\b`, 'gi');
       let blankSentence = current.ex.replace(regex, "______");
       if (!blankSentence.includes("______")) {
@@ -979,7 +978,6 @@
       nextBtn.classList.remove('hidden');
     }
 
-    // 支援 Enter 鍵送出答案
     document.getElementById('cloze-user-input').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') checkClozeAnswer();
     });
@@ -1052,7 +1050,6 @@
         );
       }
 
-      // 最多顯示 100 筆以保持滑動極致順暢
       const slice = filtered.slice(0, 100);
 
       slice.forEach(w => {
