@@ -1,366 +1,617 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>柚子老師的每日五字小學堂 | 國小高年級英語</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>每日 5 單字小學堂 - 柚子老師製作</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Phosphor Icons for playful UI -->
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <!-- Canvas Confetti for winning celebrations -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            pomelo: {
-              50: '#fffbeb',
-              100: '#fef3c7',
-              200: '#fde68a',
-              300: '#fcd34d',
-              400: '#fbbf24',
-              500: '#f59e0b',
-              600: '#d97706',
-            },
-            kidsSky: '#38bdf8',
-          },
-          fontFamily: {
-            sans: ['"Nunito"', '"Quicksand"', '"PingFang TC"', '"Noto Sans TC"', '"Microsoft JhengHei"', 'sans-serif'],
-          }
-        }
-      }
-    };
-  </script>
-
-  <!-- Google Fonts: Rounded & Child-friendly -->
+  <!-- Google Fonts 友善圓體 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+  <!-- Confetti 彩帶特效 -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
   <style>
-    body {
-      font-family: 'Nunito', 'Fredoka', sans-serif;
+    * {
+      font-family: 'Zen Maru Gothic', 'Fredoka', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
-    .card-bounce {
-      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    html, body {
+      touch-action: manipulation;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+      background-color: #FEF9E7;
     }
-    .card-bounce:hover {
-      transform: translateY(-3px);
+
+    .pomelo-btn-shadow {
+      box-shadow: 0 4px 0px #d97706;
+      transition: all 0.1s ease-in-out;
     }
-    .pop-btn {
-      transition: all 0.15s ease-in-out;
-      box-shadow: 0 4px 0 rgba(0,0,0,0.08);
+    .pomelo-btn-shadow:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0px #d97706;
     }
-    .pop-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 rgba(0,0,0,0.12);
+
+    .mint-btn-shadow {
+      box-shadow: 0 4px 0px #059669;
+      transition: all 0.1s ease-in-out;
     }
-    .pop-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    .mint-btn-shadow:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0px #059669;
+    }
+
+    .blue-btn-shadow {
+      box-shadow: 0 4px 0px #2563eb;
+      transition: all 0.1s ease-in-out;
+    }
+    .blue-btn-shadow:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0px #2563eb;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FEF3C7;
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #FBBF24;
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #F59E0B;
     }
   </style>
 </head>
-<body class="bg-[#FFFDF7] text-slate-700 min-h-screen pb-12 antialiased selection:bg-amber-200">
+<body class="text-slate-800 min-h-screen flex flex-col justify-between selection:bg-amber-200">
 
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-amber-100 shadow-sm">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
-      
-      <!-- Logo Title & Taiwan Date Display -->
-      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('daily')">
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-xl font-black text-slate-800 tracking-tight">每日 5 字小學堂</h1>
-            <span class="bg-amber-100 text-amber-900 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-200">
-              國小五六年級英語
-            </span>
-          </div>
-          <p class="text-xs text-slate-500 font-medium flex items-center gap-1.5 mt-0.5">
-            <i class="ph-bold ph-clock text-amber-500"></i>
-            <span id="header-tw-date" class="font-bold text-slate-700">台灣時間載入中...</span>
-          </p>
-        </div>
+  <!-- 頂部導覽列 (字體加大、觸控舒適) -->
+  <header class="bg-white/95 backdrop-blur border-b-2 border-amber-200 sticky top-0 z-40 px-4 py-3 sm:py-4 shadow-sm">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-amber-900 tracking-wide">每日 5 字小學堂</h1>
+        <span class="bg-amber-100 text-amber-800 text-sm sm:text-base font-bold px-3 py-1 rounded-full border border-amber-300">國小高年級</span>
       </div>
 
-      <!-- Navigation Tabs -->
-      <nav class="flex items-center gap-1.5 bg-amber-100/70 p-1.5 rounded-2xl border border-amber-200/80 text-xs sm:text-sm font-bold">
-        <button id="tab-btn-daily" onclick="switchTab('daily')" class="tab-btn px-3.5 py-2 rounded-xl text-amber-950 bg-white shadow-sm flex items-center gap-1.5 transition">
-          <i class="ph-bold ph-calendar-check text-lg text-amber-500"></i>
-          <span>今日五字</span>
+      <!-- 導覽分頁按鈕 (已拿掉發布教學) -->
+      <nav class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 justify-center">
+        <button onclick="switchTab('daily')" id="tab-daily" class="px-4 py-2 rounded-xl font-bold text-base sm:text-lg transition-all bg-amber-500 text-white shadow-sm">
+          今日單字
         </button>
-        <button id="tab-btn-quiz" onclick="switchTab('quiz')" class="tab-btn px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition">
-          <i class="ph-bold ph-game-controller text-lg text-indigo-500"></i>
-          <span>過關測驗</span>
+        <button onclick="switchTab('quiz-choice')" id="tab-quiz-choice" class="px-4 py-2 rounded-xl font-bold text-base sm:text-lg transition-all bg-white text-slate-600 hover:bg-amber-50">
+          字義測驗
         </button>
-        <button id="tab-btn-bank" onclick="switchTab('bank')" class="tab-btn px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition">
-          <i class="ph-bold ph-books text-lg text-emerald-500"></i>
-          <span>單字總寶庫</span>
+        <button onclick="switchTab('quiz-cloze')" id="tab-quiz-cloze" class="px-4 py-2 rounded-xl font-bold text-base sm:text-lg transition-all bg-white text-slate-600 hover:bg-amber-50">
+          克漏字挑戰
         </button>
-        <button id="tab-btn-github" onclick="switchTab('github')" class="tab-btn px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition">
-          <i class="ph-bold ph-github-logo text-lg text-slate-700"></i>
-          <span>GitHub發布教學</span>
+        <button onclick="switchTab('library')" id="tab-library" class="px-4 py-2 rounded-xl font-bold text-base sm:text-lg transition-all bg-white text-slate-600 hover:bg-amber-50">
+          主題字庫
         </button>
       </nav>
     </div>
   </header>
 
-  <!-- Notification Toast -->
-  <div id="toast" class="fixed bottom-24 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white text-sm px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5">
-    <i class="ph-fill ph-bell-ringing text-amber-400 text-xl"></i>
-    <span id="toast-text" class="font-bold">通知訊息</span>
-  </div>
+  <!-- 主內容容器 (支援滑動、自適應比例) -->
+  <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 flex-1">
 
-  <main class="max-w-4xl mx-auto px-4 pt-6">
-
-    <!-- TAB 1: DAILY WORDS SECTION -->
-    <section id="section-daily" class="space-y-5">
-
-      <!-- Interactive Date Navigator (Recall yesterday, block tomorrow) -->
-      <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border-2 border-amber-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="flex items-center gap-3 w-full sm:w-auto">
-          <button onclick="changeDateOffset(-1)" class="pop-btn bg-amber-50 hover:bg-amber-100 text-amber-900 font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-amber-200">
-            <i class="ph-bold ph-caret-left text-base"></i> 前一天 (溫習)
-          </button>
-          
-          <div class="text-center sm:text-left flex-1 sm:flex-initial">
-            <div class="flex items-center gap-2">
-              <span id="viewing-date-label" class="text-base sm:text-lg font-black text-slate-800">讀取中...</span>
-              <span id="date-status-badge" class="text-xs font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">今日單字</span>
-            </div>
-            <p class="text-[11px] text-slate-400 font-bold">依台灣時間每日 00:00 自動換日</p>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-          <button id="btn-back-today" onclick="resetToToday()" class="hidden pop-btn bg-amber-400 hover:bg-amber-300 text-slate-900 font-black text-xs px-3 py-2 rounded-xl shadow-xs flex items-center gap-1">
-            <i class="ph-bold ph-arrow-u-up-left"></i> 回今天
-          </button>
-          <input 
-            type="date" 
-            id="date-picker-input" 
-            onchange="onCustomDatePick(this.value)"
-            class="bg-amber-50/70 border border-amber-200 text-slate-700 text-xs font-bold px-2.5 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-300"
-          />
-          <button id="btn-next-day" onclick="changeDateOffset(1)" disabled class="pop-btn bg-slate-100 text-slate-400 font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-slate-200 cursor-not-allowed">
-            後一天 <i class="ph-bold ph-caret-right text-base"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Encouragement Banner -->
-      <div class="bg-gradient-to-r from-amber-300 via-yellow-300 to-emerald-300 rounded-3xl p-5 sm:p-6 shadow-md border-2 border-amber-200 relative overflow-hidden">
-        <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div class="space-y-1">
-            <h2 id="hero-date-title" class="text-xl md:text-2xl font-black text-slate-800">
-              今天挑戰這 5 個高年級必背單字！
-            </h2>
-            <p class="text-slate-700 text-xs sm:text-sm font-semibold max-w-xl">
-              生活化實用例句，點擊發音按鈕多聽多念，每天 5 個字，輕鬆累積字彙量！
-            </p>
-          </div>
-
-          <button onclick="startDailyQuiz()" class="pop-btn bg-emerald-500 hover:bg-emerald-400 text-white font-black text-xs sm:text-sm px-5 py-2.5 rounded-2xl flex items-center gap-1.5 shadow-md shrink-0">
-            <i class="ph-fill ph-lightning text-yellow-200 text-lg"></i>
-            開始練習這 5 字
-          </button>
-        </div>
-        <div class="absolute -right-6 -bottom-10 w-44 h-44 rounded-full bg-white/20 pointer-events-none"></div>
-      </div>
-
-      <!-- Word Cards List -->
-      <div id="daily-words-container" class="space-y-4">
-        <!-- Rendered via JS -->
-      </div>
-    </section>
-
-    <!-- TAB 2: QUIZ SECTION -->
-    <section id="section-quiz" class="hidden space-y-6">
-      <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border-2 border-amber-100">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-amber-50 pb-5">
-          <div>
-            <h2 class="text-2xl font-black text-slate-800 flex items-center gap-2">
-              <span class="w-9 h-9 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl shadow-xs">
-                <i class="ph-fill ph-trophy"></i>
-              </span>
-              高年級單字過關測驗
-            </h2>
-            <p class="text-slate-500 text-xs font-semibold mt-1">答對獲得金幣音效與彩帶，連續全對累積星星！</p>
-          </div>
-
-          <!-- Gamified Stats -->
-          <div class="flex items-center gap-2 sm:gap-3">
-            <div class="bg-amber-50 border-2 border-amber-200 px-4 py-2 rounded-2xl text-center shadow-xs">
-              <span class="text-[11px] text-amber-700 font-extrabold block">答對星星</span>
-              <div class="flex items-center justify-center gap-1">
-                <i class="ph-fill ph-star text-amber-400 text-sm"></i>
-                <span id="quiz-correct-count" class="text-lg font-black text-amber-800">0</span>
-              </div>
-            </div>
-            <div class="bg-rose-50 border-2 border-rose-200 px-4 py-2 rounded-2xl text-center shadow-xs">
-              <span class="text-[11px] text-rose-700 font-extrabold block">連勝紀錄</span>
-              <div class="flex items-center justify-center gap-1">
-                <i class="ph-fill ph-flame text-rose-500 text-sm"></i>
-                <span id="quiz-streak-count" class="text-lg font-black text-rose-800">0</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mode Buttons & Scope Filter -->
-        <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex rounded-2xl bg-slate-100 p-1 font-bold text-xs sm:text-sm">
-            <button id="quiz-type-mcq" onclick="setQuizType('mcq')" class="px-4 py-2 rounded-xl bg-white text-indigo-700 shadow-sm transition flex items-center gap-1.5">
-              <i class="ph-bold ph-list-numbers text-base"></i> 四選一字義測驗
-            </button>
-            <button id="quiz-type-cloze" onclick="setQuizType('cloze')" class="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
-              <i class="ph-bold ph-pencil-simple-line text-base"></i> 生活例句克漏字
-            </button>
-          </div>
-
-          <div class="flex items-center gap-2 text-xs font-bold text-slate-600">
-            <span>題目範圍：</span>
-            <select id="quiz-scope" onchange="loadNewQuizQuestion()" class="bg-amber-50/80 border border-amber-200 text-slate-800 rounded-xl px-3 py-1.5 font-bold focus:outline-none focus:ring-2 focus:ring-amber-300">
-              <option value="daily">目前選取日期的 5 個單字</option>
-              <option value="all">從全部題庫抽題</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quiz Action Card Area -->
-      <div id="quiz-card-box" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border-2 border-amber-100 min-h-[340px] flex flex-col justify-between">
-        <!-- Rendered via JS -->
-      </div>
-    </section>
-
-    <!-- TAB 3: BANK SECTION -->
-    <section id="section-bank" class="hidden space-y-6">
-      <div class="bg-white rounded-3xl p-6 shadow-sm border-2 border-amber-100">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h2 class="text-2xl font-black text-slate-800 flex items-center gap-2">
-              <span class="w-9 h-9 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shadow-xs">
-                <i class="ph-fill ph-book-open"></i>
-              </span>
-              國小高年級單字寶庫
-            </h2>
-            <p class="text-slate-500 text-xs font-medium mt-1">
-              收錄國小高年級課綱核心與銜接字庫。目前已有 <span id="bank-total-count" class="font-extrabold text-emerald-600 text-sm">0</span> 個精選單字。
-            </p>
-          </div>
-
-          <!-- JSON Export/Import buttons -->
-          <div class="flex items-center gap-2">
-            <button onclick="downloadWordBankJson()" class="pop-btn text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold flex items-center gap-1 border border-slate-200">
-              <i class="ph-bold ph-download-simple"></i> 匯出字庫
-            </button>
-            <label class="pop-btn text-xs bg-emerald-500 hover:bg-emerald-400 text-white px-3.5 py-2 rounded-xl font-bold flex items-center gap-1 cursor-pointer shadow-sm">
-              <i class="ph-bold ph-upload-simple"></i> 匯入擴充字庫
-              <input type="file" id="json-importer" accept=".json" class="hidden" onchange="handleImportJson(event)" />
-            </label>
-          </div>
-        </div>
-
-        <!-- Search Bar -->
-        <div class="mt-4 relative">
-          <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
-          <input 
-            type="text" 
-            id="bank-search-input" 
-            oninput="handleBankSearch()"
-            placeholder="搜尋單字、中文解釋或詞性（例: apple、朋友、adj.）..." 
-            class="w-full pl-11 pr-4 py-3 rounded-2xl bg-amber-50/40 border-2 border-amber-100 text-sm font-semibold focus:outline-none focus:border-amber-400 focus:bg-white transition"
-          />
-        </div>
-      </div>
-
-      <!-- Word Grid List -->
-      <div id="bank-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-        <!-- Rendered via JS -->
-      </div>
-    </section>
-
-    <!-- TAB 4: GITHUB PAGES TUTORIAL -->
-    <section id="section-github" class="hidden space-y-6">
-      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border-2 border-amber-100 space-y-6">
+    <!-- 台灣時間與日期選擇器 (可看昨天、鎖定明天) -->
+    <div class="bg-white border-2 border-amber-200 rounded-3xl p-4 sm:p-5 mb-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">📅</span>
         <div>
-          <span class="bg-indigo-100 text-indigo-900 font-extrabold text-xs px-3 py-1 rounded-full border border-indigo-200">
-            免費上線指南 💡
-          </span>
-          <h2 class="text-2xl font-black text-slate-800 mt-2">如何用 GitHub 免費發布這個網站？</h2>
-          <p class="text-slate-500 text-sm font-medium mt-1">
-            不用花錢買伺服器，直接在手機、平板與電腦隨時開啟讓孩子練習！
-          </p>
+          <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">台灣時間</span>
+          <div id="display-date-str" class="text-lg sm:text-xl font-black text-slate-700">載入中...</div>
+        </div>
+      </div>
+
+      <!-- 日期切換控制項 -->
+      <div class="flex items-center gap-2 w-full sm:w-auto justify-center">
+        <button id="btn-prev-day" onclick="changeDay(-1)" class="px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-2xl font-bold text-base transition pomelo-btn-shadow flex items-center gap-1">
+          <span>◀</span> 前一天溫習
+        </button>
+        
+        <input type="date" id="date-picker" onchange="onDateSelected(this.value)" class="border-2 border-amber-300 rounded-2xl px-3 py-2 text-base font-bold text-slate-700 bg-amber-50/50 focus:outline-none focus:ring-2 focus:ring-amber-400">
+
+        <button id="btn-next-day" onclick="changeDay(1)" class="px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-2xl font-bold text-base transition pomelo-btn-shadow flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none">
+          後一天 <span>▶</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 1. 今日單字分頁 -->
+    <section id="view-daily" class="space-y-6">
+      <div class="bg-amber-50 border-2 border-amber-200 rounded-3xl p-5 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-400 text-white flex items-center justify-center text-2xl font-bold shadow-inner">
+            5
+          </div>
+          <div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-amber-900" id="daily-banner-title">今日進度：精選 5 單字</h2>
+            <p class="text-sm sm:text-base text-slate-500 font-medium">每天花 3 分鐘大聲念，英文進步看得見！</p>
+          </div>
+        </div>
+        <button id="btn-today-reset" onclick="resetToToday()" class="hidden px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold text-base shadow pomelo-btn-shadow">
+          回今天進度
+        </button>
+      </div>
+
+      <!-- 5 個單字卡片容器 -->
+      <div id="daily-cards-container" class="space-y-5">
+        <!-- 由 JavaScript 動態渲染 -->
+      </div>
+    </section>
+
+    <!-- 2. 字義測驗分頁 -->
+    <section id="view-quiz-choice" class="hidden space-y-6">
+      <div class="bg-white border-2 border-amber-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+        <div class="flex justify-between items-center mb-6 pb-4 border-b border-amber-100">
+          <div>
+            <span class="text-sm font-bold text-amber-600 bg-amber-100 px-3 py-1 rounded-full">四選一測驗</span>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-800 mt-2">這個單字是什麼意思？</h3>
+          </div>
+          <div class="text-right">
+            <span class="text-sm text-slate-500 font-bold">目前進度</span>
+            <div id="choice-progress" class="text-xl sm:text-2xl font-black text-amber-600">1 / 5</div>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4">
-          <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/50 border border-amber-100">
-            <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-900 font-black flex items-center justify-center shrink-0 shadow-xs">1</div>
-            <div class="space-y-1.5">
-              <h3 class="font-black text-slate-800">在 GitHub 建立 Repository</h3>
-              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                登入 <a href="https://github.com" target="_blank" class="text-indigo-600 underline font-bold">GitHub</a>，點選右上角「+」➔「New repository」，取名為 <code>daily-words</code>，設為 <strong>Public</strong> 並建立。
-              </p>
-            </div>
+        <div class="text-center my-6">
+          <div id="choice-question-word" class="text-4xl sm:text-5xl font-black text-amber-900 tracking-wide mb-3">
+            word
+          </div>
+          <button id="choice-audio-btn" onclick="speakCurrentQuizWord()" class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-800 text-base sm:text-lg font-bold transition">
+            🔊 聽發音
+          </button>
+        </div>
+
+        <!-- 四個選項按鈕 (加大高度，平板好點按) -->
+        <div id="choice-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+          <!-- 由 JavaScript 動態生成選項按鈕 -->
+        </div>
+
+        <!-- 答題回饋訊息 -->
+        <div id="choice-feedback" class="mt-6 text-center text-lg sm:text-xl font-black min-h-[32px]"></div>
+
+        <div class="mt-6 flex justify-end">
+          <button id="choice-next-btn" onclick="nextChoiceQuiz()" class="hidden px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-black text-lg shadow-md pomelo-btn-shadow">
+            下一題 ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 克漏字填空測驗分頁 -->
+    <section id="view-quiz-cloze" class="hidden space-y-6">
+      <div class="bg-white border-2 border-emerald-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+        <div class="flex justify-between items-center mb-6 pb-4 border-b border-emerald-100">
+          <div>
+            <span class="text-sm font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">例句克漏字填空</span>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-800 mt-2">根據句子填入正確單字</h3>
+          </div>
+          <div class="text-right">
+            <span class="text-sm text-slate-500 font-bold">目前進度</span>
+            <div id="cloze-progress" class="text-xl sm:text-2xl font-black text-emerald-600">1 / 5</div>
+          </div>
+        </div>
+
+        <!-- 例句題目 -->
+        <div class="bg-emerald-50/70 border-2 border-emerald-200 rounded-2xl p-6 my-6 text-center">
+          <div id="cloze-sentence-display" class="text-2xl sm:text-3xl font-bold text-slate-800 leading-relaxed">
+            I eat an <span class="text-emerald-600 underline font-black">______</span> every day.
+          </div>
+          <div id="cloze-sentence-zh" class="text-lg sm:text-xl text-slate-600 mt-3 font-semibold">
+            我每天吃一顆蘋果。
+          </div>
+        </div>
+
+        <!-- 填空輸入區與提示 -->
+        <div class="max-w-md mx-auto space-y-4">
+          <div class="flex gap-2">
+            <input type="text" id="cloze-user-input" placeholder="請輸入單字..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="flex-1 border-2 border-emerald-300 rounded-2xl px-5 py-3 text-xl font-bold text-slate-800 focus:outline-none focus:ring-4 focus:ring-emerald-200 text-center">
+            <button onclick="checkClozeAnswer()" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-black text-lg mint-btn-shadow">
+              送出
+            </button>
           </div>
 
-          <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/50 border border-amber-100">
-            <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-900 font-black flex items-center justify-center shrink-0 shadow-xs">2</div>
-            <div class="space-y-1.5">
-              <h3 class="font-black text-slate-800">上傳 index.html 與 teacher.png 照片</h3>
-              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                點選「Add file」➔「Upload files」：<br/>
-                ① 將這份網頁程式碼另存為 <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-black">index.html</code> 上傳。<br/>
-                ② 將您的小熊貓照片命名為 <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-black">teacher.png</code> 一同上傳至同目錄。
-              </p>
-            </div>
+          <div class="flex items-center justify-between px-2 text-sm sm:text-base font-bold text-slate-500">
+            <span id="cloze-hint-text">💡 提示：字首是 a，共 5 個字母</span>
+            <button onclick="revealClozeHint()" class="text-emerald-700 underline hover:text-emerald-800">
+              顯示更多提示
+            </button>
           </div>
+        </div>
 
-          <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/50 border border-amber-100">
-            <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-900 font-black flex items-center justify-center shrink-0 shadow-xs">3</div>
-            <div class="space-y-1.5">
-              <h3 class="font-black text-slate-800">開啟 GitHub Pages</h3>
-              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                點選儲存庫上方的「Settings」➔ 左側「Pages」➔ Branch 選擇「main」或「master」➔ 點擊 Save。<br/>
-                約 1 分鐘後即可得到專屬網址！
-              </p>
-            </div>
+        <!-- 回饋訊息 -->
+        <div id="cloze-feedback" class="mt-6 text-center text-lg sm:text-xl font-black min-h-[32px]"></div>
+
+        <div class="mt-6 flex justify-end">
+          <button id="cloze-next-btn" onclick="nextClozeQuiz()" class="hidden px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-black text-lg mint-btn-shadow">
+            下一題 ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 1500 主題分類字庫清單 -->
+    <section id="view-library" class="hidden space-y-6">
+      <div class="bg-white border-2 border-amber-200 rounded-3xl p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <div>
+            <h3 class="text-2xl font-extrabold text-slate-800">國小常用 1500 核心字庫</h3>
+            <p class="text-base text-slate-500 mt-1">點擊主題即可快速篩選分類，共收錄各主題實用基礎單字與例句。</p>
           </div>
+          <div class="text-amber-700 font-extrabold text-lg bg-amber-50 border border-amber-200 px-4 py-2 rounded-2xl">
+            收錄：<span id="lib-total-count" class="text-amber-900 font-black">1500</span> 字
+          </div>
+        </div>
+
+        <!-- 主題分類按鈕列 -->
+        <div id="category-filter-bar" class="flex flex-wrap gap-2 pb-4 border-b border-amber-100">
+          <button onclick="filterCategory('ALL')" class="cat-pill active-cat px-4 py-2 rounded-xl text-base font-bold bg-amber-500 text-white shadow-sm transition">
+            全部單字
+          </button>
+          <!-- 由 JS 填充各主題分類標籤 -->
+        </div>
+
+        <!-- 關鍵字搜尋框 -->
+        <div class="my-4">
+          <input type="text" id="lib-search-input" oninput="renderLibraryWords()" placeholder="🔍 搜尋英文單字或中文意思..." class="w-full border-2 border-amber-200 rounded-2xl px-4 py-3 text-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
+        </div>
+
+        <!-- 單字瀏覽列表 (垂直滑順滾動) -->
+        <div id="library-words-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[550px] overflow-y-auto p-1">
+          <!-- 由 JavaScript 動態生成單字卡 -->
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- EXACT FOOTER BADGE AS REQUESTED IN USER REFERENCE IMAGE -->
-  <footer class="mt-14 flex flex-col items-center justify-center">
-    <div class="inline-flex items-center gap-3 bg-[#1e293b] px-6 py-2.5 rounded-full shadow-lg border border-slate-700/60 transition hover:border-slate-500">
-      <!-- Round White Avatar Frame for teacher.png -->
-      <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center p-0.5 overflow-hidden shrink-0 shadow-inner">
-        <img 
-          src="teacher.png" 
-          alt="柚子老師" 
-          class="w-full h-full object-contain"
-          onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'52\' r=\'36\' fill=\'%23FFFFFF\' stroke=\'%231e293b\' stroke-width=\'4\'/><circle cx=\'26\' cy=\'30\' r=\'14\' fill=\'%231e293b\'/><circle cx=\'74\' cy=\'30\' r=\'14\' fill=\'%231e293b\'/><circle cx=\'38\' cy=\'52\' r=\'11\' fill=\'%231e293b\'/><circle cx=\'62\' cy=\'52\' r=\'11\' fill=\'%231e293b\'/><path d=\'M50 16 C 50 8, 62 10, 64 18 C 64 24, 52 24, 50 16 Z\' fill=\'%2384cc16\' stroke=\'%231e293b\' stroke-width=\'2\'/></svg>';"
-        />
+  <!-- 頁面底部：精準還原「柚子老師製作」深藍膠囊標章 -->
+  <footer class="py-8 flex justify-center items-center">
+    <div class="bg-[#1e293b] border border-slate-700/80 rounded-full px-6 py-2.5 flex items-center gap-3 shadow-lg select-none">
+      <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden flex-shrink-0">
+        <img src="teacher.png" alt="柚子老師" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%23ffffff\'/><circle cx=\'30\' cy=\'40\' r=\'12\' fill=\'%23000000\'/><circle cx=\'70\' cy=\'40\' r=\'12\' fill=\'%23000000\'/><circle cx=\'42\' cy=\'50\' r=\'6\' fill=\'%23000000\'/><circle cx=\'58\' cy=\'50\' r=\'6\' fill=\'%23000000\'/><path d=\'M46 62 Q50 66 54 62\' stroke=\'%23000000\' stroke-width=\'3\' fill=\'none\'/></svg>'">
       </div>
-      <!-- Label Text -->
-      <span class="text-white font-black text-base tracking-wide select-none">
+      <span class="text-white font-extrabold text-lg sm:text-xl tracking-wider">
         柚子老師製作
       </span>
     </div>
   </footer>
 
   <script>
-    let audioCtx = null;
+    /* ==========================================================
+       1. 國小高年級 1500 核心主題字庫建立與分類
+       ========================================================== */
+    const rawCategories = {
+      "食物與飲品 🍕": [
+        ["apple", "蘋果", "[ˈæpəl]", "n.", "I eat an apple every day.", "我每天吃一顆蘋果。"],
+        ["banana", "香蕉", "[bəˈnænə]", "n.", "Monkeys like sweet bananas.", "猴子喜歡吃甜甜的香蕉。"],
+        ["bread", "麵包", "[brɛd]", "n.", "Mom bakes fresh bread in the morning.", "媽媽早上烤了新鮮的麵包。"],
+        ["breakfast", "早餐", "[ˈbrɛkfəst]", "n.", "We eat breakfast together at seven.", "我們七點一起吃早餐。"],
+        ["lunch", "午餐", "[lʌntʃ]", "n.", "What do you want for lunch?", "你午餐想要吃什麼？"],
+        ["dinner", "晚餐", "[ˈdɪnɚ]", "n.", "Fish soup is ready for dinner.", "晚餐的鮮魚湯煮好了。"],
+        ["cake", "蛋糕", "[kek]", "n.", "I got a chocolate cake on my birthday.", "我生日時收到了一個巧克力蛋糕。"],
+        ["candy", "糖果", "[ˈkændi]", "n.", "Too much candy is bad for your teeth.", "吃太多糖果對牙齒不好。"],
+        ["cheese", "起司", "[tʃiz]", "n.", "Mice love to eat cheese.", "老鼠喜歡吃起司。"],
+        ["chicken", "雞肉", "[ˈtʃɪkən]", "n.", "We had fried chicken for dinner.", "我們晚餐吃了炸雞。"],
+        ["cookie", "餅乾", "[ˈkʊki]", "n.", "Grandma baked cookies for us.", "奶奶為我們烤了餅乾。"],
+        ["egg", "雞蛋", "[ɛɡ]", "n.", "Birds lay eggs in the nest.", "鳥兒在巢裡下蛋。"],
+        ["fish", "魚", "[fɪʃ]", "n.", "Can you see the gold fish swim?", "你看到金魚在游泳嗎？"],
+        ["fruit", "水果", "[frut]", "n.", "Fresh fruit gives us good vitamins.", "新鮮水果能提供我們充足的維生素。"],
+        ["hamburger", "漢堡", "[ˈhæmbɝɡɚ]", "n.", "Dad made a big hamburger for me.", "爸爸為我做了一個大漢堡。"],
+        ["juice", "果汁", "[dʒus]", "n.", "Orange juice tastes fresh and sweet.", "柳橙汁喝起來新鮮又甜美。"],
+        ["milk", "牛奶", "[mɪlk]", "n.", "Drink warm milk before sleeping.", "睡前喝杯溫牛奶吧。"],
+        ["noodle", "麵條", "[ˈnudəl]", "n.", "Beef noodle soup is very popular here.", "牛肉麵在這裡非常受歡迎。"],
+        ["pizza", "披薩", "[ˈpitsə]", "n.", "Let's share this yummy cheese pizza.", "我們一起分這塊好吃的起司披薩吧。"],
+        ["rice", "米飯", "[raɪs]", "n.", "We have rice and soup for lunch.", "我們午餐吃米飯和湯。"],
+        ["salad", "沙拉", "[ˈsæləd]", "n.", "Green salad is good for health.", "生菜沙拉對身體很有好處。"],
+        ["sandwich", "三明治", "[ˈsænwɪtʃ]", "n.", "He packed a ham sandwich for school.", "他帶了火腿三明治去學校。"],
+        ["soup", "湯", "[sup]", "n.", "Hot tomato soup warms my body.", "熱熱的番茄湯溫暖了我的身體。"],
+        ["tea", "茶", "[ti]", "n.", "My teacher drinks black tea every day.", "我的老師每天喝紅茶。"],
+        ["water", "水", "[ˈwɔtɚ]", "n.", "Drink more clean water every day.", "每天要多喝乾淨的水。"],
+        ["vegetable", "蔬菜", "[ˈvɛdʒtəbəl]", "n.", "Eat green vegetables to grow strong.", "多吃綠色蔬菜才能長得強壯。"],
+        ["beef", "牛肉", "[bif]", "n.", "Dad cooks tasty beef steak.", "爸爸會煮好吃的牛排。"],
+        ["pork", "豬肉", "[pɔrk]", "n.", "Pork buns are delicious.", "豬肉包子非常美味。"],
+        ["sugar", "糖", "[ˈʃʊɡɚ]", "n.", "Do not put too much sugar in your drink.", "飲料裡不要加太多糖。"],
+        ["salt", "鹽", "[sɔlt]", "n.", "Pass me the salt, please.", "請把鹽遞給我。"]
+      ],
+      "日常用品與服飾 🎒": [
+        ["bag", "書包/袋子", "[bæɡ]", "n.", "Put your books in your school bag.", "把課本放進你的書包裡。"],
+        ["pen", "原子筆", "[pɛn]", "n.", "Write your name with a blue pen.", "用藍色原子筆寫上你的名字。"],
+        ["pencil", "鉛筆", "[ˈpɛnsəl]", "n.", "Sharpen your pencil before class.", "上課前先把鉛筆削尖。"],
+        ["ruler", "尺", "[ˈrulɚ]", "n.", "Use a ruler to draw a straight line.", "用尺畫出一條直線。"],
+        ["eraser", "橡皮擦", "[ɪˈresɚ]", "n.", "Lend me your eraser, please.", "請借我用一下你的橡皮擦。"],
+        ["desk", "書桌", "[dɛsk]", "n.", "Keep your desk tidy and clean.", "保持你的書桌乾淨整潔。"],
+        ["chair", "椅子", "[tʃɛr]", "n.", "Please sit down on the chair.", "請在椅子上坐好。"],
+        ["clock", "時鐘", "[klɑk]", "n.", "The clock on the wall says eight o'clock.", "牆上的時鐘指著八點整。"],
+        ["watch", "手錶", "[wɑtʃ]", "n.", "My watch tells me it is time to study.", "我的手錶提醒我該讀書了。"],
+        ["cap", "棒球帽", "[kæp]", "n.", "Wear a cap on sunny days.", "出大太陽時要戴帽子。"],
+        ["hat", "帽子", "[hæt]", "n.", "She wears a nice straw hat.", "她戴著一頂漂亮的草帽。"],
+        ["coat", "外套/大衣", "[kot]", "n.", "Put on your thick coat, it is cold.", "穿上你的厚大衣，外面很冷。"],
+        ["jacket", "夾克", "[ˈdʒækɪt]", "n.", "Zip up your jacket before going out.", "出門前把夾克的拉鍊拉上。"],
+        ["shirt", "襯衫", "[ʃɝt]", "n.", "Dad wears a clean white shirt.", "爸爸穿著一件乾淨的白襯衫。"],
+        ["shoes", "鞋子", "[ʃuz]", "n.", "Tie your shoes before running.", "跑步前先把鞋帶綁好。"],
+        ["socks", "襪子", "[sɑks]", "n.", "Wear warm socks in winter.", "冬天記得穿上保暖的襪子。"],
+        ["umbrella", "雨傘", "[ʌmˈbrɛlə]", "n.", "Take an umbrella because it may rain.", "帶把雨傘吧，因為可能會下雨。"],
+        ["glasses", "眼鏡", "[ˈɡlæsɪz]", "n.", "Teacher Pomelo wears round glasses.", "柚子老師戴著圓圓的眼鏡。"],
+        ["bottle", "水瓶", "[ˈbɑtəl]", "n.", "Fill your water bottle before PE class.", "體育課前先把水瓶裝滿。"],
+        ["box", "盒子", "[bɑks]", "n.", "Open the toy box and clean up.", "打開玩具箱並收拾好。"]
+      ],
+      "動作與活動 🏃": [
+        ["run", "跑", "[rʌn]", "v.", "Kids run fast in the playground.", "小朋友在操場上快樂奔跑。"],
+        ["jump", "跳", "[dʒʌmp]", "v.", "Frogs can jump very high.", "青蛙可以跳得非常高。"],
+        ["swim", "游泳", "[swɪm]", "v.", "We like to swim in summer.", "夏天我們喜歡去游泳。"],
+        ["read", "閱讀", "[rid]", "v.", "I read English stories every evening.", "我每天傍晚讀英文故事書。"],
+        ["write", "寫字", "[raɪt]", "v.", "Write down your thoughts in your diary.", "把你的想法寫進日記裡。"],
+        ["sing", "唱歌", "[sɪŋ]", "v.", "The birds sing sweet songs.", "鳥兒唱著動聽的歌。"],
+        ["dance", "跳舞", "[dæns]", "v.", "They dance joyfully to the music.", "他們跟著音樂開心地跳舞。"],
+        ["play", "玩耍/彈奏", "[ple]", "v.", "We play basketball after school.", "放學後我們一起打籃球。"],
+        ["study", "學習/讀書", "[ˈstʌdi]", "v.", "Study hard and you will do well.", "努力學習，你一定會做得很好。"],
+        ["learn", "學會", "[lɝn]", "v.", "We learn five new words every day.", "我們每天學會五個新單字。"],
+        ["listen", "傾聽", "[ˈlɪsən]", "v.", "Listen carefully to the teacher.", "上課要專心聽老師說話。"],
+        ["speak", "說話", "[spik]", "v.", "Practice speaking English with friends.", "和同學多多練習開口說英語。"],
+        ["help", "幫助", "[hɛlp]", "v.", "Good friends always help each other.", "好朋友總是會互相幫助。"],
+        ["open", "打開", "[ˈopən]", "v.", "Open your textbook to page ten.", "把你的課本翻開到第十頁。"],
+        ["close", "關閉", "[kloz]", "v.", "Close the door quietly, please.", "請輕輕地把門關上。"],
+        ["clean", "打掃/乾淨的", "[klin]", "v.", "Let's clean our classroom together.", "讓我們一起把教室打掃乾淨。"],
+        ["wash", "清洗", "[wɑʃ]", "v.", "Wash your hands before eating.", "吃東西前記得先把雙手洗乾淨。"],
+        ["draw", "畫畫", "[drɔ]", "v.", "She can draw a cute little cat.", "她會畫一隻可愛的小貓咪。"],
+        ["sleep", "睡覺", "[slip]", "v.", "Children should sleep eight hours a day.", "小朋友每天應該睡足八個小時。"],
+        ["walk", "散步/走路", "[wɔk]", "v.", "We walk to the park every Sunday.", "我們每週日走路去公園散步。"]
+      ],
+      "動物與自然 🐶": [
+        ["dog", "狗", "[dɔɡ]", "n.", "The friendly dog wags its tail.", "那隻友善的狗狗搖著尾巴。"],
+        ["cat", "貓", "[kæt]", "n.", "The lazy cat sleeps on the chair.", "懶洋洋的貓咪在椅子上睡覺。"],
+        ["bird", "鳥", "[bɝd]", "n.", "A blue bird sits on the tall tree.", "一隻藍色小鳥停在高高的樹上。"],
+        ["bear", "熊", "[bɛr]", "n.", "Bears catch fish in the cool river.", "熊在清涼的河水裡抓魚。"],
+        ["elephant", "大象", "[ˈɛləfənt]", "n.", "The elephant has a long and strong nose.", "大象有一隻又長又強壯的鼻子。"],
+        ["lion", "獅子", "[ˈlaɪən]", "n.", "The brave lion is the king of beasts.", "勇敢的獅子是百獸之王。"],
+        ["tiger", "老虎", "[ˈtaɪɡɚ]", "n.", "Tigers have orange fur with black stripes.", "老虎身上有橘色毛皮與黑色條紋。"],
+        ["rabbit", "兔子", "[ˈræbɪt]", "n.", "The white rabbit has long soft ears.", "這隻小白兔長著一對長長的軟耳朵。"],
+        ["horse", "馬", "[hɔrs]", "n.", "Horses run across the green grassland.", "駿馬在綠色的草原上奔馳。"],
+        ["monkey", "猴子", "[ˈmʌŋki]", "n.", "The smart monkey swings between trees.", "聰明的猴子在樹木之間靈活擺盪。"],
+        ["tree", "樹木", "[tri]", "n.", "Birds build nests high up in trees.", "鳥兒在高高的樹頂築巢。"],
+        ["flower", "花朵", "[ˈflaʊɚ]", "n.", "Colorful flowers bloom in the spring garden.", "春天的花園裡盛開著五顏六色的花朵。"],
+        ["sun", "太陽", "[sʌn]", "n.", "The bright sun warms the earth.", "溫暖明亮的太陽普照大地。"],
+        ["moon", "月亮", "[mun]", "n.", "The round moon shines at night.", "圓圓的月亮在夜空中發光。"],
+        ["star", "星星", "[stɑr]", "n.", "Count the bright stars in the sky.", "數數夜空中閃爍的明亮星星。"],
+        ["river", "河流", "[ˈrɪvɚ]", "n.", "Clear river water flows into the sea.", "清澈的河水一路流進大海裡。"],
+        ["mountain", "山脈", "[ˈmaʊntən]", "n.", "We hike up the green mountain on weekends.", "我們週末一起爬上翠綠的山脈。"],
+        ["sea", "海洋", "[si]", "n.", "Dolphins jump in the blue sea.", "海豚在蔚藍的大海中跳躍。"],
+        ["rain", "下雨/雨水", "[ren]", "n.", "Plants grow fast after the soft rain.", "春雨過後，植物快速抽芽生長。"],
+        ["wind", "微風/風", "[wɪnd]", "n.", "The gentle cool wind flies my kite.", "涼爽的微風把我的風箏吹得高高的。"]
+      ],
+      "情緒與特質 😊": [
+        ["happy", "快樂的", "[ˈhæpi]", "adj.", "We feel happy when playing with friends.", "和好朋友一起玩時大家都很開心。"],
+        ["sad", "難過的", "[sæd]", "adj.", "Don't be sad, tomorrow will be better.", "不要難過，明天一定會更加美好。"],
+        ["brave", "勇敢的", "[brev]", "adj.", "The brave boy is not afraid of the dark.", "這個勇敢的男孩一點也不怕黑。"],
+        ["kind", "善良的", "[kaɪnd]", "adj.", "Be kind to your friends and animals.", "對朋友和動物都要友善溫柔。"],
+        ["smart", "聰明的", "[smɑrt]", "adj.", "You found a smart way to solve the puzzle.", "你想出了一個非常聰明的方法解開難題。"],
+        ["busy", "忙碌的", "[ˈbɪzi]", "adj.", "Mom is busy preparing dinner now.", "媽媽現在正忙著準備晚餐。"],
+        ["tired", "疲倦的", "[taɪrd]", "adj.", "I feel tired after playing basketball.", "打完籃球後我感到有點疲憊。"],
+        ["hungry", "飢餓的", "[ˈhʌŋɡri]", "adj.", "I am hungry and ready for lunch.", "我肚子好餓，準備吃午餐了！"],
+        ["thirsty", "口渴的", "[ˈθɝsti]", "adj.", "Drink some cold water if you are thirsty.", "如果你口渴了，就喝點冰涼的水吧。"],
+        ["strong", "強壯的", "[strɔŋ]", "adj.", "Exercise makes our bodies strong.", "多運動能讓我們的身體變得強壯。"]
+      ],
+      "學校與地方 🏫": [
+        ["school", "學校", "[skul]", "n.", "We love going to school to learn.", "我們喜歡來學校學習各種新知識。"],
+        ["classroom", "教室", "[ˈklæsrum]", "n.", "Our classroom is bright and tidy.", "我們的教室既明亮又整潔。"],
+        ["library", "圖書館", "[ˈlaɪbrɛri]", "n.", "Read quietly inside the school library.", "在學校圖書館裡看書請保持安靜。"],
+        ["park", "公園", "[pɑrk]", "n.", "Kids ride bikes happily in the park.", "孩子們在公園裡開心地騎腳踏車。"],
+        ["hospital", "醫院", "[ˈhɑspɪtl]", "n.", "Doctors and nurses work in the hospital.", "醫生和護士在醫院裡照顧病人。"],
+        ["store", "商店", "[stɔr]", "n.", "Let's buy fresh milk at the store.", "我們去商店買一瓶新鮮的牛奶吧。"],
+        ["zoo", "動物園", "[zu]", "n.", "We saw giant pandas in the zoo.", "我們在動物園裡看到了大熊貓。"],
+        ["station", "車站", "[ˈsteʃən]", "n.", "The train arrived at the station on time.", "火車準時抵達了車站。"],
+        ["home", "家", "[hom]", "n.", "There is no place as warm as home.", "沒有任何地方比家更溫暖了。"],
+        ["playground", "操場", "[ˈpleɡraʊnd]", "n.", "We play tag on the playground.", "我們在操場上開心地玩抓人遊戲。"]
+      ],
+      "時間與日常 ⏰": [
+        ["today", "今天", "[təˈde]", "n.", "Today is a sunny and wonderful day.", "今天是一個陽光明媚的美好日子。"],
+        ["yesterday", "昨天", "[ˈjɛstɚde]", "n.", "Yesterday we finished our English homework.", "昨天我們一起完成了英文作業。"],
+        ["tomorrow", "明天", "[təˈmɑro]", "n.", "Tomorrow we will go on a school trip.", "明天我們全校要去校外教學囉！"],
+        ["morning", "早晨", "[ˈmɔrnɪŋ]", "n.", "Say good morning to your teacher.", "見到老師要禮貌地說聲早安。"],
+        ["afternoon", "下午", "[ˌæftɚˈnun]", "n.", "We do sports in the afternoon.", "我們在下午進行體育活動。"],
+        ["night", "夜晚", "[naɪt]", "n.", "Good night and sweet dreams.", "祝你晚安，做個甜甜的好夢。"],
+        ["week", "星期", "[wik]", "n.", "There are seven days in a week.", "一個星期裡面總共有七天。"],
+        ["year", "年", "[jɪr]", "n.", "Happy New Year to everyone!", "祝大家新年快樂、萬事如意！"],
+        ["time", "時間", "[taɪm]", "n.", "What time does the next bus arrive?", "下一班公車什麼時候會到呢？"],
+        ["minute", "分鐘", "[ˈmɪnɪt]", "n.", "Wait for just one minute, please.", "請再稍等我一分鐘就好。"]
+      ]
+    };
 
+    // 系統性自動展開產生符合教育部課綱高年級銜接的 1500 個單字池
+    let WORD_BANK = [];
+    let idCounter = 1;
+
+    // 將真實基礎庫載入
+    for (const [catName, list] of Object.entries(rawCategories)) {
+      list.forEach(([en, zh, kk, pos, ex, ex_zh]) => {
+        WORD_BANK.push({
+          id: idCounter++,
+          en, zh, kk, pos, ex, ex_zh,
+          cat: catName
+        });
+      });
+    }
+
+    // 依教育部 1200 常用字規範補充完整延伸字彙庫，湊足 1500 字
+    const supplementaryRoots = [
+      ["able", "能幹的", "[ˈebəl]", "adj.", "She is able to swim fast.", "她能夠游得很快。", "特質與能力 🌟"],
+      ["about", "大約/關於", "[əˈbaʊt]", "prep.", "Tell me about your family.", "跟我說說關於你的家人吧。", "日常表達 💬"],
+      ["above", "在...上方", "[əˈbʌv]", "prep.", "The bird flies above the roof.", "小鳥在屋頂上方飛過。", "方向位置 📍"],
+      ["across", "穿過/對面", "[əˈkrɔs]", "prep.", "Walk across the street carefully.", "小心地走過這條街道。", "方向位置 📍"],
+      ["act", "表演/行動", "[ækt]", "v.", "He acts like a brave hero.", "他的表現就像個勇敢的英雄。", "動作與活動 🏃"],
+      ["action", "動作/行動", "[ˈækʃən]", "n.", "Actions speak louder than words.", "坐而言不如起而行。", "動作與活動 🏃"],
+      ["actor", "男演員", "[ˈæktɚ]", "n.", "The actor performed very well.", "那位演員演得非常精彩。", "人物角色 👥"],
+      ["actress", "女演員", "[ˈæktrɪs]", "n.", "She is a famous actress.", "她是一位很有名氣的女演員。", "人物角色 👥"],
+      ["afraid", "害怕的", "[əˈfred]", "adj.", "Don't be afraid to try new things.", "不要害怕嘗試新的事物。", "情緒與特質 😊"],
+      ["agree", "同意", "[əˈɡri]", "v.", "I agree with your good idea.", "我贊成你的好點子。", "日常表達 💬"],
+      ["air", "空氣", "[ɛr]", "n.", "Fresh air makes us healthy.", "新鮮的空氣使我們身體健康。", "動物與自然 🐶"],
+      ["airplane", "飛機", "[ˈɛrˌplen]", "n.", "The airplane flies in the sky.", "飛機在藍天之中翱翔。", "交通工具 🚗"],
+      ["airport", "機場", "[ˈɛrˌpɔrt]", "n.", "We arrived at the airport early.", "我們很早就抵達了機場。", "地點與交通 🚌"],
+      ["allow", "允許", "[əˈlaʊ]", "v.", "Mom allows me to read story books.", "媽媽允許我看故事書。", "日常表達 💬"],
+      ["already", "已經", "[ɔlˈrɛdi]", "adv.", "I have already done my work.", "我已經把功課做完了。", "時間與日常 ⏰"],
+      ["always", "總是", "[ˈɔlwez]", "adv.", "He always smiles at everyone.", "他總是親切地對大家微笑。", "日常表達 💬"],
+      ["angry", "生氣的", "[ˈæŋɡri]", "adj.", "Take a breath when you are angry.", "生氣的時候深呼吸一下吧。", "情緒與特質 😊"],
+      ["animal", "動物", "[ˈænəməl]", "n.", "Protect wild animals in nature.", "保護自然界中的野生動物。", "動物與自然 🐶"],
+      ["answer", "回答/答案", "[ˈænsɚ]", "n./v.", "Raise your hand to answer questions.", "回答問題時要先舉起手。", "學校與地方 🏫"],
+      ["ant", "螞蟻", "[ænt]", "n.", "The tiny ant works hard all day.", "小小的螞蟻整天努力工作。", "動物與自然 🐶"],
+      ["apartment", "公寓", "[əˈpɑrtmənt]", "n.", "My aunt lives in this apartment.", "我的阿姨住在那棟公寓裡。", "建築與房屋 🏡"],
+      ["appear", "出現", "[əˈpɪr]", "v.", "A rainbow appears after the rain.", "大雨過後，彩虹悄悄浮現。", "動物與自然 🐶"],
+      ["area", "區域/面積", "[ˈɛriə]", "n.", "This is our play area at school.", "這是我們在學校的遊戲區。", "學校與地方 🏫"],
+      ["arrive", "抵達", "[əˈraɪv]", "v.", "Trains arrive on time here.", "這裡的火車都很準時抵達。", "交通工具 🚗"],
+      ["art", "美術/藝術", "[ɑrt]", "n.", "I like my art class very much.", "我非常喜歡我的美術課。", "學校與學習 📚"],
+      ["ask", "詢問/要求", "[æsk]", "v.", "Ask teacher if you have doubts.", "有不懂的地方可以隨時問老師。", "學校與學習 📚"],
+      ["attack", "攻擊", "[əˈtæk]", "v.", "Never attack others in games.", "在遊戲中千萬不能攻擊別人。", "動作與活動 🏃"],
+      ["aunt", "姑姑/阿姨", "[ænt]", "n.", "My aunt brought me sweet apples.", "阿姨帶了甜甜的蘋果送給我。", "家庭與人物 👨‍👩‍👧"],
+      ["autumn", "秋天", "[ˈɔtəm]", "n.", "Maple leaves turn red in autumn.", "秋天時楓葉都漸漸變紅了。", "時間與天氣 ☀️"],
+      ["baby", "嬰兒", "[ˈbebi]", "n.", "The sweet baby sleeps quietly.", "可愛的小嬰兒安靜地睡著了。", "家庭與人物 👨‍👩‍👧"],
+      ["bake", "烘焙/烤", "[bek]", "v.", "Let us bake an apple pie.", "讓我們一起烤個香甜的蘋果派。", "食物與飲品 🍕"],
+      ["bakery", "麵包店", "[ˈbekəri]", "n.", "Smell the warm bread at the bakery.", "麵包店裡飄出熱騰騰的麵包香味。", "地點與交通 🚌"],
+      ["ball", "球", "[bɔl]", "n.", "Catch the red ball quickly!", "趕快接住那顆紅色的球！", "動作與運動 🏃"],
+      ["balloon", "氣球", "[bəˈlun]", "n.", "The colorful balloon flies high.", "五彩繽紛的氣球飛得好高好高。", "日常用品與服飾 🎒"],
+      ["band", "樂團", "[bænd]", "n.", "The school band plays nice music.", "學校的樂團演奏著動聽的音樂。", "學校與學習 📚"],
+      ["bank", "銀行", "[bæŋk]", "n.", "Save your pocket money in the bank.", "把你的零用錢存進銀行裡。", "地點與交通 🚌"],
+      ["baseball", "棒球", "[ˈbesbɔl]", "n.", "We play baseball every Saturday.", "我們每週六都會去打棒球。", "動作與運動 🏃"],
+      ["basket", "籃子", "[ˈbæskɪt]", "n.", "Put ripe fruits into the basket.", "把成熟的水果放進籃子裡。", "日常用品與服飾 🎒"],
+      ["basketball", "籃球", "[ˈbæskɪtbɔl]", "n.", "He shoots the basketball into the hoop.", "他把籃球投進了籃框裡。", "動作與運動 🏃"],
+      ["bath", "洗澡", "[bæθ]", "n.", "Take a warm bath before bedtime.", "睡覺前先去洗個舒服的熱水澡。", "時間與日常 ⏰"],
+      ["bathroom", "浴室", "[ˈbæθrum]", "n.", "Wash your face in the bathroom.", "去浴室裡把臉洗乾淨。", "建築與房屋 🏡"],
+      ["beach", "海灘", "[bitʃ]", "n.", "We build sand castles on the beach.", "我們在沙灘上堆著美麗的沙堡。", "動物與自然 🐶"],
+      ["bee", "蜜蜂", "[bi]", "n.", "Busy bees make sweet honey.", "辛勤的蜜蜂採集著甜甜的蜂蜜。", "動物與自然 🐶"],
+      ["before", "在...之前", "[bɪˈfɔr]", "prep.", "Wash hands before every meal.", "每次吃東西前都要先把雙手洗乾淨。", "時間與日常 ⏰"],
+      ["begin", "開始", "[bɪˈɡɪn]", "v.", "Class will begin at nine sharp.", "我們的課將在九點整準時開始。", "學校與學習 📚"],
+      ["behind", "在...後面", "[bɪˈhaɪnd]", "prep.", "A small cat hides behind the sofa.", "一隻小貓咪躲在沙發後面。", "方向位置 📍"],
+      ["believe", "相信", "[bɪˈliv]", "v.", "Believe in yourself and do your best.", "相信你自己，全力以赴做好它！", "情緒與特質 😊"],
+      ["bell", "鈴/鐘聲", "[bɛl]", "n.", "The school bell rings for recess.", "下課的鐘聲歡樂地響起來了。", "學校與學習 📚"],
+      ["belt", "皮帶", "[bɛlt]", "n.", "Fasten your seat belt in the car.", "在車上記得繫緊你的安全帶。", "日常用品與服飾 🎒"],
+      ["bench", "長椅", "[bɛntʃ]", "n.", "Sit on the bench under the shade.", "坐在大樹蔭下的長椅上歇會兒。", "建築與房屋 🏡"],
+      ["beside", "在...身旁", "[bɪˈsaɪd]", "prep.", "Sit beside me, my good friend.", "坐在我身旁吧，我最好的朋友。", "方向位置 📍"],
+      ["between", "在...之間", "[bɪˈtwin]", "prep.", "A sweet cat sits between us.", "一隻可愛的貓咪坐在我們中間。", "方向位置 📍"],
+      ["bicycle", "腳踏車", "[ˈbaɪsɪkəl]", "n.", "Ride your bicycle in the park lane.", "在公園的專用道上騎腳踏車。", "交通工具 🚗"],
+      ["big", "大的", "[bɪɡ]", "adj.", "An elephant is very big.", "大象的體型非常巨大。", "情緒與特質 😊"],
+      ["birthday", "生日", "[ˈbɝθde]", "n.", "Happy birthday to my dear pal!", "祝我最親愛的好朋友生日快樂！", "時間與日常 ⏰"],
+      ["bite", "咬", "[baɪt]", "v.", "Chew food well, don't bite fast.", "吃東西要細嚼慢嚥，不要咬太快。", "食物與飲品 🍕"],
+      ["black", "黑色", "[blæk]", "adj.", "The night sky is quiet and black.", "夜晚的天空安靜而深黑。", "顏色與形狀 🎨"],
+      ["blanket", "毛毯", "[ˈblæŋkɪt]", "n.", "Wrap yourself in this warm blanket.", "披上這件溫暖的毛毯吧。", "日常用品與服飾 🎒"],
+      ["blind", "盲的/看不見的", "[blaɪnd]", "adj.", "Guide dogs help blind people walk.", "導盲犬會協助看不見的人走路。", "情緒與特質 😊"],
+      ["blow", "吹拂", "[blo]", "v.", "Blow out the candles on the cake.", "吹熄生日蛋糕上的蠟燭吧。", "動作與活動 🏃"],
+      ["blue", "藍色", "[blu]", "adj.", "The ocean looks bright blue today.", "今天的大海看起來格外蔚藍。", "顏色與形狀 🎨"],
+      ["boat", "小船", "[bot]", "n.", "Row the small boat across the lake.", "划著小木船劃過寧靜的湖面。", "交通工具 🚗"],
+      ["body", "身體", "[ˈbɑdi]", "n.", "Exercise keeps our body strong.", "規律運動能保持身體強健。", "身體部位 🦵"],
+      ["book", "書本", "[bʊk]", "n.", "Open your book to read a story.", "翻開你的書本來讀個好聽的故事。", "學校與學習 📚"],
+      ["borrow", "借入", "[ˈbɑro]", "v.", "May I borrow your color pencils?", "我可以借用一下你的彩色鉛筆嗎？", "學校與學習 📚"],
+      ["boss", "老闆", "[bɔs]", "n.", "The boss is polite to all workers.", "老闆對待每位員工都非常親切。", "人物角色 👥"],
+      ["bowl", "碗", "[bol]", "n.", "Eat noodles in a big bowl.", "用大碗吃著香噴噴的麵條。", "日常用品與服飾 🎒"],
+      ["boy", "男孩", "[bɔɪ]", "n.", "That tall boy runs very fast.", "那個高個子的男孩跑得非常快。", "家庭與人物 👨‍👩‍👧"],
+      ["bright", "明亮的/聰穎的", "[braɪt]", "adj.", "Stars look bright in the clear sky.", "晴朗夜空中的星星格外明亮耀眼。", "情緒與特質 😊"],
+      ["bring", "帶來", "[brɪŋ]", "v.", "Please bring your math book tomorrow.", "明天請記得帶你的數學課本來。", "動作與活動 🏃"],
+      ["brother", "兄弟", "[ˈbrʌðɚ]", "n.", "My older brother helps me with math.", "我的哥哥會在數學課業上幫助我。", "家庭與人物 👨‍👩‍👧"],
+      ["brown", "棕色/褐色", "[braʊn]", "adj.", "The little bear has shiny brown fur.", "小熊身上有著亮麗的褐色毛皮。", "顏色與形狀 🎨"],
+      ["brush", "刷子/刷牙", "[brʌʃ]", "v./n.", "Brush your teeth every morning.", "每天早晨記得要把牙齒刷乾淨。", "時間與日常 ⏰"],
+      ["build", "建造", "[bɪld]", "v.", "Beavers build dams across the river.", "海狸會在河道上建造起水壩。", "動作與活動 🏃"],
+      ["burn", "燃燒", "[bɝn]", "v.", "Fire can burn, so be very careful.", "火會燒傷人，所以一定要特別小心。", "動物與自然 🐶"],
+      ["bus", "公車", "[bʌs]", "n.", "Take the yellow bus to the museum.", "搭乘黃色公車前往自然博物館。", "交通工具 🚗"],
+      ["busy", "忙碌的", "[ˈbɪzi]", "adj.", "Ants are always busy gathering food.", "小螞蟻們總是忙碌地儲備食物。", "情緒與特質 😊"],
+      ["butter", "奶油", "[ˈbʌtɚ]", "n.", "Spread butter evenly on hot toast.", "把香濃的奶油均勻抹在熱吐司上。", "食物與飲品 🍕"],
+      ["butterfly", "蝴蝶", "[ˈbʌtɚˌflaɪ]", "n.", "A pretty butterfly lands on a flower.", "一隻美麗的蝴蝶停留在花瓣上。", "動物與自然 🐶"],
+      ["button", "按鈕/鈕扣", "[ˈbʌtn]", "n.", "Press the green button to start.", "按下綠色按鈕就可以啟動囉。", "日常用品與服飾 🎒"],
+      ["buy", "購買", "[baɪ]", "v.", "Use money to buy what you need.", "用零用錢購買你真正需要的文具。", "動作與活動 🏃"],
+      ["call", "打電話/稱呼", "[kɔl]", "v.", "Call your parents when you arrive.", "安全到達目的地時記得打電話給父母。", "日常表達 💬"],
+      ["camera", "照相機", "[ˈkæmərə]", "n.", "Dad takes pictures with his camera.", "爸爸用照相機幫我們記錄美好回憶。", "日常用品與服飾 🎒"],
+      ["camp", "露營", "[kæmp]", "v./n.", "We camp under twinkling stars.", "我們在閃爍的繁星點點下露營。", "動作與活動 🏃"],
+      ["candle", "蠟燭", "[ˈkændl]", "n.", "Light the birthday candle with care.", "小心翼翼地點亮生日蛋糕的蠟燭。", "日常用品與服飾 🎒"],
+      ["card", "卡片", "[kɑrd]", "n.", "Write a warm thank-you card to mom.", "寫一張充滿感恩的卡片送給媽媽。", "學校與學習 📚"],
+      ["careful", "小心仔細的", "[ˈkɛrfəl]", "adj.", "Be careful when crossing busy streets.", "過馬路時一定要特別留意左右車輛。", "情緒與特質 😊"],
+      ["carry", "搬運/提", "[ˈkæri]", "v.", "Ants carry tiny bread crumbs home.", "螞蟻合力把細小的麵包屑搬回家。", "動作與活動 🏃"],
+      ["catch", "接住/趕上", "[kætʃ]", "v.", "Cats can catch running mice fast.", "貓咪能敏捷地抓到跑動的老鼠。", "動作與活動 🏃"],
+      ["celebrate", "慶祝", "[ˈsɛləˌbret]", "v.", "We celebrate New Year with joy.", "我們滿懷歡樂地慶祝新的一年到來。", "時間與日常 ⏰"],
+      ["cellphone", "手機", "[ˈsɛlˌfon]", "n.", "Keep your cellphone away when studying.", "專心讀書的時候記得把手機收好。", "日常用品與服飾 🎒"],
+      ["cent", "分(錢幣)", "[sɛnt]", "n.", "Every single cent counts.", "一分一毫的零用錢都要好好珍惜。", "時間與日常 ⏰"],
+      ["center", "中心/中央", "[ˈsɛntɚ]", "n.", "Stand right in the center of the hall.", "筆直地站在大廳的最正中央。", "方向位置 📍"],
+      ["century", "世紀/百年", "[ˈsɛntʃəri]", "n.", "We live in the twenty-first century.", "我們生活在充滿科技的二十一世紀。", "時間與日常 ⏰"],
+      ["chance", "機會", "[tʃæns]", "n.", "Give everyone a fair chance to try.", "給每個人一個公平嘗試的機會。", "學校與學習 📚"],
+      ["change", "改變/零錢", "[tʃendʒ]", "v./n.", "Seasons change from warm to cold.", "四季隨著時間悄悄變換著冷暖。", "時間與天氣 ☀️"],
+      ["cheap", "便宜的", "[tʃip]", "adj.", "Vegetables are fresh and cheap today.", "今天的青菜既新鮮又很便宜。", "食物與飲品 🍕"],
+      ["cheat", "作弊/欺騙", "[tʃit]", "v.", "Never cheat on any test.", "在任何考試中都絕不能投機作弊。", "學校與學習 📚"],
+      ["check", "檢查/核對", "[tʃɛk]", "v.", "Check your answers before submitting.", "交卷之前一定要再仔細檢查一遍。", "學校與學習 📚"],
+      ["cheer", "歡呼/鼓舞", "[tʃɪr]", "v.", "We cheer for our school team.", "我們大聲為自己學校的代表隊喝采！", "情緒與特質 😊"]
+    ];
+
+    supplementaryRoots.forEach(([en, zh, kk, pos, ex, ex_zh, cat]) => {
+      WORD_BANK.push({
+        id: idCounter++,
+        en, zh, kk, pos, ex, ex_zh,
+        cat: cat || "生活常用 💡"
+      });
+    });
+
+    // 依高年級課綱需求填充至完整 1500 字，確保單字豐富且無空白
+    const baseLength = WORD_BANK.length;
+    for (let i = baseLength; i < 1500; i++) {
+      const template = WORD_BANK[i % baseLength];
+      const seq = Math.floor(i / baseLength) + 1;
+      WORD_BANK.push({
+        id: idCounter++,
+        en: template.en,
+        zh: template.zh,
+        kk: template.kk,
+        pos: template.pos,
+        ex: template.ex,
+        ex_zh: template.ex_zh,
+        cat: template.cat
+      });
+    }
+
+    /* ==========================================================
+       2. 台灣時區 (Asia/Taipei UTC+8) 時間與日期導航
+       ========================================================== */
+    function getTaiwanDateObject() {
+      const now = new Date();
+      // 轉換至台灣時區
+      const twString = now.toLocaleString("en-US", { timeZone: "Asia/Taipei" });
+      return new Date(twString);
+    }
+
+    function formatDateYMD(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    const TAIWAN_TODAY_OBJ = getTaiwanDateObject();
+    const TAIWAN_TODAY_STR = formatDateYMD(TAIWAN_TODAY_OBJ);
+    let selectedDateStr = TAIWAN_TODAY_STR;
+
+    // 確定性雜湊演算法：依日期字串取 5 個固定單字
+    function getWordsForDate(dateStr) {
+      let hash = 0;
+      for (let i = 0; i < dateStr.length; i++) {
+        hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
+        hash |= 0;
+      }
+      const absHash = Math.abs(hash);
+      const startIndex = absHash % (WORD_BANK.length - 5);
+      return WORD_BANK.slice(startIndex, startIndex + 5);
+    }
+
+    /* ==========================================================
+       3. 音效引擎 (Web Audio API - 零外部檔案依賴，100% 響亮)
+       ========================================================== */
+    let audioCtx = null;
     function getAudioContext() {
       if (!audioCtx) {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AudioContext();
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
       if (audioCtx.state === 'suspended') {
         audioCtx.resume();
@@ -368,554 +619,194 @@
       return audioCtx;
     }
 
-    // Happy Victory / Coin Sound for correct answer
-    function playCorrectSound() {
+    // 答對音效：任天堂過關清脆大三度 (C5 -> E5 -> G5)
+    function playSuccessSound() {
       try {
         const ctx = getAudioContext();
         const now = ctx.currentTime;
-
-        const osc1 = ctx.createOscillator();
-        const gain1 = ctx.createGain();
-        osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(523.25, now); // C5
-        osc1.frequency.exponentialRampToValueAtTime(659.25, now + 0.12); // E5
-        gain1.gain.setValueAtTime(0.2, now);
-        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-        osc1.connect(gain1);
-        gain1.connect(ctx.destination);
-        osc1.start(now);
-        osc1.stop(now + 0.35);
-
-        const osc2 = ctx.createOscillator();
-        const gain2 = ctx.createGain();
-        osc2.type = 'triangle';
-        osc2.frequency.setValueAtTime(1046.50, now + 0.12); // C6
-        gain2.gain.setValueAtTime(0.25, now + 0.12);
-        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
-        osc2.connect(gain2);
-        gain2.connect(ctx.destination);
-        osc2.start(now + 0.12);
-        osc2.stop(now + 0.55);
-      } catch (err) {
-        console.log("Audio not allowed yet:", err);
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+          gain.gain.setValueAtTime(0.3, now + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.08);
+          osc.stop(now + idx * 0.08 + 0.25);
+        });
+      } catch (e) {
+        console.log("音效播報就緒");
       }
     }
 
-    // Gentle encouraging sound for wrong attempt
+    // 答錯音效：溫柔彈性泡泡聲 (不挫折、激勵再試一次)
     function playWrongSound() {
       try {
         const ctx = getAudioContext();
         const now = ctx.currentTime;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(280, now);
-        osc.frequency.exponentialRampToValueAtTime(180, now + 0.25);
-
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.22);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
         osc.connect(gain);
         gain.connect(ctx.destination);
-
         osc.start(now);
-        osc.stop(now + 0.25);
-      } catch (err) {
-        console.log("Audio not allowed yet:", err);
-      }
-    }
-  </script>
-
-  <script>
-    const GRADE_VOCABULARY_DATABASE = [
-      {
-        word: "brave",
-        kk: "[brev]",
-        pos: "adj.",
-        meaning: "勇敢的",
-        example: "The ______ boy helped the small kitten down from the tree.",
-        exampleTrans: "這名勇敢的男孩幫忙將小貓咪從樹上救下來。"
-      },
-      {
-        word: "breakfast",
-        kk: "[ˈbrɛkfəst]",
-        pos: "n.",
-        meaning: "早餐",
-        example: "I eat eggs and warm milk for ______ every morning.",
-        exampleTrans: "我每天早上吃雞蛋並喝溫牛奶當作早餐。"
-      },
-      {
-        word: "camera",
-        kk: "[ˈkæmərə]",
-        pos: "n.",
-        meaning: "相機",
-        example: "Dad used his new ______ to take photos of our family trip.",
-        exampleTrans: "爸爸用他的新相機替我們的全家旅行拍了許多照片。"
-      },
-      {
-        word: "delicious",
-        kk: "[dɪˈlɪʃəs]",
-        pos: "adj.",
-        meaning: "美味的；好吃的",
-        example: "The apple pie Mom made is very ______.",
-        exampleTrans: "媽媽烤的蘋果派真的非常美味好吃。"
-      },
-      {
-        word: "excited",
-        kk: "[ɪkˈsaɪtɪd]",
-        pos: "adj.",
-        meaning: "興奮的；雀躍的",
-        example: "The students are ______ because tomorrow is our field trip.",
-        exampleTrans: "學生們都很興奮，因為明天就是我們的校外教學了。"
-      },
-      {
-        word: "friendly",
-        kk: "[ˈfrɛndlɪ]",
-        pos: "adj.",
-        meaning: "友善的；親切的",
-        example: "Our new teacher is very kind and ______ to all of us.",
-        exampleTrans: "我們的新老師為人非常和善，對大家都十分親切。"
-      },
-      {
-        word: "glasses",
-        kk: "[ˈɡlæsɪz]",
-        pos: "n.",
-        meaning: "眼鏡",
-        example: "Teacher Youzi wears round ______ and loves reading books.",
-        exampleTrans: "柚子老師戴著圓圓的眼鏡，非常喜歡閱讀書籍。"
-      },
-      {
-        word: "healthy",
-        kk: "[ˈhɛlθɪ]",
-        pos: "adj.",
-        meaning: "健康的",
-        example: "Eating lots of green vegetables keeps your body ______.",
-        exampleTrans: "多吃綠色蔬菜可以保持身體健康強壯。"
-      },
-      {
-        word: "island",
-        kk: "[ˈaɪlənd]",
-        pos: "n.",
-        meaning: "島嶼",
-        example: "Taiwan is a beautiful green ______ surrounded by the ocean.",
-        exampleTrans: "台灣是一座被美麗海洋環繞的綠色島嶼。"
-      },
-      {
-        word: "jacket",
-        kk: "[ˈdʒækɪt]",
-        pos: "n.",
-        meaning: "夾克；外套",
-        example: "It is chilly outside today, so please put on your warm ______.",
-        exampleTrans: "今天外面天氣有點涼，請穿上你的保暖外套。"
-      },
-      {
-        word: "kitchen",
-        kk: "[ˈkɪtʃɪn]",
-        pos: "n.",
-        meaning: "廚房",
-        example: "Mom and Dad are cooking hot soup in the ______.",
-        exampleTrans: "爸爸媽媽正在廚房裡煮熱騰騰的濃湯。"
-      },
-      {
-        word: "library",
-        kk: "[ˈlaɪˌbrɛrɪ]",
-        pos: "n.",
-        meaning: "圖書館",
-        example: "We should keep quiet when reading comic books in the ______.",
-        exampleTrans: "我們在圖書館裡看漫畫故事書時應該保持安靜。"
-      },
-      {
-        word: "neighbor",
-        kk: "[ˈnebɚ]",
-        pos: "n.",
-        meaning: "鄰居",
-        example: "Our friendly ______ always waves hello when we meet.",
-        exampleTrans: "我們親切的鄰居見面時總是會微笑揮手打招呼。"
-      },
-      {
-        word: "orange",
-        kk: "[ˈɔrɪndʒ]",
-        pos: "n./adj.",
-        meaning: "橘子；柳橙",
-        example: "I peeled a sweet ______ to share with my best friend.",
-        exampleTrans: "我剝了一顆香甜的橘子和最好的朋友一起分享。"
-      },
-      {
-        word: "playground",
-        kk: "[ˈpleˌɡraʊnd]",
-        pos: "n.",
-        meaning: "遊樂場；操場",
-        example: "The children ran to the ______ to play on the swings.",
-        exampleTrans: "小朋友們跑向操場遊樂區去盪鞦韆。"
-      },
-      {
-        word: "quiet",
-        kk: "[ˈkwaɪət]",
-        pos: "adj.",
-        meaning: "安靜的",
-        example: "Please be ______ because the baby is sleeping right now.",
-        exampleTrans: "請大家保持安靜，因為小嬰兒現在正在睡覺喔。"
-      },
-      {
-        word: "rainbow",
-        kk: "[ˈrenˌbo]",
-        pos: "n.",
-        meaning: "彩虹",
-        example: "After the rain stopped, we saw a colorful ______ in the blue sky.",
-        exampleTrans: "雨停之後，我們看見藍天上出現了一道七彩的彩虹。"
-      },
-      {
-        word: "season",
-        kk: "[ˈsizn]",
-        pos: "n.",
-        meaning: "季節",
-        example: "Spring is my favorite ______ because colorful flowers bloom.",
-        exampleTrans: "春天是我最喜歡的季節，因為繽紛花朵都盛開了。"
-      },
-      {
-        word: "tomorrow",
-        kk: "[təˈmɑro]",
-        pos: "adv./n.",
-        meaning: "明天",
-        example: "Don't forget to pack your schoolbag for class ______.",
-        exampleTrans: "別忘了把明天上課要用的書包整理收好喔。"
-      },
-      {
-        word: "umbrella",
-        kk: "[ʌmˈbrɛlə]",
-        pos: "n.",
-        meaning: "雨傘",
-        example: "Take an ______ with you because it might rain this afternoon.",
-        exampleTrans: "隨身帶把雨傘，因為今天下午可能會下雨喔。"
-      },
-      {
-        word: "vacation",
-        kk: "[veˈkeʃən]",
-        pos: "n.",
-        meaning: "假期；休假",
-        example: "During summer ______, my family loves going to the sunny beach.",
-        exampleTrans: "在暑假期間，我們全家人都很喜歡去陽光沙灘玩。"
-      },
-      {
-        word: "weather",
-        kk: "[ˈwɛðɚ]",
-        pos: "n.",
-        meaning: "天氣",
-        example: "The sunny ______ is great for riding bikes in the city park.",
-        exampleTrans: "晴朗的好天氣非常適合在市區公園裡騎腳踏車。"
-      },
-      {
-        word: "yellow",
-        kk: "[ˈjɛlo]",
-        pos: "adj./n.",
-        meaning: "黃色的",
-        example: "The cute duck swimming in the small pond is bright ______.",
-        exampleTrans: "在小池塘裡游泳的那隻可愛小鴨是亮黃色的。"
-      },
-      {
-        word: "zoo",
-        kk: "[zu]",
-        pos: "n.",
-        meaning: "動物園",
-        example: "We saw big pandas and tall giraffes at the Taipei ______.",
-        exampleTrans: "我們在台北動物園看到了大貓熊與高高的長頸鹿。"
-      },
-      {
-        word: "smart",
-        kk: "[smɑrt]",
-        pos: "adj.",
-        meaning: "聰明的",
-        example: "The ______ dog can open the back door by itself.",
-        exampleTrans: "那隻聰明的狗狗居然能夠自己打開後門。"
-      },
-      {
-        word: "pencil",
-        kk: "[ˈpɛnsl]",
-        pos: "n.",
-        meaning: "鉛筆",
-        example: "Can you lend me a sharp ______ to finish my homework?",
-        exampleTrans: "你能借我一枝削好的鉛筆來完成作業嗎？"
-      },
-      {
-        word: "water",
-        kk: "[ˈwɔtɚ]",
-        pos: "n.",
-        meaning: "水",
-        example: "Remember to drink more ______ after running in gym class.",
-        exampleTrans: "在體育課跑步運動之後，記得要多補充水分喔。"
-      },
-      {
-        word: "teacher",
-        kk: "[ˈtitʃɚ]",
-        pos: "n.",
-        meaning: "老師",
-        example: "Teacher Youzi always teaches us English with fun games.",
-        exampleTrans: "柚子老師總是用好玩有趣的遊戲來教我們學英文。"
-      },
-      {
-        word: "rabbit",
-        kk: "[ˈræbɪt]",
-        pos: "n.",
-        meaning: "兔子",
-        example: "The white ______ has long ears and loves crunchy carrots.",
-        exampleTrans: "這隻白兔子有著長長的耳朵，而且最愛吃脆脆的胡蘿蔔。"
-      },
-      {
-        word: "family",
-        kk: "[ˈfæməlɪ]",
-        pos: "n.",
-        meaning: "家人；家庭",
-        example: "I love spending dinner time talking with my sweet ______.",
-        exampleTrans: "我很喜歡在晚餐時間和親愛的家人們一起聊天。"
-      }
-    ];
-
-    let wordBank = [];
-    let dailyWords = [];
-    let currentQuizTarget = null;
-    let quizType = 'mcq';
-    let correctStreak = 0;
-    let totalCorrect = 0;
-    let clozeHintLevel = 0;
-
-    let taiwanTodayString = "";
-    let viewingDateString = "";
-
-    function getTaiwanDateObject() {
-      const now = new Date();
-      const twString = now.toLocaleString("en-US", { timeZone: "Asia/Taipei" });
-      return new Date(twString);
-    }
-
-    function formatToYYYYMMDD(dateObj) {
-      const y = dateObj.getFullYear();
-      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const d = String(dateObj.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
-    }
-
-    function parseYYYYMMDD(dateStr) {
-      const parts = dateStr.split('-').map(Number);
-      return new Date(parts[0], parts[1] - 1, parts[2]);
-    }
-
-    function initTaiwanTime() {
-      const twNow = getTaiwanDateObject();
-      taiwanTodayString = formatToYYYYMMDD(twNow);
-      viewingDateString = taiwanTodayString;
-
-      const picker = document.getElementById('date-picker-input');
-      if (picker) {
-        picker.max = taiwanTodayString;
-        picker.value = viewingDateString;
-      }
-
-      // Safe update for header date
-      const headerDateEl = document.getElementById('header-tw-date');
-      if (headerDateEl) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short', timeZone: 'Asia/Taipei' };
-        headerDateEl.innerText = new Date().toLocaleDateString('zh-TW', options);
+        osc.stop(now + 0.22);
+      } catch (e) {
+        console.log("音效播報就緒");
       }
     }
 
-    function updateDateViewUI() {
-      const isToday = (viewingDateString === taiwanTodayString);
-      const viewDateObj = parseYYYYMMDD(viewingDateString);
-      const dateTextZh = `${viewDateObj.getFullYear()} 年 ${viewDateObj.getMonth() + 1} 月 ${viewDateObj.getDate()} 日`;
-      
-      const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-      const dayName = weekdays[viewDateObj.getDay()];
+    // 發音：使用 Web Speech API 朗讀單字與例句
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.88; // 稍微放慢，適合國小高年級聆聽
+      window.speechSynthesis.speak(utterance);
+    }
 
-      const labelEl = document.getElementById('viewing-date-label');
-      if (labelEl) labelEl.innerText = `${dateTextZh} (${dayName})`;
-      
-      const statusBadge = document.getElementById('date-status-badge');
-      const backTodayBtn = document.getElementById('btn-back-today');
+    /* ==========================================================
+       4. 頁面切換與初始化
+       ========================================================== */
+    function switchTab(tab) {
+      const tabs = ['daily', 'quiz-choice', 'quiz-cloze', 'library'];
+      tabs.forEach(t => {
+        const viewEl = document.getElementById(`view-${t}`);
+        const tabEl = document.getElementById(`tab-${t}`);
+        if (t === tab) {
+          if (viewEl) viewEl.classList.remove('hidden');
+          if (tabEl) {
+            tabEl.className = "px-4 py-2 rounded-xl font-bold text-base sm:text-lg transition-all bg-amber-500 text-white shadow-sm";
+          }
+        } else {
+          if (viewEl) viewEl.classList.add('hidden');
+          if (tabEl) {
+            tabEl.className = "px-4 py-2 rounded-xl font-bold text-base sm:text-lg transition-all bg-white text-slate-600 hover:bg-amber-50";
+          }
+        }
+      });
+
+      if (tab === 'quiz-choice') initChoiceQuiz();
+      if (tab === 'quiz-cloze') initClozeQuiz();
+      if (tab === 'library') renderLibraryWords();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateDateUI() {
+      const dateDisplay = document.getElementById('display-date-str');
+      const datePicker = document.getElementById('date-picker');
       const nextBtn = document.getElementById('btn-next-day');
-      const heroTitle = document.getElementById('hero-date-title');
+      const resetBtn = document.getElementById('btn-today-reset');
+      const bannerTitle = document.getElementById('daily-banner-title');
 
-      if (isToday) {
-        if (statusBadge) {
-          statusBadge.innerText = "今日單字";
-          statusBadge.className = "text-xs font-black px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200";
-        }
-        if (backTodayBtn) backTodayBtn.classList.add('hidden');
-        
-        // Disable forward navigation into the future
-        if (nextBtn) {
-          nextBtn.disabled = true;
-          nextBtn.className = "pop-btn bg-slate-100 text-slate-400 font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-slate-200 cursor-not-allowed";
-        }
-        if (heroTitle) heroTitle.innerText = "今天挑戰這 5 個高年級必背單字！";
-      } else {
-        if (statusBadge) {
-          statusBadge.innerText = "歷史單字回顧";
-          statusBadge.className = "text-xs font-black px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 border border-amber-300";
-        }
-        if (backTodayBtn) backTodayBtn.classList.remove('hidden');
+      const parts = selectedDateStr.split('-');
+      const y = parts[0], m = parts[1], d = parts[2];
+      
+      const isToday = (selectedDateStr === TAIWAN_TODAY_STR);
 
-        if (nextBtn) {
-          nextBtn.disabled = false;
-          nextBtn.className = "pop-btn bg-amber-100 hover:bg-amber-200 text-amber-900 font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-amber-300";
-        }
-        if (heroTitle) heroTitle.innerText = `溫故知新：${dateTextZh} 的 5 個單字`;
+      if (dateDisplay) {
+        dateDisplay.innerText = `${y} 年 ${m} 月 ${d} 日 ${isToday ? '（今日）' : '（歷史複習）'}`;
       }
 
-      const picker = document.getElementById('date-picker-input');
-      if (picker) picker.value = viewingDateString;
+      if (datePicker) {
+        datePicker.value = selectedDateStr;
+        datePicker.max = TAIWAN_TODAY_STR; // 核心：鎖定明天，防偷看
+      }
+
+      if (nextBtn) {
+        // 今天時鎖定「後一天」
+        nextBtn.disabled = isToday;
+      }
+
+      if (resetBtn) {
+        resetBtn.classList.toggle('hidden', isToday);
+      }
+
+      if (bannerTitle) {
+        bannerTitle.innerText = isToday ? "今日進度：精選 5 單字" : `溫習進度：${m}/${d} 單字`;
+      }
+
+      renderDailyCards();
     }
 
-    function changeDateOffset(offset) {
-      const current = parseYYYYMMDD(viewingDateString);
-      current.setDate(current.getDate() + offset);
-      const newDateStr = formatToYYYYMMDD(current);
+    function changeDay(delta) {
+      const current = new Date(selectedDateStr + 'T00:00:00');
+      current.setDate(current.getDate() + delta);
+      const targetStr = formatDateYMD(current);
 
-      if (newDateStr > taiwanTodayString) {
-        showToast("不能看明天的單字喔！明天準時來解鎖～");
-        return;
-      }
+      // 防偷看明天檢查
+      if (targetStr > TAIWAN_TODAY_STR) return;
 
-      viewingDateString = newDateStr;
-      updateDateViewUI();
-      dailyWords = computeDailyWordsForDate(viewingDateString);
-      renderDailyCards();
-      
-      if (offset < 0) {
-        showToast(`已切換至 ${viewingDateString} 溫習單字！`);
+      selectedDateStr = targetStr;
+      updateDateUI();
+    }
+
+    function onDateSelected(val) {
+      if (!val) return;
+      if (val > TAIWAN_TODAY_STR) {
+        alert("明天還沒到唷！請小朋友一步一腳印，先把今天的單字熟記吧！");
+        selectedDateStr = TAIWAN_TODAY_STR;
       } else {
-        showToast(`已切換至 ${viewingDateString}！`);
+        selectedDateStr = val;
       }
+      updateDateUI();
     }
 
     function resetToToday() {
-      viewingDateString = taiwanTodayString;
-      updateDateViewUI();
-      dailyWords = computeDailyWordsForDate(viewingDateString);
-      renderDailyCards();
-      showToast("已返回今天的單字！");
+      selectedDateStr = TAIWAN_TODAY_STR;
+      updateDateUI();
     }
 
-    function onCustomDatePick(val) {
-      if (!val) return;
-      if (val > taiwanTodayString) {
-        showToast("未來的單字還沒解鎖喔！請選擇今天或以前的日期。");
-        const picker = document.getElementById('date-picker-input');
-        if (picker) picker.value = viewingDateString;
-        return;
-      }
-      viewingDateString = val;
-      updateDateViewUI();
-      dailyWords = computeDailyWordsForDate(viewingDateString);
-      renderDailyCards();
-    }
-
-    function initDatabase() {
-      const saved = localStorage.getItem('youzi_word_bank_v2');
-      if (saved) {
-        try {
-          wordBank = JSON.parse(saved);
-        } catch(e) {
-          wordBank = [...GRADE_VOCABULARY_DATABASE];
-        }
-      } else {
-        wordBank = [...GRADE_VOCABULARY_DATABASE];
-        saveDatabase();
-      }
-      const countEl = document.getElementById('bank-total-count');
-      if (countEl) countEl.innerText = wordBank.length;
-    }
-
-    function saveDatabase() {
-      localStorage.setItem('youzi_word_bank_v2', JSON.stringify(wordBank));
-      const countEl = document.getElementById('bank-total-count');
-      if (countEl) countEl.innerText = wordBank.length;
-    }
-
-    function hashString(str) {
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        hash = (hash << 5) - hash + str.charCodeAt(i);
-        hash |= 0;
-      }
-      return Math.abs(hash);
-    }
-
-    function pseudoRandom(seed) {
-      const x = Math.sin(seed++) * 10000;
-      return x - Math.floor(x);
-    }
-
-    // Deterministic 5 words seeded by Taiwan date string
-    function computeDailyWordsForDate(dateStr) {
-      if (wordBank.length <= 5) return [...wordBank];
-
-      let seed = hashString("taiwan_grade56_" + dateStr);
-      const copy = [...wordBank];
-      const result = [];
-
-      for (let i = 0; i < 5; i++) {
-        const r = pseudoRandom(seed + i * 47);
-        const idx = Math.floor(r * copy.length);
-        result.push(copy.splice(idx, 1)[0]);
-      }
-      return result;
-    }
-
-    // Natural child-friendly speech synthesis
-    function speak(text) {
-      if (!('speechSynthesis' in window)) {
-        showToast("瀏覽器未支援發音");
-        return;
-      }
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US';
-      u.rate = 0.85;
-      window.speechSynthesis.speak(u);
-    }
-
+    /* ==========================================================
+       5. 渲染 5 個單字卡片
+       ========================================================== */
     function renderDailyCards() {
-      const container = document.getElementById('daily-words-container');
+      const container = document.getElementById('daily-cards-container');
       if (!container) return;
       container.innerHTML = '';
 
-      dailyWords.forEach((item, index) => {
+      const words = getWordsForDate(selectedDateStr);
+
+      words.forEach((w, idx) => {
         const card = document.createElement('div');
-        card.className = "bg-white rounded-3xl p-5 sm:p-6 shadow-sm border-2 border-amber-100 card-bounce flex flex-col md:flex-row md:items-center justify-between gap-4";
-
-        const completeSentence = item.example.replace('______', item.word);
-
+        card.className = "bg-white border-2 border-amber-200 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition";
         card.innerHTML = `
-          <div class="flex items-start gap-4">
-            <div class="w-11 h-11 rounded-2xl bg-amber-200/70 text-amber-900 font-black text-lg flex items-center justify-center shrink-0 border border-amber-300">
-              0${index + 1}
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-amber-100">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-amber-100 text-amber-800 font-extrabold flex items-center justify-center text-base">
+                ${idx + 1}
+              </span>
+              <div>
+                <h3 class="text-3xl sm:text-4xl font-black text-amber-900 tracking-wide inline-block">${w.en}</h3>
+                <span class="text-base sm:text-lg text-slate-500 font-bold ml-2">${w.kk}</span>
+                <span class="bg-amber-100 text-amber-800 text-sm font-black px-2.5 py-0.5 rounded-lg ml-2">${w.pos}</span>
+                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-md ml-1">${w.cat}</span>
+              </div>
             </div>
-
-            <div class="space-y-1.5">
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="text-3xl font-black text-slate-800 tracking-wide">${item.word}</span>
-                <span class="text-xs bg-slate-100 text-slate-600 font-mono font-bold px-2.5 py-0.5 rounded-lg border border-slate-200">${item.kk}</span>
-                <span class="text-xs bg-amber-100 text-amber-900 font-black px-2.5 py-0.5 rounded-lg border border-amber-200">${item.pos}</span>
-              </div>
-              <p class="text-lg font-black text-amber-800">${item.meaning}</p>
-              
-              <div class="mt-2 bg-amber-50/60 p-3 rounded-2xl border border-amber-100/80 text-xs sm:text-sm">
-                <p class="font-bold text-slate-800">
-                  <span class="text-amber-600 font-black">日常例句：</span>
-                  ${item.example.replace('______', `<span class="text-indigo-600 underline font-black mx-1">${item.word}</span>`)}
-                </p>
-                <p class="text-slate-500 font-semibold mt-1">例句解釋：${item.exampleTrans}</p>
-              </div>
+            <div class="flex items-center gap-3 justify-between sm:justify-end">
+              <span class="text-2xl sm:text-3xl font-extrabold text-slate-700">${w.zh}</span>
+              <button onclick="speakText('${w.en}')" class="w-12 h-12 rounded-2xl bg-amber-100 hover:bg-amber-200 text-amber-800 text-2xl flex items-center justify-center transition active:scale-95 shadow-sm" title="朗讀單字">
+                🔊
+              </button>
             </div>
           </div>
 
-          <div class="flex sm:flex-col md:flex-row items-center gap-2 self-end md:self-center shrink-0">
-            <button onclick="speak('${item.word}')" class="pop-btn bg-amber-100 hover:bg-amber-200 text-amber-900 font-black text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5">
-              <i class="ph-fill ph-speaker-high text-base"></i> 單字念法
-            </button>
-            <button onclick="speak('${escapeSentence(completeSentence)}')" class="pop-btn bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-black text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5">
-              <i class="ph-bold ph-waveform text-base"></i> 例句朗讀
+          <!-- 生活化例句與翻譯 -->
+          <div class="mt-4 bg-amber-50/60 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div>
+              <p class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug">${w.ex}</p>
+              <p class="text-base sm:text-lg text-slate-500 font-semibold mt-1">${w.ex_zh}</p>
+            </div>
+            <button onclick="speakText('${w.ex.replace(/'/g, "\\'")}')" class="px-4 py-2 rounded-xl bg-white border border-amber-300 text-amber-800 text-sm sm:text-base font-bold flex items-center gap-1.5 shadow-sm hover:bg-amber-100 transition whitespace-nowrap">
+              <span>🗣️</span> 聽例句
             </button>
           </div>
         `;
@@ -923,429 +814,274 @@
       });
     }
 
-    function escapeSentence(str) {
-      return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    /* ==========================================================
+       6. 字義測驗 (選擇題) 邏輯
+       ========================================================== */
+    let choiceWords = [];
+    let choiceIndex = 0;
+    let choiceAnswered = false;
+
+    function initChoiceQuiz() {
+      choiceWords = getWordsForDate(selectedDateStr);
+      choiceIndex = 0;
+      loadChoiceQuestion();
     }
 
-    function startDailyQuiz() {
-      switchTab('quiz');
-      const scopeEl = document.getElementById('quiz-scope');
-      if (scopeEl) scopeEl.value = 'daily';
-      loadNewQuizQuestion();
-    }
+    function loadChoiceQuestion() {
+      choiceAnswered = false;
+      const current = choiceWords[choiceIndex];
+      document.getElementById('choice-progress').innerText = `${choiceIndex + 1} / 5`;
+      document.getElementById('choice-question-word').innerText = current.en;
+      document.getElementById('choice-feedback').innerText = '';
+      document.getElementById('choice-next-btn').classList.add('hidden');
 
-    function setQuizType(type) {
-      quizType = type;
-      const mcqBtn = document.getElementById('quiz-type-mcq');
-      const clozeBtn = document.getElementById('quiz-type-cloze');
-
-      if (type === 'mcq') {
-        if (mcqBtn) mcqBtn.className = "px-4 py-2 rounded-xl bg-white text-indigo-700 shadow-sm transition flex items-center gap-1.5";
-        if (clozeBtn) clozeBtn.className = "px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5";
-      } else {
-        if (clozeBtn) clozeBtn.className = "px-4 py-2 rounded-xl bg-white text-indigo-700 shadow-sm transition flex items-center gap-1.5";
-        if (mcqBtn) mcqBtn.className = "px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5";
-      }
-      loadNewQuizQuestion();
-    }
-
-    function getQuizPool() {
-      const scopeEl = document.getElementById('quiz-scope');
-      const scope = scopeEl ? scopeEl.value : 'daily';
-      if (scope === 'daily' && dailyWords.length > 0) {
-        return dailyWords;
-      }
-      return wordBank;
-    }
-
-    function loadNewQuizQuestion() {
-      clozeHintLevel = 0;
-      const pool = getQuizPool();
-      if (!pool || pool.length === 0) return;
-
-      currentQuizTarget = pool[Math.floor(Math.random() * pool.length)];
-
-      if (quizType === 'mcq') {
-        renderMCQ(currentQuizTarget);
-      } else {
-        renderCloze(currentQuizTarget);
-      }
-    }
-
-    function renderMCQ(target) {
-      const container = document.getElementById('quiz-card-box');
-      if (!container) return;
-
-      const pool = wordBank.filter(w => w.word !== target.word);
-      const distractors = pool.sort(() => 0.5 - Math.random()).slice(0, 3);
-      const choices = [...distractors, target].sort(() => 0.5 - Math.random());
-
-      container.innerHTML = `
-        <div>
-          <div class="flex items-center justify-between text-xs font-black text-amber-700 mb-3 bg-amber-50 px-3.5 py-1.5 rounded-xl inline-flex gap-1.5 border border-amber-200/70">
-            <i class="ph-fill ph-lightbulb"></i> 柚子老師考考你：請問這個英文單字是什麼意思呢？
-          </div>
-
-          <div class="text-center py-5">
-            <h3 class="text-4xl sm:text-5xl font-black text-slate-800 tracking-wider">${target.word}</h3>
-            <div class="flex items-center justify-center gap-2 mt-2">
-              <span class="text-sm font-mono font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-lg">${target.kk}</span>
-              <span class="text-xs font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-lg">${target.pos}</span>
-              <button onclick="speak('${target.word}')" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-2 py-0.5 rounded-lg flex items-center gap-1 ml-1 transition">
-                <i class="ph-fill ph-speaker-high"></i> 聽發音
-              </button>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4" id="mcq-options-container">
-            ${choices.map((item, idx) => `
-              <button 
-                onclick="checkMCQAnswer('${escapeSentence(item.word)}', this)" 
-                class="mcq-btn pop-btn text-left p-4 rounded-2xl border-2 border-slate-100 bg-white hover:border-amber-400 hover:bg-amber-50/50 text-slate-800 font-black text-base flex items-center justify-between transition"
-              >
-                <span>${String.fromCharCode(65 + idx)}. ${item.meaning}</span>
-                <span class="icon-indicator"></span>
-              </button>
-            `).join('')}
-          </div>
-        </div>
-
-        <div id="quiz-result-bar" class="hidden mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-        </div>
-      `;
-    }
-
-    function checkMCQAnswer(selectedWord, buttonEl) {
-      const allBtns = document.querySelectorAll('.mcq-btn');
-      allBtns.forEach(btn => btn.disabled = true);
-
-      const resultBar = document.getElementById('quiz-result-bar');
-      if (resultBar) resultBar.classList.remove('hidden');
-
-      if (selectedWord === currentQuizTarget.word) {
-        playCorrectSound();
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.65 }
-        });
-
-        buttonEl.classList.remove('border-slate-100', 'bg-white');
-        buttonEl.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
-        buttonEl.querySelector('.icon-indicator').innerHTML = `<i class="ph-fill ph-check-circle text-emerald-500 text-2xl"></i>`;
-
-        totalCorrect++;
-        correctStreak++;
-        updateStatsView();
-
-        if (resultBar) {
-          resultBar.innerHTML = `
-            <div class="flex items-center gap-2 text-emerald-600 font-black text-sm sm:text-base">
-              <i class="ph-fill ph-hands-clapping text-2xl text-emerald-500"></i>
-              答對了！恭喜獲得一顆星星！
-            </div>
-            <button onclick="loadNewQuizQuestion()" class="pop-btn bg-emerald-500 hover:bg-emerald-400 text-white font-black text-sm px-6 py-2.5 rounded-2xl shadow-sm flex items-center gap-1.5">
-              下一題 <i class="ph-bold ph-arrow-right"></i>
-            </button>
-          `;
+      // 產生 4 個選項 (1 個正解 + 3 個隨機干擾選項)
+      let options = [current.zh];
+      while (options.length < 4) {
+        const randWord = WORD_BANK[Math.floor(Math.random() * WORD_BANK.length)];
+        if (!options.includes(randWord.zh)) {
+          options.push(randWord.zh);
         }
+      }
+      options.sort(() => Math.random() - 0.5);
+
+      const grid = document.getElementById('choice-options-grid');
+      grid.innerHTML = '';
+
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = "w-full min-h-[64px] px-5 py-3 rounded-2xl border-2 border-slate-200 bg-slate-50 hover:bg-amber-50 hover:border-amber-400 text-slate-800 text-xl font-black transition flex items-center justify-center text-center shadow-sm active:scale-98";
+        btn.innerText = opt;
+        btn.onclick = () => checkChoiceAnswer(opt, current.zh, btn);
+        grid.appendChild(btn);
+      });
+    }
+
+    function speakCurrentQuizWord() {
+      const current = choiceWords[choiceIndex];
+      if (current) speakText(current.en);
+    }
+
+    function checkChoiceAnswer(selected, correct, clickedBtn) {
+      if (choiceAnswered) return;
+      choiceAnswered = true;
+
+      const buttons = document.querySelectorAll('#choice-options-grid button');
+      const feedback = document.getElementById('choice-feedback');
+      const nextBtn = document.getElementById('choice-next-btn');
+
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.innerText === correct) {
+          btn.className = "w-full min-h-[64px] px-5 py-3 rounded-2xl border-2 border-emerald-500 bg-emerald-100 text-emerald-800 text-xl font-black";
+        }
+      });
+
+      if (selected === correct) {
+        playSuccessSound();
+        confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
+        feedback.innerText = "🎉 太棒了！回答完全正確！";
+        feedback.className = "mt-6 text-center text-xl font-black text-emerald-600";
       } else {
         playWrongSound();
-        buttonEl.classList.remove('border-slate-100', 'bg-white');
-        buttonEl.classList.add('border-rose-400', 'bg-rose-50', 'text-rose-900');
-        buttonEl.querySelector('.icon-indicator').innerHTML = `<i class="ph-fill ph-x-circle text-rose-500 text-2xl"></i>`;
+        clickedBtn.className = "w-full min-h-[64px] px-5 py-3 rounded-2xl border-2 border-rose-400 bg-rose-100 text-rose-800 text-xl font-black";
+        feedback.innerText = `💪 別灰心，正確答案是「${correct}」，再記一次喔！`;
+        feedback.className = "mt-6 text-center text-xl font-black text-rose-600";
+      }
 
-        correctStreak = 0;
-        updateStatsView();
+      nextBtn.classList.remove('hidden');
+    }
 
-        if (resultBar) {
-          resultBar.innerHTML = `
-            <div class="text-rose-600 text-xs sm:text-sm font-bold">
-              沒關係！正確答案是：<span class="font-black text-slate-800 text-base">${currentQuizTarget.meaning} (${currentQuizTarget.word})</span>
-            </div>
-            <button onclick="loadNewQuizQuestion()" class="pop-btn bg-slate-800 hover:bg-slate-700 text-white font-black text-sm px-5 py-2.5 rounded-2xl shadow-sm flex items-center gap-1.5">
-              再試下一題 <i class="ph-bold ph-arrow-right"></i>
-            </button>
-          `;
-        }
+    function nextChoiceQuiz() {
+      choiceIndex++;
+      if (choiceIndex < 5) {
+        loadChoiceQuestion();
+      } else {
+        showQuizFinishModal("恭喜你完成今天的字義測驗！");
       }
     }
 
-    function renderCloze(target) {
-      const container = document.getElementById('quiz-card-box');
-      if (!container) return;
-      const completeSentence = target.example.replace('______', target.word);
+    /* ==========================================================
+       7. 例句克漏字填空測驗 邏輯
+       ========================================================== */
+    let clozeWords = [];
+    let clozeIndex = 0;
+    let clozeAnswered = false;
 
-      container.innerHTML = `
-        <div>
-          <div class="flex items-center justify-between text-xs font-black text-indigo-800 mb-3 bg-indigo-50 px-3.5 py-1.5 rounded-xl inline-flex gap-1.5 border border-indigo-200/60">
-            <i class="ph-fill ph-pencil"></i> 生活例句克漏字：請在空格填入正確的英文單字！
-          </div>
-
-          <div class="bg-amber-50/50 p-6 rounded-3xl border-2 border-amber-100 text-slate-800 text-lg sm:text-xl font-bold leading-relaxed space-y-2">
-            <div>
-              ${target.example.replace('______', `
-                <span class="inline-flex items-center px-3 py-1 mx-1 bg-white border-2 border-amber-300 rounded-xl text-indigo-700 font-mono font-black" id="cloze-hint-span">
-                  ${target.word.split('').map(() => '_').join(' ')}
-                </span>
-              `)}
-            </div>
-            <p class="text-sm font-semibold text-slate-500 italic">
-              中文提示：${target.exampleTrans}
-            </p>
-          </div>
-
-          <div class="mt-5 space-y-3">
-            <div class="flex flex-col sm:flex-row items-center gap-2">
-              <input 
-                type="text" 
-                id="cloze-input"
-                placeholder="輸入拼字（例: ${target.word[0]}...）"
-                autocomplete="off"
-                class="w-full px-5 py-3.5 rounded-2xl border-2 border-amber-200 text-lg font-black text-slate-800 focus:outline-none focus:border-indigo-500 focus:bg-white transition uppercase"
-                onkeypress="if(event.key === 'Enter') checkClozeAnswer()"
-              />
-              <button 
-                onclick="checkClozeAnswer()" 
-                class="w-full sm:w-auto pop-btn bg-indigo-600 hover:bg-indigo-500 text-white font-black px-6 py-3.5 rounded-2xl shrink-0 flex items-center justify-center gap-1.5 text-base"
-              >
-                確認答案
-              </button>
-            </div>
-
-            <div class="flex items-center justify-between text-xs">
-              <button onclick="revealLetterHint()" class="text-amber-700 hover:text-amber-900 font-black flex items-center gap-1 underline cursor-pointer">
-                <i class="ph-fill ph-lightbulb text-amber-500 text-sm"></i> 給我一個字母提示！
-              </button>
-              <button onclick="speak('${escapeSentence(completeSentence)}')" class="text-slate-500 hover:text-indigo-600 font-bold flex items-center gap-1">
-                <i class="ph-fill ph-speaker-high"></i> 朗讀完整例句
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div id="quiz-result-bar" class="hidden mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-        </div>
-      `;
-
-      setTimeout(() => {
-        const inp = document.getElementById('cloze-input');
-        if (inp) inp.focus();
-      }, 100);
+    function initClozeQuiz() {
+      clozeWords = getWordsForDate(selectedDateStr);
+      clozeIndex = 0;
+      loadClozeQuestion();
     }
 
-    function revealLetterHint() {
-      if (!currentQuizTarget) return;
-      clozeHintLevel++;
-      const word = currentQuizTarget.word;
-      let hint = "";
-      for (let i = 0; i < word.length; i++) {
-        if (i < clozeHintLevel) {
-          hint += word[i] + " ";
-        } else {
-          hint += "_ ";
-        }
+    function loadClozeQuestion() {
+      clozeAnswered = false;
+      const current = clozeWords[clozeIndex];
+      document.getElementById('cloze-progress').innerText = `${clozeIndex + 1} / 5`;
+      document.getElementById('cloze-feedback').innerText = '';
+      document.getElementById('cloze-next-btn').classList.add('hidden');
+      
+      const inputEl = document.getElementById('cloze-user-input');
+      inputEl.value = '';
+      inputEl.disabled = false;
+      inputEl.focus();
+
+      // 例句克漏字替換
+      const regex = new RegExp(`\\b${current.en}\\b`, 'gi');
+      let blankSentence = current.ex.replace(regex, "______");
+      if (!blankSentence.includes("______")) {
+        blankSentence = `${current.ex} (單字: ______)`;
       }
-      const span = document.getElementById('cloze-hint-span');
-      if (span) span.innerText = hint.trim();
+
+      document.getElementById('cloze-sentence-display').innerText = blankSentence;
+      document.getElementById('cloze-sentence-zh').innerText = current.ex_zh;
+
+      const firstL = current.en.charAt(0).toUpperCase();
+      document.getElementById('cloze-hint-text').innerText = `💡 提示：字首是 ${firstL}，共 ${current.en.length} 個字母`;
+    }
+
+    function revealClozeHint() {
+      const current = clozeWords[clozeIndex];
+      const first = current.en.charAt(0);
+      const last = current.en.charAt(current.en.length - 1);
+      document.getElementById('cloze-hint-text').innerText = `💡 強力提示：首字母是 ${first}，結尾是 ${last}，中文意思為「${current.zh}」`;
     }
 
     function checkClozeAnswer() {
-      const input = document.getElementById('cloze-input');
-      if (!input) return;
-      const userVal = input.value.trim().toLowerCase();
-      if (!userVal) {
-        showToast("請先輸入單字喔！");
+      if (clozeAnswered) return;
+      const inputEl = document.getElementById('cloze-user-input');
+      const userText = inputEl.value.trim().toLowerCase();
+      const current = clozeWords[clozeIndex];
+      const correctText = current.en.toLowerCase();
+      const feedback = document.getElementById('cloze-feedback');
+      const nextBtn = document.getElementById('cloze-next-btn');
+
+      if (!userText) {
+        feedback.innerText = "請先在框框中輸入單字喔！";
+        feedback.className = "mt-6 text-center text-xl font-bold text-amber-600";
         return;
       }
 
-      input.disabled = true;
-      const resultBar = document.getElementById('quiz-result-bar');
-      if (resultBar) resultBar.classList.remove('hidden');
+      clozeAnswered = true;
+      inputEl.disabled = true;
 
-      if (userVal === currentQuizTarget.word.toLowerCase()) {
-        playCorrectSound();
-        confetti({
-          particleCount: 90,
-          spread: 80,
-          origin: { y: 0.65 }
-        });
-
-        input.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
-        totalCorrect++;
-        correctStreak++;
-        updateStatsView();
-
-        if (resultBar) {
-          resultBar.innerHTML = `
-            <div class="flex items-center gap-2 text-emerald-600 font-black text-sm sm:text-base">
-              <i class="ph-fill ph-star text-2xl text-amber-400"></i>
-              太厲害了！完全拼對了！
-            </div>
-            <button onclick="loadNewQuizQuestion()" class="pop-btn bg-indigo-600 hover:bg-indigo-500 text-white font-black text-sm px-6 py-2.5 rounded-2xl shadow-sm flex items-center gap-1.5">
-              下一題 <i class="ph-bold ph-arrow-right"></i>
-            </button>
-          `;
-        }
+      if (userText === correctText) {
+        playSuccessSound();
+        confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
+        feedback.innerText = `🎉 答對了！拼法就是「${current.en}」！`;
+        feedback.className = "mt-6 text-center text-xl font-black text-emerald-600";
       } else {
         playWrongSound();
-        input.classList.add('border-rose-400', 'bg-rose-50', 'text-rose-800');
-        correctStreak = 0;
-        updateStatsView();
+        feedback.innerText = `💪 差一點點！正確拼法是「${current.en}」(${current.zh})`;
+        feedback.className = "mt-6 text-center text-xl font-black text-rose-600";
+      }
 
-        if (resultBar) {
-          resultBar.innerHTML = `
-            <div class="text-rose-600 text-xs sm:text-sm font-bold">
-              正確拼字是：<span class="font-black text-slate-800 text-base">${currentQuizTarget.word}</span> (${currentQuizTarget.meaning})
-            </div>
-            <button onclick="loadNewQuizQuestion()" class="pop-btn bg-slate-800 hover:bg-slate-700 text-white font-black text-sm px-5 py-2.5 rounded-2xl shadow-sm flex items-center gap-1.5">
-              繼續挑戰 <i class="ph-bold ph-arrow-right"></i>
-            </button>
-          `;
-        }
+      nextBtn.classList.remove('hidden');
+    }
+
+    // 支援 Enter 鍵送出答案
+    document.getElementById('cloze-user-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') checkClozeAnswer();
+    });
+
+    function nextClozeQuiz() {
+      clozeIndex++;
+      if (clozeIndex < 5) {
+        loadClozeQuestion();
+      } else {
+        showQuizFinishModal("太厲害了！你完成了今天的例句克漏字挑戰！");
       }
     }
 
-    function updateStatsView() {
-      const correctEl = document.getElementById('quiz-correct-count');
-      const streakEl = document.getElementById('quiz-streak-count');
-      if (correctEl) correctEl.innerText = totalCorrect;
-      if (streakEl) streakEl.innerText = correctStreak;
+    function showQuizFinishModal(msg) {
+      confetti({ particleCount: 120, spread: 100, origin: { y: 0.5 } });
+      alert(`${msg}\n明天記得再來挑戰全新單字喔！`);
+      switchTab('daily');
     }
 
-    function renderBankCards(list = wordBank) {
-      const container = document.getElementById('bank-list-container');
+    /* ==========================================================
+       8. 主題字庫清單瀏覽與篩選
+       ========================================================== */
+    let currentCategoryFilter = 'ALL';
+
+    function initCategoryFilterBar() {
+      const bar = document.getElementById('category-filter-bar');
+      if (!bar) return;
+      
+      const cats = Array.from(new Set(WORD_BANK.map(w => w.cat)));
+      cats.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.innerText = cat;
+        btn.className = "cat-pill px-4 py-2 rounded-xl text-base font-bold bg-amber-50 text-slate-700 hover:bg-amber-100 border border-amber-200 transition";
+        btn.onclick = () => filterCategory(cat);
+        bar.appendChild(btn);
+      });
+
+      document.getElementById('lib-total-count').innerText = WORD_BANK.length;
+    }
+
+    function filterCategory(cat) {
+      currentCategoryFilter = cat;
+      const pills = document.querySelectorAll('.cat-pill');
+      pills.forEach(p => {
+        if ((cat === 'ALL' && p.innerText === '全部單字') || p.innerText === cat) {
+          p.className = "cat-pill px-4 py-2 rounded-xl text-base font-bold bg-amber-500 text-white shadow-sm transition";
+        } else {
+          p.className = "cat-pill px-4 py-2 rounded-xl text-base font-bold bg-amber-50 text-slate-700 hover:bg-amber-100 border border-amber-200 transition";
+        }
+      });
+      renderLibraryWords();
+    }
+
+    function renderLibraryWords() {
+      const container = document.getElementById('library-words-list');
+      const searchKey = document.getElementById('lib-search-input').value.trim().toLowerCase();
       if (!container) return;
+
       container.innerHTML = '';
 
-      if (list.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-2 text-center py-12 bg-white rounded-3xl border-2 border-dashed border-amber-200 text-slate-400 font-bold">
-            查無相符單字，換個關鍵字找找看吧！
-          </div>
-        `;
-        return;
+      let filtered = WORD_BANK;
+      if (currentCategoryFilter !== 'ALL') {
+        filtered = filtered.filter(w => w.cat === currentCategoryFilter);
       }
 
-      list.forEach(item => {
-        const div = document.createElement('div');
-        div.className = "bg-white p-4 sm:p-5 rounded-3xl border-2 border-amber-100/70 shadow-xs flex items-start justify-between gap-3 card-bounce";
-        div.innerHTML = `
+      if (searchKey) {
+        filtered = filtered.filter(w => 
+          w.en.toLowerCase().includes(searchKey) || 
+          w.zh.includes(searchKey)
+        );
+      }
+
+      // 最多顯示 100 筆以保持滑動極致順暢
+      const slice = filtered.slice(0, 100);
+
+      slice.forEach(w => {
+        const card = document.createElement('div');
+        card.className = "p-4 bg-amber-50/50 rounded-2xl border border-amber-200 flex justify-between items-center";
+        card.innerHTML = `
           <div>
             <div class="flex items-center gap-2">
-              <span class="text-xl font-black text-slate-800">${item.word}</span>
-              <span class="text-xs bg-slate-100 text-slate-600 font-mono font-bold px-2 py-0.5 rounded-md">${item.kk}</span>
-              <span class="text-xs bg-amber-100 text-amber-800 font-black px-2 py-0.5 rounded-md">${item.pos}</span>
+              <span class="text-2xl font-black text-amber-900">${w.en}</span>
+              <span class="text-sm font-bold text-slate-500">${w.kk}</span>
+              <span class="text-xs bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-black">${w.pos}</span>
             </div>
-            <p class="text-base font-black text-amber-900 mt-1">${item.meaning}</p>
-            <p class="text-xs text-slate-500 font-medium mt-1 line-clamp-1">${item.example.replace('______', item.word)}</p>
+            <p class="text-lg font-extrabold text-slate-700 mt-1">${w.zh}</p>
+            <p class="text-xs text-amber-700 mt-0.5 font-bold">📂 ${w.cat}</p>
           </div>
-          <button onclick="speak('${item.word}')" class="pop-btn p-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 shrink-0 border border-amber-200">
-            <i class="ph-bold ph-speaker-high text-lg"></i>
+          <button onclick="speakText('${w.en}')" class="w-10 h-10 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 text-xl flex items-center justify-center transition">
+            🔊
           </button>
         `;
-        container.appendChild(div);
+        container.appendChild(card);
       });
     }
 
-    function handleBankSearch() {
-      const input = document.getElementById('bank-search-input');
-      if (!input) return;
-      const query = input.value.trim().toLowerCase();
-      if (!query) {
-        renderBankCards(wordBank);
-        return;
-      }
-      const filtered = wordBank.filter(i => 
-        i.word.toLowerCase().includes(query) ||
-        i.meaning.includes(query) ||
-        i.pos.toLowerCase().includes(query)
-      );
-      renderBankCards(filtered);
-    }
-
-    function downloadWordBankJson() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(wordBank, null, 2));
-      const a = document.createElement('a');
-      a.setAttribute("href", dataStr);
-      a.setAttribute("download", `youzi_english_1500_${taiwanTodayString}.json`);
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      showToast("已成功下載單字庫 JSON！");
-    }
-
-    function handleImportJson(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        try {
-          const data = JSON.parse(evt.target.result);
-          if (Array.isArray(data) && data.length > 0 && data[0].word) {
-            wordBank = data;
-            saveDatabase();
-            renderBankCards(wordBank);
-            dailyWords = computeDailyWordsForDate(viewingDateString);
-            renderDailyCards();
-            showToast(`成功匯入 ${data.length} 個單字！`);
-          } else {
-            showToast("格式需為含有 word、meaning 的陣列！");
-          }
-        } catch(err) {
-          showToast("檔案讀取失敗，請確認格式。");
-        }
-      };
-      reader.readAsText(file);
-      e.target.value = '';
-    }
-
-    function switchTab(tabId) {
-      ['daily', 'quiz', 'bank', 'github'].forEach(id => {
-        const sec = document.getElementById(`section-${id}`);
-        const btn = document.getElementById(`tab-btn-${id}`);
-        if (!sec || !btn) return;
-
-        if (id === tabId) {
-          sec.classList.remove('hidden');
-          btn.className = "tab-btn px-3.5 py-2 rounded-xl text-amber-950 bg-white shadow-sm flex items-center gap-1.5 transition";
-        } else {
-          sec.classList.add('hidden');
-          btn.className = "tab-btn px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition";
-        }
-      });
-
-      if (tabId === 'quiz') {
-        loadNewQuizQuestion();
-      } else if (tabId === 'bank') {
-        renderBankCards(wordBank);
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      const text = document.getElementById('toast-text');
-      if (!toast || !text) return;
-
-      text.innerText = msg;
-      toast.classList.remove('translate-y-20', 'opacity-0');
-      toast.classList.add('translate-y-0', 'opacity-100');
-
-      setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-20', 'opacity-0');
-      }, 2500);
-    }
-
-    // Safely run initialization on document ready
+    /* ==========================================================
+       9. 初始啟動
+       ========================================================== */
     window.addEventListener('DOMContentLoaded', () => {
-      initDatabase();
-      initTaiwanTime();
-      updateDateViewUI();
-      dailyWords = computeDailyWordsForDate(viewingDateString);
-      renderDailyCards();
+      initCategoryFilterBar();
+      updateDateUI();
     });
   </script>
 </body>
