@@ -153,8 +153,7 @@ const RAW_WORD_LIST = [
   { id: 147, en: "cage", zh: "籠子", kk: "[kedʒ]", pos: "n.", cat: "日常用品 🎒", ex: "The pet bird sings in the cage.", ex_zh: "寵物鳥在籠子裡歡樂地歌唱。" },
   { id: 148, en: "cake", zh: "蛋糕", kk: "[kek]", pos: "n.", cat: "食物與飲品 🍕", ex: "We ate chocolate cake at the party.", ex_zh: "我們在派對上吃了巧克力蛋糕。" },
   { id: 149, en: "call", zh: "打電話/呼叫", kk: "[kɔl]", pos: "v.", cat: "動作與活動 🏃", ex: "Call your mom when you get home.", ex_zh: "回到家時記得打電話給媽媽報平安。" },
-  { id: 150, en: "camera", zh: "照相機", kk: "[ˈkæmərə]", pos: "n.", cat: "日常用品 🎒", ex: "Dad takes pictures with his camera.", ex_zh: "爸爸用照相機幫全家人記錄美好瞬間。" }
-
+  { id: 150, en: "camera", zh: "照相機", kk: "[ˈkæmərə]", pos: "n.", cat: "日常用品 🎒", ex: "Dad takes pictures with his camera.", ex_zh: "爸爸用照相機幫全家人記錄美好瞬間。" },
 // ==========================================
   // 第二批（第 151 ~ 300 字）
   // ==========================================
