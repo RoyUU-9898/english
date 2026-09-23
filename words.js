@@ -152,10 +152,10 @@ const RAW_WORD_LIST = [
   { id: 146, en: "by", zh: "藉著/在…旁邊", kk: "[baɪ]", pos: "prep.", cat: "日常表達 💬", ex: "We travel to school by bus.", ex_zh: "我們搭公車到學校。" },
   { id: 147, en: "cage", zh: "籠子", kk: "[kedʒ]", pos: "n.", cat: "日常用品 🎒", ex: "The pet bird sings in the cage.", ex_zh: "寵物鳥在籠子裡歡樂地歌唱。" },
   { id: 148, en: "cake", zh: "蛋糕", kk: "[kek]", pos: "n.", cat: "食物與飲品 🍕", ex: "We ate chocolate cake at the party.", ex_zh: "我們在派對上吃了巧克力蛋糕。" },
-{ id: 149, en: "call", zh: "打電話/呼叫", kk: "[kɔl]", pos: "v.", cat: "動作與活動 🏃", ex: "Call your mom when you get home.", ex_zh: "回到家時記得打電話給媽媽報平安。" },
+  { id: 149, en: "call", zh: "打電話/呼叫", kk: "[kɔl]", pos: "v.", cat: "動作與活動 🏃", ex: "Call your mom when you get home.", ex_zh: "回到家時記得打電話給媽媽報平安。" },
   { id: 150, en: "camera", zh: "照相機", kk: "[ˈkæmərə]", pos: "n.", cat: "日常用品 🎒", ex: "Dad takes pictures with his camera.", ex_zh: "爸爸用照相機幫全家人記錄美好瞬間。" },
   { id: 151, en: "camp", zh: "露營", kk: "[kæmp]", pos: "v./n.", cat: "體育與運動 🏅", ex: "We camp in the mountains every summer.", ex_zh: "我們每年夏天都去山裡露營。" },
-  { id: 152, en: "can", zh: "能夠/罐頭", kk: "[kæn]", pos: "aux./n.", cat: "能力與特質 🌟", ex: "You can do it if you practice.", ex_zh: "只要多加練習，你一定能做到的。" }
+  { id: 152, en: "can", zh: "能夠/罐頭", kk: "[kæn]", pos: "aux./n.", cat: "能力與特質 🌟", ex: "You can do it if you practice.", ex_zh: "只要多加練習，你一定能做到的。" },
   { id: 153, en: "candle", zh: "蠟燭", kk: "[ˈkændl]", pos: "n.", cat: "日常用品 🎒", ex: "Light the candles on the birthday cake.", ex_zh: "點亮生日蛋糕上的蠟燭吧。" },
   { id: 154, en: "candy", zh: "糖果", kk: "[ˈkændi]", pos: "n.", cat: "食物與飲品 🍕", ex: "Eating too much candy hurts your teeth.", ex_zh: "吃太多糖果會傷害牙齒。" },
   { id: 155, en: "cap", zh: "(無邊便)帽/棒球帽", kk: "[kæp]", pos: "n.", cat: "衣著與配件 👕", ex: "Wear a cap on sunny days.", ex_zh: "大太陽的日子要記得戴帽子。" },
