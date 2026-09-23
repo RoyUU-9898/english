@@ -12,14 +12,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
   <!-- Confetti 彩帶特效 -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  
+
   <style>
-    /* 平板與手機：維持原本預設適中比例 */
+    /* 平板與手機：維持適中舒適尺寸 */
     html {
       font-size: 16px;
     }
 
-    /* 筆記型電腦、桌上型電腦螢幕（1024px 以上）：字體與元素自動等比例放大 20% */
+    /* 筆電與桌機螢幕（1024px 以上）：字體與元素等比例自動放大 20% */
     @media (min-width: 1024px) {
       html {
         font-size: 19.5px;
@@ -29,7 +29,7 @@
       }
     }
 
-    /* 大螢幕桌機、大顯示器或教室投影機（1440px 以上）：自動等比例放大 35% */
+    /* 大螢幕桌機、大顯示器或教室投影機（1440px 以上）：自動放大 35% */
     @media (min-width: 1440px) {
       html {
         font-size: 21.5px;
@@ -86,15 +86,19 @@
       background: #F59E0B;
     }
   </style>
+
+  <!-- 引入 1200 單字資料庫 (支援 words.js 與 word.js 檔名) -->
+  <script src="words.js"></script>
+  <script src="word.js"></script>
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col justify-between selection:bg-amber-200">
 
-  <!-- 頂部導覽列 -->
+  <!-- 頂部導覽列 (標題無橘子圖示) -->
   <header class="bg-white/95 backdrop-blur border-b-2 border-amber-200 sticky top-0 z-40 px-4 py-3 sm:py-4 shadow-sm">
     <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-3">
         <h1 class="text-2xl sm:text-3xl font-extrabold text-amber-900 tracking-wide">每日 5 字小學堂</h1>
-        <span class="bg-amber-100 text-amber-800 text-sm sm:text-base font-bold px-3 py-1 rounded-full border border-amber-300">國小高年級</span>
+        <span class="bg-amber-100 text-amber-800 text-sm sm:text-base font-bold px-3 py-1 rounded-full border border-amber-300">國中先修 1200 字</span>
       </div>
 
       <!-- 導覽分頁按鈕 -->
@@ -118,7 +122,7 @@
   <!-- 主內容容器 -->
   <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 flex-1">
 
-    <!-- 台灣時間與日期選擇器 -->
+    <!-- 台灣時間與日期選擇器 (可看昨天、鎖定明天防偷看) -->
     <div class="bg-white border-2 border-amber-200 rounded-3xl p-4 sm:p-5 mb-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
         <span class="text-2xl">📅</span>
@@ -151,7 +155,7 @@
           </div>
           <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-amber-900" id="daily-banner-title">今日進度：精選 5 單字</h2>
-            <p class="text-sm sm:text-base text-slate-500 font-medium">每天花 3 分鐘大聲念，英文進步看得見！</p>
+            <p class="text-sm sm:text-base text-slate-500 font-medium">每隔一天換 5 個新單字，全學完一輪才會重複喔！</p>
           </div>
         </div>
         <button id="btn-today-reset" onclick="resetToToday()" class="hidden px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold text-base shadow pomelo-btn-shadow">
@@ -256,16 +260,16 @@
       </div>
     </section>
 
-    <!-- 4. 1500 主題分類字庫清單 -->
+    <!-- 4. 主題分類字庫清單 (嚴格去重，每一個都不同) -->
     <section id="view-library" class="hidden space-y-6">
       <div class="bg-white border-2 border-amber-200 rounded-3xl p-6 shadow-sm">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <div>
-            <h3 class="text-2xl font-extrabold text-slate-800">國小常用 1500 核心字庫</h3>
-            <p class="text-base text-slate-500 mt-1">點擊主題即可快速篩選分類，收錄生活實用基礎單字與例句。</p>
+            <h3 class="text-2xl font-extrabold text-slate-800">國中生必背 1200 核心主題字庫</h3>
+            <p class="text-base text-slate-500 mt-1">單字庫已完成嚴格去重，每一個單字皆不重複！</p>
           </div>
           <div class="text-amber-700 font-extrabold text-lg bg-amber-50 border border-amber-200 px-4 py-2 rounded-2xl">
-            收錄：<span id="lib-total-count" class="text-amber-900 font-black">1500</span> 字
+            收錄：<span id="lib-total-count" class="text-amber-900 font-black">0</span> 字
           </div>
         </div>
 
@@ -276,12 +280,12 @@
           </button>
         </div>
 
-        <!-- 搜尋框 -->
+        <!-- 關鍵字搜尋框 -->
         <div class="my-4">
           <input type="text" id="lib-search-input" oninput="renderLibraryWords()" placeholder="🔍 搜尋英文單字或中文意思..." class="w-full border-2 border-amber-200 rounded-2xl px-4 py-3 text-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
         </div>
 
-        <!-- 單字列表 -->
+        <!-- 單字列表 (滑順滾動) -->
         <div id="library-words-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[550px] overflow-y-auto p-1">
           <!-- 由 JavaScript 動態生成單字卡 -->
         </div>
@@ -290,7 +294,7 @@
 
   </main>
 
-  <!-- 頁面底部：依截圖設計的深藍黑曜石膠囊「柚子老師製作」標章 -->
+  <!-- 頁面底部：深藍黑曜石膠囊「柚子老師製作」標章 -->
   <footer class="py-8 flex justify-center items-center">
     <div class="bg-[#1e293b] border border-slate-700/80 rounded-full px-6 py-2.5 flex items-center gap-3 shadow-lg select-none">
       <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -304,286 +308,71 @@
 
   <script>
     /* ==========================================================
-       1. 國小高年級 1500 核心主題字庫建立與分類
+       1. 載入外部字庫與嚴格去重處理
        ========================================================== */
-    const rawCategories = {
-      "食物與飲品 🍕": [
-        ["apple", "蘋果", "[ˈæpəl]", "n.", "I eat an apple every day.", "我每天吃一顆蘋果。"],
-        ["banana", "香蕉", "[bəˈnænə]", "n.", "Monkeys like sweet bananas.", "猴子喜歡吃甜甜的香蕉。"],
-        ["bread", "麵包", "[brɛd]", "n.", "Mom bakes fresh bread in the morning.", "媽媽早上烤了新鮮的麵包。"],
-        ["breakfast", "早餐", "[ˈbrɛkfəst]", "n.", "We eat breakfast together at seven.", "我們七點一起吃早餐。"],
-        ["lunch", "午餐", "[lʌntʃ]", "n.", "What do you want for lunch?", "你午餐想要吃什麼？"],
-        ["dinner", "晚餐", "[ˈdɪnɚ]", "n.", "Fish soup is ready for dinner.", "晚餐的鮮魚湯煮好了。"],
-        ["cake", "蛋糕", "[kek]", "n.", "I got a chocolate cake on my birthday.", "我生日時收到了一個巧克力蛋糕。"],
-        ["candy", "糖果", "[ˈkændi]", "n.", "Too much candy is bad for your teeth.", "吃太多糖果對牙齒不好。"],
-        ["cheese", "起司", "[tʃiz]", "n.", "Mice love to eat cheese.", "老鼠喜歡吃起司。"],
-        ["chicken", "雞肉", "[ˈtʃɪkən]", "n.", "We had fried chicken for dinner.", "我們晚餐吃了炸雞。"],
-        ["cookie", "餅乾", "[ˈkʊki]", "n.", "Grandma baked cookies for us.", "奶奶為我們烤了餅乾。"],
-        ["egg", "雞蛋", "[ɛɡ]", "n.", "Birds lay eggs in the nest.", "鳥兒在巢裡下蛋。"],
-        ["fish", "魚", "[fɪʃ]", "n.", "Can you see the gold fish swim?", "你看到金魚在游泳嗎？"],
-        ["fruit", "水果", "[frut]", "n.", "Fresh fruit gives us good vitamins.", "新鮮水果能提供我們充足的維生素。"],
-        ["hamburger", "漢堡", "[ˈhæmbɝɡɚ]", "n.", "Dad made a big hamburger for me.", "爸爸為我做了一個大漢堡。"],
-        ["juice", "果汁", "[dʒus]", "n.", "Orange juice tastes fresh and sweet.", "柳橙汁喝起來新鮮又甜美。"],
-        ["milk", "牛奶", "[mɪlk]", "n.", "Drink warm milk before sleeping.", "睡前喝杯溫牛奶吧。"],
-        ["noodle", "麵條", "[ˈnudəl]", "n.", "Beef noodle soup is very popular here.", "牛肉麵在這裡非常受歡迎。"],
-        ["pizza", "披薩", "[ˈpitsə]", "n.", "Let's share this yummy cheese pizza.", "我們一起分這塊好吃的起司披薩吧。"],
-        ["rice", "米飯", "[raɪs]", "n.", "We have rice and soup for lunch.", "我們午餐吃米飯和湯。"],
-        ["salad", "沙拉", "[ˈsæləd]", "n.", "Green salad is good for health.", "生菜沙拉對身體很有好處。"],
-        ["sandwich", "三明治", "[ˈsænwɪtʃ]", "n.", "He packed a ham sandwich for school.", "他帶了火腿三明治去學校。"],
-        ["soup", "湯", "[sup]", "n.", "Hot tomato soup warms my body.", "熱熱的番茄湯溫暖了我的身體。"],
-        ["tea", "茶", "[ti]", "n.", "My teacher drinks black tea every day.", "我的老師每天喝紅茶。"],
-        ["water", "水", "[ˈwɔtɚ]", "n.", "Drink more clean water every day.", "每天要多喝乾淨的水。"],
-        ["vegetable", "蔬菜", "[ˈvɛdʒtəbəl]", "n.", "Eat green vegetables to grow strong.", "多吃綠色蔬菜才能長得強壯。"],
-        ["beef", "牛肉", "[bif]", "n.", "Dad cooks tasty beef steak.", "爸爸會煮好吃的牛排。"],
-        ["pork", "豬肉", "[pɔrk]", "n.", "Pork buns are delicious.", "豬肉包子非常美味。"],
-        ["sugar", "糖", "[ˈʃʊɡɚ]", "n.", "Do not put too much sugar in your drink.", "飲料裡不要加太多糖。"],
-        ["salt", "鹽", "[sɔlt]", "n.", "Pass me the salt, please.", "請把鹽遞給我。"]
-      ],
-      "日常用品與服飾 🎒": [
-        ["bag", "書包/袋子", "[bæɡ]", "n.", "Put your books in your school bag.", "把課本放進你的書包裡。"],
-        ["pen", "原子筆", "[pɛn]", "n.", "Write your name with a blue pen.", "用藍色原子筆寫上你的名字。"],
-        ["pencil", "鉛筆", "[ˈpɛnsəl]", "n.", "Sharpen your pencil before class.", "上課前先把鉛筆削尖。"],
-        ["ruler", "尺", "[ˈrulɚ]", "n.", "Use a ruler to draw a straight line.", "用尺畫出一條直線。"],
-        ["eraser", "橡皮擦", "[ɪˈresɚ]", "n.", "Lend me your eraser, please.", "請借我用一下你的橡皮擦。"],
-        ["desk", "書桌", "[dɛsk]", "n.", "Keep your desk tidy and clean.", "保持你的書桌乾淨整潔。"],
-        ["chair", "椅子", "[tʃɛr]", "n.", "Please sit down on the chair.", "請在椅子上坐好。"],
-        ["clock", "時鐘", "[klɑk]", "n.", "The clock on the wall says eight o'clock.", "牆上的時鐘指著八點整。"],
-        ["watch", "手錶", "[wɑtʃ]", "n.", "My watch tells me it is time to study.", "我的手錶提醒我該讀書了。"],
-        ["cap", "棒球帽", "[kæp]", "n.", "Wear a cap on sunny days.", "出大太陽時要戴帽子。"],
-        ["hat", "帽子", "[hæt]", "n.", "She wears a nice straw hat.", "她戴著一頂漂亮的草帽。"],
-        ["coat", "外套/大衣", "[kot]", "n.", "Put on your thick coat, it is cold.", "穿上你的厚大衣，外面很冷。"],
-        ["jacket", "夾克", "[ˈdʒækɪt]", "n.", "Zip up your jacket before going out.", "出門前把夾克的拉鍊拉上。"],
-        ["shirt", "襯衫", "[ʃɝt]", "n.", "Dad wears a clean white shirt.", "爸爸穿著一件乾淨的白襯衫。"],
-        ["shoes", "鞋子", "[ʃuz]", "n.", "Tie your shoes before running.", "跑步前先把鞋帶綁好。"],
-        ["socks", "襪子", "[sɑks]", "n.", "Wear warm socks in winter.", "冬天記得穿上保暖的襪子。"],
-        ["umbrella", "雨傘", "[ʌmˈbrɛlə]", "n.", "Take an umbrella because it may rain.", "帶把雨傘吧，因為可能會下雨。"],
-        ["glasses", "眼鏡", "[ˈɡlæsɪz]", "n.", "Teacher Pomelo wears round glasses.", "柚子老師戴著圓圓的眼鏡。"],
-        ["bottle", "水瓶", "[ˈbɑtəl]", "n.", "Fill your water bottle before PE class.", "體育課前先把水瓶裝滿。"],
-        ["box", "盒子", "[bɑks]", "n.", "Open the toy box and clean up.", "打開玩具箱並收拾好。"]
-      ],
-      "動作與活動 🏃": [
-        ["run", "跑", "[rʌn]", "v.", "Kids run fast in the playground.", "小朋友在操場上快樂奔跑。"],
-        ["jump", "跳", "[dʒʌmp]", "v.", "Frogs can jump very high.", "青蛙可以跳得非常高。"],
-        ["swim", "游泳", "[swɪm]", "v.", "We like to swim in summer.", "夏天我們喜歡去游泳。"],
-        ["read", "閱讀", "[rid]", "v.", "I read English stories every evening.", "我每天傍晚讀英文故事書。"],
-        ["write", "寫字", "[raɪt]", "v.", "Write down your thoughts in your diary.", "把你的想法寫進日記裡。"],
-        ["sing", "唱歌", "[sɪŋ]", "v.", "The birds sing sweet songs.", "鳥兒唱著動聽的歌。"],
-        ["dance", "跳舞", "[dæns]", "v.", "They dance joyfully to the music.", "他們跟著音樂開心地跳舞。"],
-        ["play", "玩耍/彈奏", "[ple]", "v.", "We play basketball after school.", "放學後我們一起打籃球。"],
-        ["study", "學習/讀書", "[ˈstʌdi]", "v.", "Study hard and you will do well.", "努力學習，你一定會做得很好。"],
-        ["learn", "學會", "[lɝn]", "v.", "We learn five new words every day.", "我們每天學會五個新單字。"],
-        ["listen", "傾聽", "[ˈlɪsən]", "v.", "Listen carefully to the teacher.", "上課要專心聽老師說話。"],
-        ["speak", "說話", "[spik]", "v.", "Practice speaking English with friends.", "和同學多多練習開口說英語。"],
-        ["help", "幫助", "[hɛlp]", "v.", "Good friends always help each other.", "好朋友總是會互相幫助。"],
-        ["open", "打開", "[ˈopən]", "v.", "Open your textbook to page ten.", "把你的課本翻開到第十頁。"],
-        ["close", "關閉", "[kloz]", "v.", "Close the door quietly, please.", "請輕輕地把門關上。"],
-        ["clean", "打掃/乾淨的", "[klin]", "v.", "Let's clean our classroom together.", "讓我們一起把教室打掃乾淨。"],
-        ["wash", "清洗", "[wɑʃ]", "v.", "Wash your hands before eating.", "吃東西前記得先把雙手洗乾淨。"],
-        ["draw", "畫畫", "[drɔ]", "v.", "She can draw a cute little cat.", "她會畫一隻可愛的小貓咪。"],
-        ["sleep", "睡覺", "[slip]", "v.", "Children should sleep eight hours a day.", "小朋友每天應該睡足八個小時。"],
-        ["walk", "散步/走路", "[wɔk]", "v.", "We walk to the park every Sunday.", "我們每週日走路去公園散步。"]
-      ],
-      "動物與自然 🐶": [
-        ["dog", "狗", "[dɔɡ]", "n.", "The friendly dog wags its tail.", "那隻友善的狗狗搖著尾巴。"],
-        ["cat", "貓", "[kæt]", "n.", "The lazy cat sleeps on the chair.", "懶洋洋的貓咪在椅子上睡覺。"],
-        ["bird", "鳥", "[bɝd]", "n.", "A blue bird sits on the tall tree.", "一隻藍色小鳥停在高高的樹上。"],
-        ["bear", "熊", "[bɛr]", "n.", "Bears catch fish in the cool river.", "熊在清涼的河水裡抓魚。"],
-        ["elephant", "大象", "[ˈɛləfənt]", "n.", "The elephant has a long and strong nose.", "大象有一隻又長又強壯的鼻子。"],
-        ["lion", "獅子", "[ˈlaɪən]", "n.", "The brave lion is the king of beasts.", "勇敢的獅子是百獸之王。"],
-        ["tiger", "老虎", "[ˈtaɪɡɚ]", "n.", "Tigers have orange fur with black stripes.", "老虎身上有橘色毛皮與黑色條紋。"],
-        ["rabbit", "兔子", "[ˈræbɪt]", "n.", "The white rabbit has long soft ears.", "這隻小白兔長著一對長長的軟耳朵。"],
-        ["horse", "馬", "[hɔrs]", "n.", "Horses run across the green grassland.", "駿馬在綠色的草原上奔馳。"],
-        ["monkey", "猴子", "[ˈmʌŋki]", "n.", "The smart monkey swings between trees.", "聰明的猴子在樹木之間靈活擺盪。"],
-        ["tree", "樹木", "[tri]", "n.", "Birds build nests high up in trees.", "鳥兒在高高的樹頂築巢。"],
-        ["flower", "花朵", "[ˈflaʊɚ]", "n.", "Colorful flowers bloom in the spring garden.", "春天的花園裡盛開著五顏六色的花朵。"],
-        ["sun", "太陽", "[sʌn]", "n.", "The bright sun warms the earth.", "溫暖明亮的太陽普照大地。"],
-        ["moon", "月亮", "[mun]", "n.", "The round moon shines at night.", "圓圓的月亮在夜空中發光。"],
-        ["star", "星星", "[stɑr]", "n.", "Count the bright stars in the sky.", "數數夜空中閃爍的明亮星星。"],
-        ["river", "河流", "[ˈrɪvɚ]", "n.", "Clear river water flows into the sea.", "清澈的河水一路流進大海裡。"],
-        ["mountain", "山脈", "[ˈmaʊntən]", "n.", "We hike up the green mountain on weekends.", "我們週末一起爬上翠綠的山脈。"],
-        ["sea", "海洋", "[si]", "n.", "Dolphins jump in the blue sea.", "海豚在蔚藍的大海中跳躍。"],
-        ["rain", "下雨/雨水", "[ren]", "n.", "Plants grow fast after the soft rain.", "春雨過後，植物快速抽芽生長。"],
-        ["wind", "微風/風", "[wɪnd]", "n.", "The gentle cool wind flies my kite.", "涼爽的微風把我的風箏吹得高高的。"]
-      ],
-      "情緒與特質 😊": [
-        ["happy", "快樂的", "[ˈhæpi]", "adj.", "We feel happy when playing with friends.", "和好朋友一起玩時大家都很開心。"],
-        ["sad", "難過的", "[sæd]", "adj.", "Don't be sad, tomorrow will be better.", "不要難過，明天一定會更加美好。"],
-        ["brave", "勇敢的", "[brev]", "adj.", "The brave boy is not afraid of the dark.", "這個勇敢的男孩一點也不怕黑。"],
-        ["kind", "善良的", "[kaɪnd]", "adj.", "Be kind to your friends and animals.", "對朋友和動物都要友善溫柔。"],
-        ["smart", "聰明的", "[smɑrt]", "adj.", "You found a smart way to solve the puzzle.", "你想出了一個非常聰明的方法解開難題。"],
-        ["busy", "忙碌的", "[ˈbɪzi]", "adj.", "Mom is busy preparing dinner now.", "媽媽現在正忙著準備晚餐。"],
-        ["tired", "疲倦的", "[taɪrd]", "adj.", "I feel tired after playing basketball.", "打完籃球後我感到有點疲憊。"],
-        ["hungry", "飢餓的", "[ˈhʌŋɡri]", "adj.", "I am hungry and ready for lunch.", "我肚子好餓，準備吃午餐了！"],
-        ["thirsty", "口渴的", "[ˈθɝsti]", "adj.", "Drink some cold water if you are thirsty.", "如果你口渴了，就喝點冰涼的水吧。"],
-        ["strong", "強壯的", "[strɔŋ]", "adj.", "Exercise makes our bodies strong.", "多運動能讓我們的身體變得強壯。"]
-      ],
-      "學校與地方 🏫": [
-        ["school", "學校", "[skul]", "n.", "We love going to school to learn.", "我們喜歡來學校學習各種新知識。"],
-        ["classroom", "教室", "[ˈklæsrum]", "n.", "Our classroom is bright and tidy.", "我們的教室既明亮又整潔。"],
-        ["library", "圖書館", "[ˈlaɪbrɛri]", "n.", "Read quietly inside the school library.", "在學校圖書館裡看書請保持安靜。"],
-        ["park", "公園", "[pɑrk]", "n.", "Kids ride bikes happily in the park.", "孩子們在公園裡開心地騎腳踏車。"],
-        ["hospital", "醫院", "[ˈhɑspɪtl]", "n.", "Doctors and nurses work in the hospital.", "醫生和護士在醫院裡照顧病人。"],
-        ["store", "商店", "[stɔr]", "n.", "Let's buy fresh milk at the store.", "我們去商店買一瓶新鮮的牛奶吧。"],
-        ["zoo", "動物園", "[zu]", "n.", "We saw giant pandas in the zoo.", "我們在動物園裡看到了大熊貓。"],
-        ["station", "車站", "[ˈsteʃən]", "n.", "The train arrived at the station on time.", "火車準時抵達了車站。"],
-        ["home", "家", "[hom]", "n.", "There is no place as warm as home.", "沒有任何地方比家更溫暖了。"],
-        ["playground", "操場", "[ˈpleɡraʊnd]", "n.", "We play tag on the playground.", "我們在操場上開心地玩抓人遊戲。"]
-      ],
-      "時間與日常 ⏰": [
-        ["today", "今天", "[təˈde]", "n.", "Today is a sunny and wonderful day.", "今天是一個陽光明媚的美好日子。"],
-        ["yesterday", "昨天", "[ˈjɛstɚde]", "n.", "Yesterday we finished our English homework.", "昨天我們一起完成了英文作業。"],
-        ["tomorrow", "明天", "[təˈmɑro]", "n.", "Tomorrow we will go on a school trip.", "明天我們全校要去校外教學囉！"],
-        ["morning", "早晨", "[ˈmɔrnɪŋ]", "n.", "Say good morning to your teacher.", "見到老師要禮貌地說聲早安。"],
-        ["afternoon", "下午", "[ˌæftɚˈnun]", "n.", "We do sports in the afternoon.", "我們在下午進行體育活動。"],
-        ["night", "夜晚", "[naɪt]", "n.", "Good night and sweet dreams.", "祝你晚安，做個甜甜的好夢。"],
-        ["week", "星期", "[wik]", "n.", "There are seven days in a week.", "一個星期裡面總共有七天。"],
-        ["year", "年", "[jɪr]", "n.", "Happy New Year to everyone!", "祝大家新年快樂、萬事如意！"],
-        ["time", "時間", "[taɪm]", "n.", "What time does the next bus arrive?", "下一班公車什麼時候會到呢？"],
-        ["minute", "分鐘", "[ˈmɪnɪt]", "n.", "Wait for just one minute, please.", "請再稍等我一分鐘就好。"]
-      ]
-    };
-
     let WORD_BANK = [];
-    let idCounter = 1;
 
-    for (const [catName, list] of Object.entries(rawCategories)) {
-      list.forEach(([en, zh, kk, pos, ex, ex_zh]) => {
-        WORD_BANK.push({
-          id: idCounter++,
-          en, zh, kk, pos, ex, ex_zh,
-          cat: catName
-        });
+    function initWordBank() {
+      // 讀取外部 words.js 中宣告的 RAW_WORD_LIST
+      const sourceList = (typeof RAW_WORD_LIST !== 'undefined' && Array.isArray(RAW_WORD_LIST)) 
+        ? RAW_WORD_LIST 
+        : [];
+
+      const map = new Map();
+      sourceList.forEach((item, index) => {
+        if (!item || !item.en) return;
+        const key = item.en.toLowerCase().trim();
+        // 嚴格去重：相同單字只保留一筆
+        if (!map.has(key)) {
+          map.set(key, {
+            id: index + 1,
+            en: item.en.trim(),
+            zh: item.zh ? item.zh.trim() : "",
+            kk: item.kk ? item.kk.trim() : "",
+            pos: item.pos ? item.pos.trim() : "",
+            cat: item.cat ? item.cat.trim() : "日常生活 💡",
+            ex: item.ex ? item.ex.trim() : `I like the word ${item.en}.`,
+            ex_zh: item.ex_zh ? item.ex_zh.trim() : `我喜歡 ${item.en} 這個單字。`
+          });
+        }
       });
-    }
 
-    const supplementaryRoots = [
-      ["able", "能幹的", "[ˈebəl]", "adj.", "She is able to swim fast.", "她能夠游得很快。", "特質與能力 🌟"],
-      ["about", "大約/關於", "[əˈbaʊt]", "prep.", "Tell me about your family.", "跟我說說關於你的家人吧。", "日常表達 💬"],
-      ["above", "在...上方", "[əˈbʌv]", "prep.", "The bird flies above the roof.", "小鳥在屋頂上方飛過。", "方向位置 📍"],
-      ["across", "穿過/對面", "[əˈkrɔs]", "prep.", "Walk across the street carefully.", "小心地走過這條街道。", "方向位置 📍"],
-      ["act", "表演/行動", "[ækt]", "v.", "He acts like a brave hero.", "他的表現就像個勇敢的英雄。", "動作與活動 🏃"],
-      ["action", "動作/行動", "[ˈækʃən]", "n.", "Actions speak louder than words.", "坐而言不如起而行。", "動作與活動 🏃"],
-      ["actor", "男演員", "[ˈæktɚ]", "n.", "The actor performed very well.", "那位演員演得非常精彩。", "人物角色 👥"],
-      ["actress", "女演員", "[ˈæktrɪs]", "n.", "She is a famous actress.", "她是一位很有名氣的女演員。", "人物角色 👥"],
-      ["afraid", "害怕的", "[əˈfred]", "adj.", "Don't be afraid to try new things.", "不要害怕嘗試新的事物。", "情緒與特質 😊"],
-      ["agree", "同意", "[əˈɡri]", "v.", "I agree with your good idea.", "我贊成你的好點子。", "日常表達 💬"],
-      ["air", "空氣", "[ɛr]", "n.", "Fresh air makes us healthy.", "新鮮的空氣使我們身體健康。", "動物與自然 🐶"],
-      ["airplane", "飛機", "[ˈɛrˌplen]", "n.", "The airplane flies in the sky.", "飛機在藍天之中翱翔。", "交通工具 🚗"],
-      ["airport", "機場", "[ˈɛrˌpɔrt]", "n.", "We arrived at the airport early.", "我們很早就抵達了機場。", "地點與交通 🚌"],
-      ["allow", "允許", "[əˈlaʊ]", "v.", "Mom allows me to read story books.", "媽媽允許我看故事書。", "日常表達 💬"],
-      ["already", "已經", "[ɔlˈrɛdi]", "adv.", "I have already done my work.", "我已經把功課做完了。", "時間與日常 ⏰"],
-      ["always", "總是", "[ˈɔlwez]", "adv.", "He always smiles at everyone.", "他總是親切地對大家微笑。", "日常表達 💬"],
-      ["angry", "生氣的", "[ˈæŋɡri]", "adj.", "Take a breath when you are angry.", "生氣的時候深呼吸一下吧。", "情緒與特質 😊"],
-      ["animal", "動物", "[ˈænəməl]", "n.", "Protect wild animals in nature.", "保護自然界中的野生動物。", "動物與自然 🐶"],
-      ["answer", "回答/答案", "[ˈænsɚ]", "n./v.", "Raise your hand to answer questions.", "回答問題時要先舉起手。", "學校與地方 🏫"],
-      ["ant", "螞蟻", "[ænt]", "n.", "The tiny ant works hard all day.", "小小的螞蟻整天努力工作。", "動物與自然 🐶"],
-      ["apartment", "公寓", "[əˈpɑrtmənt]", "n.", "My aunt lives in this apartment.", "我的阿姨住在那棟公寓裡。", "建築與房屋 🏡"],
-      ["appear", "出現", "[əˈpɪr]", "v.", "A rainbow appears after the rain.", "大雨過後，彩虹悄悄浮現。", "動物與自然 🐶"],
-      ["area", "區域/面積", "[ˈɛriə]", "n.", "This is our play area at school.", "這是我們在學校的遊戲區。", "學校與地方 🏫"],
-      ["arrive", "抵達", "[əˈraɪv]", "v.", "Trains arrive on time here.", "這裡的火車都很準時抵達。", "交通工具 🚗"],
-      ["art", "美術/藝術", "[ɑrt]", "n.", "I like my art class very much.", "我非常喜歡我的美術課。", "學校與學習 📚"],
-      ["ask", "詢問/要求", "[æsk]", "v.", "Ask teacher if you have doubts.", "有不懂的地方可以隨時問老師。", "學校與學習 📚"],
-      ["attack", "攻擊", "[əˈtæk]", "v.", "Never attack others in games.", "在遊戲中千萬不能攻擊別人。", "動作與活動 🏃"],
-      ["aunt", "姑姑/阿姨", "[ænt]", "n.", "My aunt brought me sweet apples.", "阿姨帶了甜甜的蘋果送給我。", "家庭與人物 👨‍👩‍👧"],
-      ["autumn", "秋天", "[ˈɔtəm]", "n.", "Maple leaves turn red in autumn.", "秋天時楓葉都漸漸變紅了。", "時間與天氣 ☀️"],
-      ["baby", "嬰兒", "[ˈbebi]", "n.", "The sweet baby sleeps quietly.", "可愛的小嬰兒安靜地睡著了。", "家庭與人物 👨‍👩‍👧"],
-      ["bake", "烘焙/烤", "[bek]", "v.", "Let us bake an apple pie.", "讓我們一起烤個香甜的蘋果派。", "食物與飲品 🍕"],
-      ["bakery", "麵包店", "[ˈbekəri]", "n.", "Smell the warm bread at the bakery.", "麵包店裡飄出熱騰騰的麵包香味。", "地點與交通 🚌"],
-      ["ball", "球", "[bɔl]", "n.", "Catch the red ball quickly!", "趕快接住那顆紅色的球！", "動作與運動 🏃"],
-      ["balloon", "氣球", "[bəˈlun]", "n.", "The colorful balloon flies high.", "五彩繽紛的氣球飛得好高好高。", "日常用品與服飾 🎒"],
-      ["band", "樂團", "[bænd]", "n.", "The school band plays nice music.", "學校的樂團演奏著動聽的音樂。", "學校與學習 📚"],
-      ["bank", "銀行", "[bæŋk]", "n.", "Save your pocket money in the bank.", "把你的零用錢存進銀行裡。", "地點與交通 🚌"],
-      ["baseball", "棒球", "[ˈbesbɔl]", "n.", "We play baseball every Saturday.", "我們每週六都會去打棒球。", "動作與運動 🏃"],
-      ["basket", "籃子", "[ˈbæskɪt]", "n.", "Put ripe fruits into the basket.", "把成熟的水果放進籃子裡。", "日常用品與服飾 🎒"],
-      ["basketball", "籃球", "[ˈbæskɪtbɔl]", "n.", "He shoots the basketball into the hoop.", "他把籃球投進了籃框裡。", "動作與運動 🏃"],
-      ["bath", "洗澡", "[bæθ]", "n.", "Take a warm bath before bedtime.", "睡覺前先去洗個舒服的熱水澡。", "時間與日常 ⏰"],
-      ["bathroom", "浴室", "[ˈbæθrum]", "n.", "Wash your face in the bathroom.", "去浴室裡把臉洗乾淨。", "建築與房屋 🏡"],
-      ["beach", "海灘", "[bitʃ]", "n.", "We build sand castles on the beach.", "我們在沙灘上堆著美麗的沙堡。", "動物與自然 🐶"],
-      ["bee", "蜜蜂", "[bi]", "n.", "Busy bees make sweet honey.", "辛勤的蜜蜂採集著甜甜的蜂蜜。", "動物與自然 🐶"],
-      ["before", "在...之前", "[bɪˈfɔr]", "prep.", "Wash hands before every meal.", "每次吃東西前都要先把雙手洗乾淨。", "時間與日常 ⏰"],
-      ["begin", "開始", "[bɪˈɡɪn]", "v.", "Class will begin at nine sharp.", "我們的課將在九點整準時開始。", "學校與學習 📚"],
-      ["behind", "在...後面", "[bɪˈhaɪnd]", "prep.", "A small cat hides behind the sofa.", "一隻小貓咪躲在沙發後面。", "方向位置 📍"],
-      ["believe", "相信", "[bɪˈliv]", "v.", "Believe in yourself and do your best.", "相信你自己，全力以赴做好它！", "情緒與特質 😊"],
-      ["bell", "鈴/鐘聲", "[bɛl]", "n.", "The school bell rings for recess.", "下課的鐘聲歡樂地響起來了。", "學校與學習 📚"],
-      ["belt", "皮帶", "[bɛlt]", "n.", "Fasten your seat belt in the car.", "在車上記得繫緊你的安全帶。", "日常用品與服飾 🎒"],
-      ["bench", "長椅", "[bɛntʃ]", "n.", "Sit on the bench under the shade.", "坐在大樹蔭下的長椅上歇會兒。", "建築與房屋 🏡"],
-      ["beside", "在...身旁", "[bɪˈsaɪd]", "prep.", "Sit beside me, my good friend.", "坐在我身旁吧，我最好的朋友。", "方向位置 📍"],
-      ["between", "在...之間", "[bɪˈtwin]", "prep.", "A sweet cat sits between us.", "一隻可愛的貓咪坐在我們中間。", "方向位置 📍"],
-      ["bicycle", "腳踏車", "[ˈbaɪsɪkəl]", "n.", "Ride your bicycle in the park lane.", "在公園的專用道上騎腳踏車。", "交通工具 🚗"],
-      ["big", "大的", "[bɪɡ]", "adj.", "An elephant is very big.", "大象的體型非常巨大。", "情緒與特質 😊"],
-      ["birthday", "生日", "[ˈbɝθde]", "n.", "Happy birthday to my dear pal!", "祝我最親愛的好朋友生日快樂！", "時間與日常 ⏰"],
-      ["bite", "咬", "[baɪt]", "v.", "Chew food well, don't bite fast.", "吃東西要細嚼慢嚥，不要咬太快。", "食物與飲品 🍕"],
-      ["black", "黑色", "[blæk]", "adj.", "The night sky is quiet and black.", "夜晚的天空安靜而深黑。", "顏色與形狀 🎨"],
-      ["blanket", "毛毯", "[ˈblæŋkɪt]", "n.", "Wrap yourself in this warm blanket.", "披上這件溫暖的毛毯吧。", "日常用品與服飾 🎒"],
-      ["blind", "盲的/看不見的", "[blaɪnd]", "adj.", "Guide dogs help blind people walk.", "導盲犬會協助看不見的人走路。", "情緒與特質 😊"],
-      ["blow", "吹拂", "[blo]", "v.", "Blow out the candles on the cake.", "吹熄生日蛋糕上的蠟燭吧。", "動作與活動 🏃"],
-      ["blue", "藍色", "[blu]", "adj.", "The ocean looks bright blue today.", "今天的大海看起來格外蔚藍。", "顏色與形狀 🎨"],
-      ["boat", "小船", "[bot]", "n.", "Row the small boat across the lake.", "划著小木船劃過寧靜的湖面。", "交通工具 🚗"],
-      ["body", "身體", "[ˈbɑdi]", "n.", "Exercise keeps our body strong.", "規律運動能保持身體強健。", "身體部位 🦵"],
-      ["book", "書本", "[bʊk]", "n.", "Open your book to read a story.", "翻開你的書本來讀個好聽的故事。", "學校與學習 📚"],
-      ["borrow", "借入", "[ˈbɑro]", "v.", "May I borrow your color pencils?", "我可以借用一下你的彩色鉛筆嗎？", "學校與學習 📚"],
-      ["boss", "老闆", "[bɔs]", "n.", "The boss is polite to all workers.", "老闆對待每位員工都非常親切。", "人物角色 👥"],
-      ["bowl", "碗", "[bol]", "n.", "Eat noodles in a big bowl.", "用大碗吃著香噴噴的麵條。", "日常用品與服飾 🎒"],
-      ["boy", "男孩", "[bɔɪ]", "n.", "That tall boy runs very fast.", "那個高個子的男孩跑得非常快。", "家庭與人物 👨‍👩‍👧"],
-      ["bright", "明亮的/聰穎的", "[braɪt]", "adj.", "Stars look bright in the clear sky.", "晴朗夜空中的星星格外明亮耀眼。", "情緒與特質 😊"],
-      ["bring", "帶來", "[brɪŋ]", "v.", "Please bring your math book tomorrow.", "明天請記得帶你的數學課本來。", "動作與活動 🏃"],
-      ["brother", "兄弟", "[ˈbrʌðɚ]", "n.", "My older brother helps me with math.", "我的哥哥會在數學課業上幫助我。", "家庭與人物 👨‍👩‍👧"],
-      ["brown", "棕色/褐色", "[braʊn]", "adj.", "The little bear has shiny brown fur.", "小熊身上有著亮麗的褐色毛皮。", "顏色與形狀 🎨"],
-      ["brush", "刷子/刷牙", "[brʌʃ]", "v./n.", "Brush your teeth every morning.", "每天早晨記得要把牙齒刷乾淨。", "時間與日常 ⏰"],
-      ["build", "建造", "[bɪld]", "v.", "Beavers build dams across the river.", "海狸會在河道上建造起水壩。", "動作與活動 🏃"],
-      ["burn", "燃燒", "[bɝn]", "v.", "Fire can burn, so be very careful.", "火會燒傷人，所以一定要特別小心。", "動物與自然 🐶"],
-      ["bus", "公車", "[bʌs]", "n.", "Take the yellow bus to the museum.", "搭乘黃色公車前往自然博物館。", "交通工具 🚗"],
-      ["busy", "忙碌的", "[ˈbɪzi]", "adj.", "Ants are always busy gathering food.", "小螞蟻們總是忙碌地儲備食物。", "情緒與特質 😊"],
-      ["butter", "奶油", "[ˈbʌtɚ]", "n.", "Spread butter evenly on hot toast.", "把香濃的奶油均勻抹在熱吐司上。", "食物與飲品 🍕"],
-      ["butterfly", "蝴蝶", "[ˈbʌtɚˌflaɪ]", "n.", "A pretty butterfly lands on a flower.", "一隻美麗的蝴蝶停留在花瓣上。", "動物與自然 🐶"],
-      ["button", "按鈕/鈕扣", "[ˈbʌtn]", "n.", "Press the green button to start.", "按下綠色按鈕就可以啟動囉。", "日常用品與服飾 🎒"],
-      ["buy", "購買", "[baɪ]", "v.", "Use money to buy what you need.", "用零用錢購買你真正需要的文具。", "動作與活動 🏃"],
-      ["call", "打電話/稱呼", "[kɔl]", "v.", "Call your parents when you arrive.", "安全到達目的地時記得打電話給父母。", "日常表達 💬"],
-      ["camera", "照相機", "[ˈkæmərə]", "n.", "Dad takes pictures with his camera.", "爸爸用照相機幫我們記錄美好回憶。", "日常用品與服飾 🎒"],
-      ["camp", "露營", "[kæmp]", "v./n.", "We camp under twinkling stars.", "我們在閃爍的繁星點點下露營。", "動作與活動 🏃"],
-      ["candle", "蠟燭", "[ˈkændl]", "n.", "Light the birthday candle with care.", "小心翼翼地點亮生日蛋糕的蠟燭。", "日常用品與服飾 🎒"],
-      ["card", "卡片", "[kɑrd]", "n.", "Write a warm thank-you card to mom.", "寫一張充滿感恩的卡片送給媽媽。", "學校與學習 📚"],
-      ["careful", "小心仔細的", "[ˈkɛrfəl]", "adj.", "Be careful when crossing busy streets.", "過馬路時一定要特別留意左右車輛。", "情緒與特質 😊"],
-      ["carry", "搬運/提", "[ˈkæri]", "v.", "Ants carry tiny bread crumbs home.", "螞蟻合力把細小的麵包屑搬回家。", "動作與活動 🏃"],
-      ["catch", "接住/趕上", "[kætʃ]", "v.", "Cats can catch running mice fast.", "貓咪能敏捷地抓到跑動的老鼠。", "動作與活動 🏃"],
-      ["celebrate", "慶祝", "[ˈsɛləˌbret]", "v.", "We celebrate New Year with joy.", "我們滿懷歡樂地慶祝新的一年到來。", "時間與日常 ⏰"],
-      ["cellphone", "手機", "[ˈsɛlˌfon]", "n.", "Keep your cellphone away when studying.", "專心讀書的時候記得把手機收好。", "日常用品與服飾 🎒"],
-      ["cent", "分(錢幣)", "[sɛnt]", "n.", "Every single cent counts.", "一分一毫的零用錢都要好好珍惜。", "時間與日常 ⏰"],
-      ["center", "中心/中央", "[ˈsɛntɚ]", "n.", "Stand right in the center of the hall.", "筆直地站在大廳的最正中央。", "方向位置 📍"],
-      ["century", "世紀/百年", "[ˈsɛntʃəri]", "n.", "We live in the twenty-first century.", "我們生活在充滿科技的二十一世紀。", "時間與日常 ⏰"],
-      ["chance", "機會", "[tʃæns]", "n.", "Give everyone a fair chance to try.", "給每個人一個公平嘗試的機會。", "學校與學習 📚"],
-      ["change", "改變/零錢", "[tʃendʒ]", "v./n.", "Seasons change from warm to cold.", "四季隨著時間悄悄變換著冷暖。", "時間與天氣 ☀️"],
-      ["cheap", "便宜的", "[tʃip]", "adj.", "Vegetables are fresh and cheap today.", "今天的青菜既新鮮又很便宜。", "食物與飲品 🍕"],
-      ["cheat", "作弊/欺騙", "[tʃit]", "v.", "Never cheat on any test.", "在任何考試中都絕不能投機作弊。", "學校與學習 📚"],
-      ["check", "檢查/核對", "[tʃɛk]", "v.", "Check your answers before submitting.", "交卷之前一定要再仔細檢查一遍。", "學校與學習 📚"],
-      ["cheer", "歡呼/鼓舞", "[tʃɪr]", "v.", "We cheer for our school team.", "我們大聲為自己學校的代表隊喝采！", "情緒與特質 😊"]
-    ];
+      WORD_BANK = Array.from(map.values()).map((w, idx) => ({ ...w, id: idx + 1 }));
 
-    supplementaryRoots.forEach(([en, zh, kk, pos, ex, ex_zh, cat]) => {
-      WORD_BANK.push({
-        id: idCounter++,
-        en, zh, kk, pos, ex, ex_zh,
-        cat: cat || "生活常用 💡"
-      });
-    });
-
-    const baseLength = WORD_BANK.length;
-    for (let i = baseLength; i < 1500; i++) {
-      const template = WORD_BANK[i % baseLength];
-      WORD_BANK.push({
-        id: idCounter++,
-        en: template.en,
-        zh: template.zh,
-        kk: template.kk,
-        pos: template.pos,
-        ex: template.ex,
-        ex_zh: template.ex_zh,
-        cat: template.cat
-      });
+      if (WORD_BANK.length === 0) {
+        // 安全備援（若外部檔案尚未讀取到）
+        WORD_BANK = [
+          { id: 1, en: "apple", zh: "蘋果", kk: "[ˈæpəl]", pos: "n.", cat: "食物與飲品 🍕", ex: "I eat an apple every day.", ex_zh: "我每天吃一顆蘋果。" },
+          { id: 2, en: "banana", zh: "香蕉", kk: "[bəˈnænə]", pos: "n.", cat: "食物與飲品 🍕", ex: "Monkeys like sweet bananas.", ex_zh: "猴子喜歡吃甜甜的香蕉。" },
+          { id: 3, en: "cat", zh: "貓", kk: "[kæt]", pos: "n.", cat: "動物與自然 🐶", ex: "The cat sleeps on the chair.", ex_zh: "貓咪在椅子上睡覺。" },
+          { id: 4, en: "dog", zh: "狗", kk: "[dɔɡ]", pos: "n.", cat: "動物與自然 🐶", ex: "The friendly dog wags its tail.", ex_zh: "友善的狗狗搖著尾巴。" },
+          { id: 5, en: "elephant", zh: "大象", kk: "[ˈɛləfənt]", pos: "n.", cat: "動物與自然 🐶", ex: "The elephant has a long nose.", ex_zh: "大象有一隻長鼻子。" }
+        ];
+      }
     }
 
     /* ==========================================================
-       2. 台灣時區 (Asia/Taipei UTC+8) 時間與日期導航
+       2. 偽隨機洗牌演算法（全學完一輪才洗牌第二次）
+       ========================================================== */
+    function seededRandom(seed) {
+      const x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    }
+
+    function getShuffledDeck(cycleNumber) {
+      const deck = [...WORD_BANK];
+      let seed = 20260923 + cycleNumber * 8819;
+      for (let i = deck.length - 1; i > 0; i--) {
+        const r = Math.floor(seededRandom(seed++) * (i + 1));
+        const temp = deck[i];
+        deck[i] = deck[r];
+        deck[r] = temp;
+      }
+      return deck;
+    }
+
+    /* ==========================================================
+       3. 台灣時間 (Asia/Taipei UTC+8) 與「隔日完全換新 5 字」計算
        ========================================================== */
     function getTaiwanDateObject() {
       const now = new Date();
@@ -602,19 +391,37 @@
     const TAIWAN_TODAY_STR = formatDateYMD(TAIWAN_TODAY_OBJ);
     let selectedDateStr = TAIWAN_TODAY_STR;
 
+    // 台灣基準起始日（2026-01-01）
+    const BASE_DATE_TIME = new Date("2026-01-01T00:00:00+08:00").getTime();
+
     function getWordsForDate(dateStr) {
-      let hash = 0;
-      for (let i = 0; i < dateStr.length; i++) {
-        hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
-        hash |= 0;
+      if (WORD_BANK.length === 0) return [];
+      const targetTime = new Date(dateStr + "T00:00:00+08:00").getTime();
+      const diffDays = Math.floor((targetTime - BASE_DATE_TIME) / (1000 * 60 * 60 * 24));
+      const safeDays = Math.max(0, diffDays);
+
+      const totalWords = WORD_BANK.length;
+      const globalWordIndex = safeDays * 5; // 每天精確前進 5 個單字，絕對不只換 1 個！
+
+      const cycle = Math.floor(globalWordIndex / totalWords);
+      const indexInCycle = globalWordIndex % totalWords;
+
+      const deck = getShuffledDeck(cycle);
+
+      let result = [];
+      if (indexInCycle + 5 <= totalWords) {
+        result = deck.slice(indexInCycle, indexInCycle + 5);
+      } else {
+        const part1 = deck.slice(indexInCycle);
+        const nextDeck = getShuffledDeck(cycle + 1);
+        const part2 = nextDeck.slice(0, 5 - part1.length);
+        result = [...part1, ...part2];
       }
-      const absHash = Math.abs(hash);
-      const startIndex = absHash % (WORD_BANK.length - 5);
-      return WORD_BANK.slice(startIndex, startIndex + 5);
+      return result;
     }
 
     /* ==========================================================
-       3. 音效引擎 (Web Audio API)
+       4. 歡樂音效引擎 (Web Audio API)
        ========================================================== */
     let audioCtx = null;
     function getAudioContext() {
@@ -644,9 +451,7 @@
           osc.start(now + idx * 0.08);
           osc.stop(now + idx * 0.08 + 0.25);
         });
-      } catch (e) {
-        console.log("音效就緒");
-      }
+      } catch (e) {}
     }
 
     function playWrongSound() {
@@ -664,9 +469,7 @@
         gain.connect(ctx.destination);
         osc.start(now);
         osc.stop(now + 0.22);
-      } catch (e) {
-        console.log("音效就緒");
-      }
+      } catch (e) {}
     }
 
     function speakText(text) {
@@ -679,7 +482,7 @@
     }
 
     /* ==========================================================
-       4. 頁面切換與初始化
+       5. 頁面切換與日期 UI
        ========================================================== */
     function switchTab(tab) {
       const tabs = ['daily', 'quiz-choice', 'quiz-cloze', 'library'];
@@ -717,12 +520,12 @@
       const isToday = (selectedDateStr === TAIWAN_TODAY_STR);
 
       if (dateDisplay) {
-        dateDisplay.innerText = `${y} 年 ${m} 月 ${d} 日 ${isToday ? '（今日）' : '（歷史複習）'}`;
+        dateDisplay.innerText = `${y} 年 ${m} 月 ${d} 日 ${isToday ? '（今日）' : '（歷史溫習）'}`;
       }
 
       if (datePicker) {
         datePicker.value = selectedDateStr;
-        datePicker.max = TAIWAN_TODAY_STR;
+        datePicker.max = TAIWAN_TODAY_STR; // 核心：鎖定明天防偷看
       }
 
       if (nextBtn) {
@@ -768,7 +571,7 @@
     }
 
     /* ==========================================================
-       5. 渲染單字卡片
+       6. 渲染單字卡片
        ========================================================== */
     function renderDailyCards() {
       const container = document.getElementById('daily-cards-container');
@@ -816,7 +619,7 @@
     }
 
     /* ==========================================================
-       6. 字義測驗 (選擇題)
+       7. 字義測驗 (選擇題)
        ========================================================== */
     let choiceWords = [];
     let choiceIndex = 0;
@@ -902,7 +705,7 @@
     }
 
     /* ==========================================================
-       7. 例句克漏字填空測驗
+       8. 例句克漏字填空測驗
        ========================================================== */
     let clozeWords = [];
     let clozeIndex = 0;
@@ -998,7 +801,7 @@
     }
 
     /* ==========================================================
-       8. 主題字庫清單瀏覽與篩選
+       9. 主題字庫清單瀏覽與篩選
        ========================================================== */
     let currentCategoryFilter = 'ALL';
 
@@ -1050,9 +853,7 @@
         );
       }
 
-      const slice = filtered.slice(0, 100);
-
-      slice.forEach(w => {
+      filtered.forEach(w => {
         const card = document.createElement('div');
         card.className = "p-4 bg-amber-50/50 rounded-2xl border border-amber-200 flex justify-between items-center";
         card.innerHTML = `
@@ -1074,9 +875,10 @@
     }
 
     /* ==========================================================
-       9. 初始啟動
+       10. 初始啟動
        ========================================================== */
     window.addEventListener('DOMContentLoaded', () => {
+      initWordBank();
       initCategoryFilterBar();
       updateDateUI();
     });
