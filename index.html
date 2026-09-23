@@ -14,7 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    /* 平板與手機：維持適中舒適尺寸 */
+    /* 平板與手機：維持適中尺寸 */
     html {
       font-size: 16px;
     }
@@ -29,7 +29,7 @@
       }
     }
 
-    /* 大螢幕桌機、大顯示器或教室投影機（1440px 以上）：自動放大 35% */
+    /* 大螢幕桌機或教室投影機（1440px 以上）：自動放大 35% */
     @media (min-width: 1440px) {
       html {
         font-size: 21.5px;
@@ -87,13 +87,13 @@
     }
   </style>
 
-  <!-- 引入 1200 單字資料庫 (支援 words.js 與 word.js 檔名) -->
-  <script src="words.js"></script>
+  <!-- 外部單字庫載入 (同時支援 word.js 與 words.js) -->
   <script src="word.js"></script>
+  <script src="words.js"></script>
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col justify-between selection:bg-amber-200">
 
-  <!-- 頂部導覽列 (標題無橘子圖示) -->
+  <!-- 頂部導覽列 (無橘子圖示) -->
   <header class="bg-white/95 backdrop-blur border-b-2 border-amber-200 sticky top-0 z-40 px-4 py-3 sm:py-4 shadow-sm">
     <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-3">
@@ -122,7 +122,7 @@
   <!-- 主內容容器 -->
   <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 flex-1">
 
-    <!-- 台灣時間與日期選擇器 (可看昨天、鎖定明天防偷看) -->
+    <!-- 台灣時間與日期選擇器 -->
     <div class="bg-white border-2 border-amber-200 rounded-3xl p-4 sm:p-5 mb-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
         <span class="text-2xl">📅</span>
@@ -155,7 +155,7 @@
           </div>
           <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-amber-900" id="daily-banner-title">今日進度：精選 5 單字</h2>
-            <p class="text-sm sm:text-base text-slate-500 font-medium">每隔一天換 5 個新單字，全學完一輪才會重複喔！</p>
+            <p class="text-sm sm:text-base text-slate-500 font-medium">每隔一天換 5 個全新單字，全部學完一輪才會重複喔！</p>
           </div>
         </div>
         <button id="btn-today-reset" onclick="resetToToday()" class="hidden px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold text-base shadow pomelo-btn-shadow">
@@ -165,7 +165,7 @@
 
       <!-- 5 個單字卡片容器 -->
       <div id="daily-cards-container" class="space-y-5">
-        <!-- 由 JavaScript 動態渲染 -->
+        <div class="text-center py-12 text-slate-400 font-bold text-lg">正在載入專屬單字庫...</div>
       </div>
     </section>
 
@@ -193,9 +193,7 @@
         </div>
 
         <!-- 四個選項按鈕 -->
-        <div id="choice-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-          <!-- 由 JavaScript 動態生成選項按鈕 -->
-        </div>
+        <div id="choice-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6"></div>
 
         <!-- 答題回饋訊息 -->
         <div id="choice-feedback" class="mt-6 text-center text-lg sm:text-xl font-black min-h-[32px]"></div>
@@ -260,7 +258,7 @@
       </div>
     </section>
 
-    <!-- 4. 主題分類字庫清單 (嚴格去重，每一個都不同) -->
+    <!-- 4. 主題分類字庫清單 -->
     <section id="view-library" class="hidden space-y-6">
       <div class="bg-white border-2 border-amber-200 rounded-3xl p-6 shadow-sm">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -280,15 +278,13 @@
           </button>
         </div>
 
-        <!-- 關鍵字搜尋框 -->
+        <!-- 搜尋框 -->
         <div class="my-4">
           <input type="text" id="lib-search-input" oninput="renderLibraryWords()" placeholder="🔍 搜尋英文單字或中文意思..." class="w-full border-2 border-amber-200 rounded-2xl px-4 py-3 text-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
         </div>
 
-        <!-- 單字列表 (滑順滾動) -->
-        <div id="library-words-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[550px] overflow-y-auto p-1">
-          <!-- 由 JavaScript 動態生成單字卡 -->
-        </div>
+        <!-- 單字列表 -->
+        <div id="library-words-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[550px] overflow-y-auto p-1"></div>
       </div>
     </section>
 
@@ -308,21 +304,24 @@
 
   <script>
     /* ==========================================================
-       1. 載入外部字庫與嚴格去重處理
+       1. 健全外部字庫讀取與去重（支援 word.js 與 words.js）
        ========================================================== */
     let WORD_BANK = [];
+    let isInitialized = false;
 
-    function initWordBank() {
-      // 讀取外部 words.js 中宣告的 RAW_WORD_LIST
-      const sourceList = (typeof RAW_WORD_LIST !== 'undefined' && Array.isArray(RAW_WORD_LIST)) 
-        ? RAW_WORD_LIST 
+    function buildWordBank() {
+      // 檢查 RAW_WORD_LIST 是否已由外部 js 載入
+      const raw = (typeof RAW_WORD_LIST !== 'undefined' && Array.isArray(RAW_WORD_LIST))
+        ? RAW_WORD_LIST
         : [];
 
+      if (raw.length === 0) return false;
+
       const map = new Map();
-      sourceList.forEach((item, index) => {
+      raw.forEach((item, index) => {
         if (!item || !item.en) return;
         const key = item.en.toLowerCase().trim();
-        // 嚴格去重：相同單字只保留一筆
+        // 嚴格去重：相同單字只收錄一次
         if (!map.has(key)) {
           map.set(key, {
             id: index + 1,
@@ -330,7 +329,7 @@
             zh: item.zh ? item.zh.trim() : "",
             kk: item.kk ? item.kk.trim() : "",
             pos: item.pos ? item.pos.trim() : "",
-            cat: item.cat ? item.cat.trim() : "日常生活 💡",
+            cat: item.cat ? item.cat.trim() : "日常用品 🎒",
             ex: item.ex ? item.ex.trim() : `I like the word ${item.en}.`,
             ex_zh: item.ex_zh ? item.ex_zh.trim() : `我喜歡 ${item.en} 這個單字。`
           });
@@ -338,21 +337,11 @@
       });
 
       WORD_BANK = Array.from(map.values()).map((w, idx) => ({ ...w, id: idx + 1 }));
-
-      if (WORD_BANK.length === 0) {
-        // 安全備援（若外部檔案尚未讀取到）
-        WORD_BANK = [
-          { id: 1, en: "apple", zh: "蘋果", kk: "[ˈæpəl]", pos: "n.", cat: "食物與飲品 🍕", ex: "I eat an apple every day.", ex_zh: "我每天吃一顆蘋果。" },
-          { id: 2, en: "banana", zh: "香蕉", kk: "[bəˈnænə]", pos: "n.", cat: "食物與飲品 🍕", ex: "Monkeys like sweet bananas.", ex_zh: "猴子喜歡吃甜甜的香蕉。" },
-          { id: 3, en: "cat", zh: "貓", kk: "[kæt]", pos: "n.", cat: "動物與自然 🐶", ex: "The cat sleeps on the chair.", ex_zh: "貓咪在椅子上睡覺。" },
-          { id: 4, en: "dog", zh: "狗", kk: "[dɔɡ]", pos: "n.", cat: "動物與自然 🐶", ex: "The friendly dog wags its tail.", ex_zh: "友善的狗狗搖著尾巴。" },
-          { id: 5, en: "elephant", zh: "大象", kk: "[ˈɛləfənt]", pos: "n.", cat: "動物與自然 🐶", ex: "The elephant has a long nose.", ex_zh: "大象有一隻長鼻子。" }
-        ];
-      }
+      return WORD_BANK.length > 0;
     }
 
     /* ==========================================================
-       2. 偽隨機洗牌演算法（全學完一輪才洗牌第二次）
+       2. 洗牌演算法（全部學完一輪才洗牌第二次）
        ========================================================== */
     function seededRandom(seed) {
       const x = Math.sin(seed++) * 10000;
@@ -361,7 +350,8 @@
 
     function getShuffledDeck(cycleNumber) {
       const deck = [...WORD_BANK];
-      let seed = 20260923 + cycleNumber * 8819;
+      // 每一輪循環使用固定種子洗牌，保證整輪內不重複
+      let seed = 20260901 + cycleNumber * 7789;
       for (let i = deck.length - 1; i > 0; i--) {
         const r = Math.floor(seededRandom(seed++) * (i + 1));
         const temp = deck[i];
@@ -372,7 +362,7 @@
     }
 
     /* ==========================================================
-       3. 台灣時間 (Asia/Taipei UTC+8) 與「隔日完全換新 5 字」計算
+       3. 台灣時間 (Asia/Taipei UTC+8) 與每日換新 5 字計算
        ========================================================== */
     function getTaiwanDateObject() {
       const now = new Date();
@@ -401,7 +391,7 @@
       const safeDays = Math.max(0, diffDays);
 
       const totalWords = WORD_BANK.length;
-      const globalWordIndex = safeDays * 5; // 每天精確前進 5 個單字，絕對不只換 1 個！
+      const globalWordIndex = safeDays * 5; // 每天精確前進 5 個單字
 
       const cycle = Math.floor(globalWordIndex / totalWords);
       const indexInCycle = globalWordIndex % totalWords;
@@ -482,7 +472,7 @@
     }
 
     /* ==========================================================
-       5. 頁面切換與日期 UI
+       5. 頁面分頁與日期 UI
        ========================================================== */
     function switchTab(tab) {
       const tabs = ['daily', 'quiz-choice', 'quiz-cloze', 'library'];
@@ -525,7 +515,7 @@
 
       if (datePicker) {
         datePicker.value = selectedDateStr;
-        datePicker.max = TAIWAN_TODAY_STR; // 核心：鎖定明天防偷看
+        datePicker.max = TAIWAN_TODAY_STR; // 鎖定明天防偷看
       }
 
       if (nextBtn) {
@@ -580,6 +570,16 @@
 
       const words = getWordsForDate(selectedDateStr);
 
+      if (words.length === 0) {
+        container.innerHTML = `
+          <div class="bg-rose-50 border-2 border-rose-200 rounded-3xl p-6 text-center text-rose-800">
+            <h4 class="text-xl font-black mb-2">⚠️ 尚未讀取到單字資料庫</h4>
+            <p class="text-base font-bold text-slate-600">請確認 GitHub 倉庫中是否已上傳 <code class="bg-white px-2 py-1 rounded border">word.js</code> 或 <code class="bg-white px-2 py-1 rounded border">words.js</code> 檔案。</p>
+          </div>
+        `;
+        return;
+      }
+
       words.forEach((w, idx) => {
         const card = document.createElement('div');
         card.className = "bg-white border-2 border-amber-200 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition";
@@ -632,6 +632,7 @@
     }
 
     function loadChoiceQuestion() {
+      if (choiceWords.length === 0) return;
       choiceAnswered = false;
       const current = choiceWords[choiceIndex];
       document.getElementById('choice-progress').innerText = `${choiceIndex + 1} / 5`;
@@ -640,7 +641,7 @@
       document.getElementById('choice-next-btn').classList.add('hidden');
 
       let options = [current.zh];
-      while (options.length < 4) {
+      while (options.length < 4 && options.length < WORD_BANK.length) {
         const randWord = WORD_BANK[Math.floor(Math.random() * WORD_BANK.length)];
         if (!options.includes(randWord.zh)) {
           options.push(randWord.zh);
@@ -718,6 +719,7 @@
     }
 
     function loadClozeQuestion() {
+      if (clozeWords.length === 0) return;
       clozeAnswered = false;
       const current = clozeWords[clozeIndex];
       document.getElementById('cloze-progress').innerText = `${clozeIndex + 1} / 5`;
@@ -801,7 +803,7 @@
     }
 
     /* ==========================================================
-       9. 主題字庫清單瀏覽與篩選
+       9. 主題字庫清單與分類篩選
        ========================================================== */
     let currentCategoryFilter = 'ALL';
 
@@ -809,7 +811,13 @@
       const bar = document.getElementById('category-filter-bar');
       if (!bar) return;
       
-      const cats = Array.from(new Set(WORD_BANK.map(w => w.cat)));
+      bar.innerHTML = `
+        <button onclick="filterCategory('ALL')" class="cat-pill active-cat px-4 py-2 rounded-xl text-base font-bold bg-amber-500 text-white shadow-sm transition">
+          全部單字
+        </button>
+      `;
+
+      const cats = Array.from(new Set(WORD_BANK.map(w => w.cat))).filter(Boolean);
       cats.forEach(cat => {
         const btn = document.createElement('button');
         btn.innerText = cat;
@@ -818,7 +826,8 @@
         bar.appendChild(btn);
       });
 
-      document.getElementById('lib-total-count').innerText = WORD_BANK.length;
+      const countEl = document.getElementById('lib-total-count');
+      if (countEl) countEl.innerText = WORD_BANK.length;
     }
 
     function filterCategory(cat) {
@@ -875,12 +884,31 @@
     }
 
     /* ==========================================================
-       10. 初始啟動
+       10. 健全啟動程序 (輪詢確保單字庫完全注入)
        ========================================================== */
+    function startApp() {
+      if (isInitialized) return;
+      const success = buildWordBank();
+      if (success) {
+        isInitialized = true;
+        initCategoryFilterBar();
+        updateDateUI();
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
-      initWordBank();
-      initCategoryFilterBar();
-      updateDateUI();
+      startApp();
+      // 若因網路非同步延遲，自動每 200ms 重試一次，最多 3 秒
+      let attempts = 0;
+      const timer = setInterval(() => {
+        if (isInitialized || attempts > 15) {
+          clearInterval(timer);
+          if (!isInitialized) updateDateUI(); // 顯示讀取失敗友善提示
+        } else {
+          attempts++;
+          startApp();
+        }
+      }, 200);
     });
   </script>
 </body>
