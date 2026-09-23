@@ -87,13 +87,18 @@
     }
   </style>
 
-  <!-- 外部單字庫載入 (同時支援 word.js 與 words.js) -->
-  <script src="word.js"></script>
-  <script src="words.js"></script>
+  <!-- 引入 words.js，加入隨機版本號強制跳過快取 -->
+  <script>
+    var loadScriptError = null;
+    function markLoadError(e) {
+      loadScriptError = "瀏覽器無法取得 words.js 檔案，請確認該檔案是否存在於同一目錄中。";
+    }
+  </script>
+  <script src="words.js?v=20260923" onerror="markLoadError(event)"></script>
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col justify-between selection:bg-amber-200">
 
-  <!-- 頂部導覽列 (無橘子圖示) -->
+  <!-- 頂部導覽列 -->
   <header class="bg-white/95 backdrop-blur border-b-2 border-amber-200 sticky top-0 z-40 px-4 py-3 sm:py-4 shadow-sm">
     <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-3">
@@ -154,8 +159,8 @@
             5
           </div>
           <div>
+            <!-- 已移除原本下方的說明文字 -->
             <h2 class="text-xl sm:text-2xl font-extrabold text-amber-900" id="daily-banner-title">今日進度：精選 5 單字</h2>
-            <p class="text-sm sm:text-base text-slate-500 font-medium">每隔一天換 5 個全新單字，全部學完一輪才會重複喔！</p>
           </div>
         </div>
         <button id="btn-today-reset" onclick="resetToToday()" class="hidden px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold text-base shadow pomelo-btn-shadow">
@@ -164,9 +169,7 @@
       </div>
 
       <!-- 5 個單字卡片容器 -->
-      <div id="daily-cards-container" class="space-y-5">
-        <div class="text-center py-12 text-slate-400 font-bold text-lg">正在載入專屬單字庫...</div>
-      </div>
+      <div id="daily-cards-container" class="space-y-5"></div>
     </section>
 
     <!-- 2. 字義測驗分頁 -->
@@ -192,10 +195,7 @@
           </button>
         </div>
 
-        <!-- 四個選項按鈕 -->
         <div id="choice-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6"></div>
-
-        <!-- 答題回饋訊息 -->
         <div id="choice-feedback" class="mt-6 text-center text-lg sm:text-xl font-black min-h-[32px]"></div>
 
         <div class="mt-6 flex justify-end">
@@ -220,7 +220,6 @@
           </div>
         </div>
 
-        <!-- 例句題目 -->
         <div class="bg-emerald-50/70 border-2 border-emerald-200 rounded-2xl p-6 my-6 text-center">
           <div id="cloze-sentence-display" class="text-2xl sm:text-3xl font-bold text-slate-800 leading-relaxed">
             I eat an <span class="text-emerald-600 underline font-black">______</span> every day.
@@ -230,7 +229,6 @@
           </div>
         </div>
 
-        <!-- 填空輸入區與提示 -->
         <div class="max-w-md mx-auto space-y-4">
           <div class="flex gap-2">
             <input type="text" id="cloze-user-input" placeholder="請輸入單字..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="flex-1 border-2 border-emerald-300 rounded-2xl px-5 py-3 text-xl font-bold text-slate-800 focus:outline-none focus:ring-4 focus:ring-emerald-200 text-center">
@@ -247,7 +245,6 @@
           </div>
         </div>
 
-        <!-- 回饋訊息 -->
         <div id="cloze-feedback" class="mt-6 text-center text-lg sm:text-xl font-black min-h-[32px]"></div>
 
         <div class="mt-6 flex justify-end">
@@ -304,13 +301,12 @@
 
   <script>
     /* ==========================================================
-       1. 健全外部字庫讀取與去重（支援 word.js 與 words.js）
+       1. 健壯單字庫初始化與去重
        ========================================================== */
     let WORD_BANK = [];
     let isInitialized = false;
 
     function buildWordBank() {
-      // 檢查 RAW_WORD_LIST 是否已由外部 js 載入
       const raw = (typeof RAW_WORD_LIST !== 'undefined' && Array.isArray(RAW_WORD_LIST))
         ? RAW_WORD_LIST
         : [];
@@ -321,7 +317,6 @@
       raw.forEach((item, index) => {
         if (!item || !item.en) return;
         const key = item.en.toLowerCase().trim();
-        // 嚴格去重：相同單字只收錄一次
         if (!map.has(key)) {
           map.set(key, {
             id: index + 1,
@@ -341,7 +336,7 @@
     }
 
     /* ==========================================================
-       2. 洗牌演算法（全部學完一輪才洗牌第二次）
+       2. 洗牌演算法（全學完一輪才洗牌第二次）
        ========================================================== */
     function seededRandom(seed) {
       const x = Math.sin(seed++) * 10000;
@@ -350,7 +345,6 @@
 
     function getShuffledDeck(cycleNumber) {
       const deck = [...WORD_BANK];
-      // 每一輪循環使用固定種子洗牌，保證整輪內不重複
       let seed = 20260901 + cycleNumber * 7789;
       for (let i = deck.length - 1; i > 0; i--) {
         const r = Math.floor(seededRandom(seed++) * (i + 1));
@@ -362,7 +356,7 @@
     }
 
     /* ==========================================================
-       3. 台灣時間 (Asia/Taipei UTC+8) 與每日換新 5 字計算
+       3. 台灣時間 (Asia/Taipei UTC+8) 與「每日完全換新 5 字」計算
        ========================================================== */
     function getTaiwanDateObject() {
       const now = new Date();
@@ -381,7 +375,6 @@
     const TAIWAN_TODAY_STR = formatDateYMD(TAIWAN_TODAY_OBJ);
     let selectedDateStr = TAIWAN_TODAY_STR;
 
-    // 台灣基準起始日（2026-01-01）
     const BASE_DATE_TIME = new Date("2026-01-01T00:00:00+08:00").getTime();
 
     function getWordsForDate(dateStr) {
@@ -515,7 +508,7 @@
 
       if (datePicker) {
         datePicker.value = selectedDateStr;
-        datePicker.max = TAIWAN_TODAY_STR; // 鎖定明天防偷看
+        datePicker.max = TAIWAN_TODAY_STR;
       }
 
       if (nextBtn) {
@@ -571,10 +564,12 @@
       const words = getWordsForDate(selectedDateStr);
 
       if (words.length === 0) {
+        const errorDetail = loadScriptError ? `<p class="text-sm text-rose-600 mt-2 font-mono">${loadScriptError}</p>` : `<p class="text-sm text-slate-500 mt-2">請打開瀏覽器開發者工具 (F12) 檢查 Console 是否有 SyntaxError 語法錯誤。</p>`;
         container.innerHTML = `
           <div class="bg-rose-50 border-2 border-rose-200 rounded-3xl p-6 text-center text-rose-800">
             <h4 class="text-xl font-black mb-2">⚠️ 尚未讀取到單字資料庫</h4>
-            <p class="text-base font-bold text-slate-600">請確認 GitHub 倉庫中是否已上傳 <code class="bg-white px-2 py-1 rounded border">word.js</code> 或 <code class="bg-white px-2 py-1 rounded border">words.js</code> 檔案。</p>
+            <p class="text-base font-bold text-slate-600">請確認 GitHub 倉庫中是否已成功上傳 <code class="bg-white px-2 py-1 rounded border">words.js</code> 檔案。</p>
+            ${errorDetail}
           </div>
         `;
         return;
@@ -898,12 +893,11 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       startApp();
-      // 若因網路非同步延遲，自動每 200ms 重試一次，最多 3 秒
       let attempts = 0;
       const timer = setInterval(() => {
         if (isInitialized || attempts > 15) {
           clearInterval(timer);
-          if (!isInitialized) updateDateUI(); // 顯示讀取失敗友善提示
+          if (!isInitialized) updateDateUI();
         } else {
           attempts++;
           startApp();
