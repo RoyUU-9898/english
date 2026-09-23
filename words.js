@@ -303,7 +303,7 @@ const RAW_WORD_LIST = [
   { id: 297, en: "eighty", zh: "八十", kk: "[ˈeti]", pos: "num.", cat: "數量與代名詞 🔢", ex: "My grandfather is eighty years old.", ex_zh: "我的爺爺今年剛好八十歲。" },
   { id: 298, en: "either", zh: "也不/任一", kk: "[ˈiðɚ]", pos: "adv./adj.", cat: "日常表達 💬", ex: "I don't like bitter coffee either.", ex_zh: "我也很不喜歡苦澀的黑咖啡。" },
   { id: 299, en: "elementary school", zh: "小學", kk: "[ˌɛləˈmɛntri skul]", pos: "n.", cat: "學校與學習 📚", ex: "We study happily in elementary school.", ex_zh: "我們在小學校園裡快樂地學習成長。" },
-  { id: 300, en: "elephant", zh: "大象", kk: "[ˈɛləfənt]", pos: "n.", cat: "動物與自然 🐶", ex: "The elephant sprays water with its long nose.", ex_zh: "大象用牠長長的大鼻子向空中噴水。" }
+  { id: 300, en: "elephant", zh: "大象", kk: "[ˈɛləfənt]", pos: "n.", cat: "動物與自然 🐶", ex: "The elephant sprays water with its long nose.", ex_zh: "大象用牠長長的大鼻子向空中噴水。" },
 // ==========================================
   // 第三批（第 301 ~ 450 字）
   // ==========================================
@@ -456,7 +456,7 @@ const RAW_WORD_LIST = [
   { id: 447, en: "handsome", zh: "英俊的", kk: "[ˈhænsəm]", pos: "adj.", cat: "人物與角色 👥", ex: "He looks neat, polite, and very handsome.", ex_zh: "他看起來乾淨整齊、彬彬有禮而且十分帥氣。" },
   { id: 448, en: "hang", zh: "懸掛", kk: "[hæŋ]", pos: "v.", cat: "動作與活動 🏃", ex: "Hang your jacket on the chair hook.", ex_zh: "把你的外套整齊掛在椅子旁邊的掛鉤上。" },
   { id: 449, en: "happen", zh: "發生", kk: "[ˈhæpən]", pos: "v.", cat: "日常表達 💬", ex: "Tell me what happened during recess time.", ex_zh: "快跟我說說看剛才下課時到底發生了什麼事。" },
-  { id: 450, en: "happy", zh: "快樂的", kk: "[ˈhæpi]", pos: "adj.", cat: "情緒與特質 😊", ex: "We feel happy when playing with our friends.", ex_zh: "和好朋友聚在一起玩耍時大家都感到無比快樂。" }
+  { id: 450, en: "happy", zh: "快樂的", kk: "[ˈhæpi]", pos: "adj.", cat: "情緒與特質 😊", ex: "We feel happy when playing with our friends.", ex_zh: "和好朋友聚在一起玩耍時大家都感到無比快樂。" },
 // ==========================================
   // 第四批（第 451 ~ 600 字）
   // ==========================================
@@ -609,7 +609,7 @@ const RAW_WORD_LIST = [
   { id: 597, en: "loud", zh: "大聲的/響亮的", kk: "[laʊd]", pos: "adj./adv.", cat: "能力與特質 🌟", ex: "Read the English words in a clear and loud voice.", ex_zh: "用清楚明亮又響亮自信的聲音把英文單字給念出來。" },
   { id: 598, en: "love", zh: "喜愛/關愛", kk: "[lʌv]", pos: "v./n.", cat: "情緒與特質 😊", ex: "We love learning new knowledge together every day.", ex_zh: "我們熱愛每天跟好朋友們聚在一起探索滿滿的新知識。" },
   { id: 599, en: "lovely", zh: "可愛的/令人愉快的", kk: "[ˈlʌvli]", pos: "adj.", cat: "情緒與特質 😊", ex: "What a lovely and sunny morning we have today!", ex_zh: "今天早晨的天氣多麼風和日麗、讓人心情愉快啊！" },
-  { id: 600, en: "low", zh: "低的/低矮的", kk: "[lo]", pos: "adj./adv.", cat: "能力與特質 🌟", ex: "The small wooden fence around the garden is low.", ex_zh: "圍繞在小花園外圍的那圈白色小木柵欄十分低矮精緻。" }
+  { id: 600, en: "low", zh: "低的/低矮的", kk: "[lo]", pos: "adj./adv.", cat: "能力與特質 🌟", ex: "The small wooden fence around the garden is low.", ex_zh: "圍繞在小花園外圍的那圈白色小木柵欄十分低矮精緻。" },
 // ==========================================
   // 第五批（第 601 ~ 750 字）
   // ==========================================
@@ -762,7 +762,7 @@ const RAW_WORD_LIST = [
   { id: 747, en: "people", zh: "人們", kk: "[ˈpipəl]", pos: "n.", cat: "人物與角色 👥", ex: "Kind people make the world a warmer place.", ex_zh: "善良的人們讓這個世界處處充滿溫暖與愛。" },
   { id: 748, en: "perhaps", zh: "或許/大概", kk: "[pɚˈhæps]", pos: "adv.", cat: "日常表達 💬", ex: "Perhaps we will visit the science museum tomorrow.", ex_zh: "或許我們明天可以安排參觀自然科學博物館。" },
   { id: 749, en: "person", zh: "人/個人", kk: "[ˈpɝsn]", pos: "n.", cat: "人物與角色 👥", ex: "Be a polite and responsible person every day.", ex_zh: "在日常生活中成為一個既有禮貌又有責任感的人。" },
-  { id: 750, en: "pet", zh: "寵物", kk: "[pɛt]", pos: "n.", cat: "動物與自然 🐶", ex: "Take loving care of your pet dog at home.", ex_zh: "用愛心細心照顧陪伴家中的毛小孩寵物犬。" }
+  { id: 750, en: "pet", zh: "寵物", kk: "[pɛt]", pos: "n.", cat: "動物與自然 🐶", ex: "Take loving care of your pet dog at home.", ex_zh: "用愛心細心照顧陪伴家中的毛小孩寵物犬。" },
 // ==========================================
   // 第六批（第 751 ~ 900 字）
   // ==========================================
@@ -915,7 +915,7 @@ const RAW_WORD_LIST = [
   { id: 897, en: "share", zh: "分享", kk: "[ʃɛr]", pos: "v.", cat: "能力與特質 🌟", ex: "Good friends share their joy and snacks.", ex_zh: "好朋友會主動分享他們的快樂與好吃的點心。" },
   { id: 898, en: "shark", zh: "鯊魚", kk: "[ʃɑrk]", pos: "n.", cat: "動物與自然 🐶", ex: "Sharks swim fast and have sharp teeth.", ex_zh: "鯊魚游泳速度極快，並且長著銳利的牙齒。" },
   { id: 899, en: "she", zh: "她", kk: "[ʃi]", pos: "pron.", cat: "數量與代名詞 🔢", ex: "She is a kind and thoughtful classmate.", ex_zh: "她是個心地善良又處處為人著想的好同學。" },
-  { id: 900, en: "sheep", zh: "綿羊", kk: "[ʃip]", pos: "n.", cat: "動物與自然 🐶", ex: "Fluffy white sheep eat green grass on the farm.", ex_zh: "毛茸茸的白色綿羊在農場上安靜地吃青草。" }
+  { id: 900, en: "sheep", zh: "綿羊", kk: "[ʃip]", pos: "n.", cat: "動物與自然 🐶", ex: "Fluffy white sheep eat green grass on the farm.", ex_zh: "毛茸茸的白色綿羊在農場上安靜地吃青草。" },
 // ==========================================
   // 第七批（第 901 ~ 1050 字）
   // ==========================================
@@ -1068,7 +1068,7 @@ const RAW_WORD_LIST = [
   { id: 1047, en: "thick", zh: "厚的/茂密的", kk: "[θɪk]", pos: "adj.", cat: "能力與特質 🌟", ex: "Put on a thick coat when cold winter wind blows.", ex_zh: "冬日冷風呼呼吹來時，趕快穿上一件厚實的大衣。" },
   { id: 1048, en: "thin", zh: "瘦的/薄的", kk: "[θɪn]", pos: "adj.", cat: "身體與健康 🦵", ex: "Draw a thin straight line with your sharp pencil.", ex_zh: "用削尖的鉛筆在紙上輕輕畫出一條纖細的直線。" },
   { id: 1049, en: "thing", zh: "事情/物品", kk: "[θɪŋ]", pos: "n.", cat: "日常用品 🎒", ex: "Pack your personal things before leaving the room.", ex_zh: "離開教室前，把自己的個人文具物品收拾整齊。" },
-  { id: 1050, en: "think", zh: "思考/想", kk: "[θɪŋk]", pos: "v.", cat: "動作與思考 🧠", ex: "Think carefully before choosing your test answer.", ex_zh: "在動筆填下測驗答案前，先再三仔細深思熟慮。" }
+  { id: 1050, en: "think", zh: "思考/想", kk: "[θɪŋk]", pos: "v.", cat: "動作與思考 🧠", ex: "Think carefully before choosing your test answer.", ex_zh: "在動筆填下測驗答案前，先再三仔細深思熟慮。" },
 // ==========================================
   // 最後一批（第 1051 ~ 1200 字）
   // ==========================================
@@ -1221,5 +1221,5 @@ const RAW_WORD_LIST = [
   { id: 1197, en: "yummy", zh: "好吃的/美味的", kk: "[ˈjʌmi]", pos: "adj.", cat: "食物與飲品 🍕", ex: "Mom cooked a warm and yummy beef soup for lunch.", ex_zh: "媽媽午餐為我們熬煮了一鍋熱氣騰騰又好吃的牛肉湯。" },
   { id: 1198, en: "zebra", zh: "斑馬", kk: "[ˈzibrə]", pos: "n.", cat: "動物與自然 🐶", ex: "Zebras have unique and striking black and white stripes.", ex_zh: "斑馬身上長著獨一無二且對比鮮明的黑白相間條紋。" },
   { id: 1199, en: "zero", zh: "零", kk: "[ˈzɪro]", pos: "num.", cat: "數量與代名詞 🔢", ex: "Start counting step by step from zero to ten.", ex_zh: "一步一腳印，從零開始慢慢數到十。" },
-  { id: 1200, en: "zoo", zh: "動物園", kk: "[zu]", pos: "n.", cat: "地點與交通 🚌", ex: "We saw giant pandas and elephants at the Taipei Zoo.", ex_zh: "我們在台北市立動物園裡看到了可愛的大貓熊與大象。" }
+  { id: 1200, en: "zoo", zh: "動物園", kk: "[zu]", pos: "n.", cat: "地點與交通 🚌", ex: "We saw giant pandas and elephants at the Taipei Zoo.", ex_zh: "我們在台北市立動物園裡看到了可愛的大貓熊與大象。" },
 ];
